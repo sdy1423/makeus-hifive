@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="56.5dp">
+            <TextView
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/change_tv_save"
+                android:text="회원 정보 수정"
+                android:textSize="20dp"
+                android:fontFamily="@font/notosanscjkr_regular"
+                android:textColor="#0B0B0B"
+                android:id="@+id/change_tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/change_tv_title"
+                android:text="저장"
+                android:textSize="16dp"
+                android:fontFamily="@font/notosanscjkr_regular"
+                android:textColor="#0B0B0B"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                android:id="@+id/change_tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="1"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.35"
+            android:background="#707070" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="131dp"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/change_iv_profile_img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/change_tv_change_profile_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="프로필 이미지 변경"
+                android:textColor="#000000"
+                android:fontFamily="@font/notosanscjkr_regular"
+                android:textSize="14dp" />
+            <View
+                android:layout_gravity="center"
+                android:layout_width="110dp"
+                android:layout_height="1dp"
+                android:background="#000000" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.35"
+            android:background="#707070" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:orientation="vertical">
+            <TextView
+                android:alpha="0.5"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="12dp"
+                android:text="E-mail"
+                android:layout_marginTop="14.5dp"
+                android:id="@+id/change_tv_email_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/change_tv_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.35"
+            android:background="#707070" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginTop="14.5dp"
+                android:text="User Name"
+                android:textColor="#000000"
+                android:alpha="0.5"
+                android:id="@+id/change_tv_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:layout_marginTop="8dp"
+                android:background="@drawable/login_signup_edt_border"
+                android:id="@+id/change_edt_username"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+            <TextView
+                android:id="@+id/change_tv_username_check_message"
+                android:text="비밀번호가 일치하지 않아요."
+                android:background="#FF7979"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.35"
+            android:background="#707070" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginTop="14.5dp"
+                android:text="Password"
+                android:textColor="#000000"
+                android:alpha="0.5"
+                android:id="@+id/change_tv_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:layout_marginTop="8dp"
+                android:background="@drawable/login_signup_edt_border"
+                android:id="@+id/change_edt_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.35"
+            android:background="#707070" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginTop="14.5dp"
+                android:text="Password Check"
+                android:textColor="#000000"
+                android:alpha="0.5"
+                android:id="@+id/change_tv_pwd_check"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:layout_marginTop="8dp"
+                android:background="@drawable/login_signup_edt_border"
+                android:id="@+id/change_edt_pwd_check"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+            <TextView
+                android:id="@+id/change_tv_pwd_check_message"
+                android:text="비밀번호가 일치하지 않아요."
+                android:background="#FF7979"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="63dp"
+            android:text="회원 탈퇴"
+            android:fontFamily="@font/notosanscjkr_regular"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:background="@drawable/change_bye_border"
+            android:id="@+id/change_btn_bye"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"/>
+    </LinearLayout>
+</ScrollView>

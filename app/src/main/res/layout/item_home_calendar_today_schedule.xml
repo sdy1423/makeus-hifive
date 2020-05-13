@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="312dp"
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/item_home_today_schedule_iv_color"
+        android:layout_width="12dp"
+        android:layout_height="64dp"
+        />
+    <TextView
+        android:id="@+id/item_home_today_schedule_tv_title"
+        android:paddingLeft="20dp"
+        android:layout_width="256dp"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/notosanscjkr_regular"
+        android:textSize="16dp"
+        android:textColor="#000000"/>
+
+    <ImageView
+        android:id="@+id/item_home_today_schedule_iv_create"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_create_24px" />
+</LinearLayout>

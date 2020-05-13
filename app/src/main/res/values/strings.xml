@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">MakeUsHiFive</string>
+
+    <!--BaseActivity-->
+    <string name="loading">로딩중입니다</string>
+
+    <!--MainActivity-->
+    <string name="home">캘린더</string>
+    <string name="feed">일정 피드</string>
+    <string name="setting">프로필</string>
+    <string name="app_title">Time Share</string>
+
+
+    <!-- signup activity edittext -->
+    <string name="sign_up_edt_e_mail">E-mail</string>
+    <string name="sign_up_edt_username">User Name</string>
+    <string name="sign_up_edt_pwd">Password</string>
+    <string name="sign_up_edt_pwd_check">Password Check</string>
+
+    <!-- login activity edittext -->
+    <string name="login_edt_email">E-mail</string>
+    <string name="login_edt_pwd">Password</string>
+
+
+    <string name="material_calendar_monday">월</string>
+    <string name="material_calendar_tuesday">화</string>
+    <string name="material_calendar_wednesday">수</string>
+    <string name="material_calendar_thursday">목</string>
+    <string name="material_calendar_friday">금</string>
+    <string name="material_calendar_saturday">토</string>
+    <string name="material_calendar_sunday">일</string>
+</resources>

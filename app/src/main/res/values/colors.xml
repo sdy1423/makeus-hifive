@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="tab_background">#FFFFFF</color>
+    
+<!--    칼라 선택 9개-->
+    <color name="one">#F87BAB</color>
+    <color name="two">#FAB462</color>
+    <color name="three">#4A62E3</color>
+    <color name="four">#D10000</color>
+    <color name="five">#53BFAB</color>
+    <color name="six">#9B50D3</color>
+    <color name="seven">#191919</color>
+    <color name="eight">#7BC94B</color>
+</resources>

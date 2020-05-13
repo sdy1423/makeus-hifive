@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "535833502909",
+    "firebase_url": "https://hifive-d16d6.firebaseio.com",
+    "project_id": "hifive-d16d6",
+    "storage_bucket": "hifive-d16d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535833502909:android:8f3373aef0db731dbf43d4",
+        "android_client_info": {
+          "package_name": "com.example.makeushifive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "535833502909-dd6msnt2jclak9nik0sejmo4bd7log21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.makeushifive",
+            "certificate_hash": "bc5575aa6a37119e17ec96818798e5ed8d44d621"
+          }
+        },
+        {
+          "client_id": "535833502909-beh7s27l13hp7nhnkmtr180id8bjsoq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgWW9tLOcGMvPdmkXPx37V1rnmIG_0S8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "535833502909-beh7s27l13hp7nhnkmtr180id8bjsoq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
