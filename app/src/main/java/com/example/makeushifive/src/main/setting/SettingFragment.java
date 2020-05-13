@@ -76,12 +76,16 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
     public void SettingClick(View view) {
         switch (view.getId()){
             case R.id.setting_tv_change_user_info:
+                Objects.requireNonNull(getActivity()).getIntent().putExtra("email",Email);
+                getActivity().getIntent().putExtra("profileUrl",ProfileUrl);
                 Intent intent1 = new Intent(getActivity(), ChangeActivity.class);
-                
+                startActivity(intent1);
                 break;
             case R.id.setting_tv_share_friend:
+
                 break;
             case R.id.setting_tv_theme_setting:
+
                 break;
         }
     }
