@@ -92,6 +92,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="16dp"
+                android:textColor="#000000"
                 android:id="@+id/change_tv_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -115,20 +118,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
+                android:paddingLeft="12dp"
                 android:layout_marginTop="8dp"
+                android:paddingRight="10dp"
                 android:background="@drawable/login_signup_edt_border"
                 android:id="@+id/change_edt_username"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
-            <TextView
-                android:id="@+id/change_tv_username_check_message"
-                android:text="비밀번호가 일치하지 않아요."
-                android:background="#FF7979"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/change_tv_username_check_message"
+            android:text="다른 유저 네임을 사용해주세요."
+            android:textColor="#FF7979"
+            android:gravity="end"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="match_parent"
@@ -149,7 +155,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
+                android:paddingLeft="12dp"
+                android:inputType="textPassword"
                 android:layout_marginTop="8dp"
+                android:paddingRight="10dp"
                 android:background="@drawable/login_signup_edt_border"
                 android:id="@+id/change_edt_pwd"
                 android:layout_width="match_parent"
@@ -173,20 +182,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
+                android:paddingLeft="12dp"
+                android:inputType="textPassword"
                 android:layout_marginTop="8dp"
+                android:paddingRight="10dp"
                 android:background="@drawable/login_signup_edt_border"
                 android:id="@+id/change_edt_pwd_check"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
-            <TextView
-                android:id="@+id/change_tv_pwd_check_message"
-                android:text="비밀번호가 일치하지 않아요."
-                android:background="#FF7979"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/change_tv_pwd_check_message"
+            android:text="비밀번호가 일치하지 않아요."
+            android:textColor="#FF7979"
+            android:gravity="end"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:layout_marginTop="63dp"

@@ -1,10 +1,13 @@
 package com.example.makeushifive.src.main.home;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -19,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.applandeo.materialcalendarview.CalendarUtils;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
@@ -29,6 +33,7 @@ import com.example.makeushifive.src.main.home.add.AddActivity;
 import com.example.makeushifive.src.main.home.interfaces.HomeFragmentView;
 import com.example.makeushifive.src.main.home.search.SearchActivity;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,7 +47,7 @@ import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
-    Context mContext = getContext();
+    Context mContext;
     private ImageView mIvSearch,mIvAlarm;
     TextView mTvCurrentDate;
     private Calendar calendar;
@@ -72,11 +77,12 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     };
 
 
+    @SuppressLint("WrongConstant")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
+        mContext = getContext();
         mIvSearch=rootView.findViewById(R.id.home_toolbar_search);
         mIvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,27 +108,33 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         day=13;
         calendar1.set(year,month-1,day);
         events.add(new EventDay(calendar1,R.drawable.ic_hifive_icon));
-        events.add(new EventDay(calendar, new Drawable() {
-            @Override
-            public void draw(@NonNull Canvas canvas) {
 
-            }
-
-            @Override
-            public void setAlpha(int alpha) {
-
-            }
-
-            @Override
-            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-
-            }
-
-            @Override
-            public int getOpacity() {
-                return 0;
-            }
-        }));
+//        CalendarUtils.getDrawableText(mContext,"song",Typeface.defaultFromStyle(R.style.TabLayoutStyle),    Color.parseColor("#FFFFFF"),10);
+//        events.add(new EventDay(calendar, new Drawable() {
+//            @Override
+//            public void draw(@NonNull Canvas canvas) {
+//
+//            }
+//
+//            @Override
+//            public void setAlpha(int alpha) {
+//
+//            }
+//
+//            @Override
+//            public void setColorFilter(@Nullable ColorFilter colorFilter) {
+//                String text="song";
+//                Typeface typeface = null;
+//                int size = 10;
+//                CalendarUtils.getDrawableText(mContext,text, typeface, Color.parseColor("#228B22"), size);
+//
+//            }
+//
+//            @Override
+//            public int getOpacity() {
+//                return 0;
+//            }
+//        }));
 
         calendarView = rootView.findViewById(R.id.home_calendarView);
         calendarView.setEvents(events);

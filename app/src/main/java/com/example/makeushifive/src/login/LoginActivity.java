@@ -129,9 +129,11 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         mUserNo = result.getUserNo();
         SharedPreferences.Editor editor = sSharedPreferences.edit();
         editor.putString(X_ACCESS_TOKEN, mJwtToken);
+        editor.putInt("userNo",mUserNo);
         editor.apply();
+
+        Log.e("Login직후 userNo",""+mUserNo);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("userNo",mUserNo);
         startActivity(intent);
         LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
 

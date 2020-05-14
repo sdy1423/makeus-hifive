@@ -14,7 +14,6 @@ import java.util.Objects;
 
 public class MainActivity extends BaseActivity implements MainActivityView {
 
-    int mUserNo;
     TabLayout mTlTabLayout;
     ViewPager mVpViewPager;
 
@@ -61,10 +60,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
 
 
-        //인텐트 수신
-        Intent intent = getIntent();
-        mUserNo=intent.getExtras().getInt("userNo");
-        Log.e("userno",""+mUserNo);
 
     }
 

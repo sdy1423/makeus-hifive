@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.PATCH;
+import retrofit2.http.POST;
 
 public interface ChangeRetrofitInterface {
 
@@ -20,4 +21,10 @@ public interface ChangeRetrofitInterface {
             @Field("profileUrl") String profileUrl,
             @Field("nickname") String nickname
             );
+
+    @POST("/usertest")
+    Call<ChangeResponse> PostOverlap(
+            @Body RequestBody params
+    );
+
 }
