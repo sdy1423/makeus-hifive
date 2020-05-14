@@ -1,184 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".src.main.home.HomeFragment">
 
-
-<!--    <com.applikeysolutions.cosmocalendar.view.CalendarView-->
-<!--        android:id="@+id/home_calendar_view"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        />-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_marginLeft="16dp"
-            android:textAlignment="viewStart"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/home_toolbar_search_alarm"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            android:id="@+id/home_toolbar_tv_today"
-            android:drawableRight="@drawable/ic_expand_more_24px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/home_toolbar_search_alarm"
-            android:layout_width="72dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintLeft_toRightOf="@id/home_toolbar_tv_today"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
-
-            <ImageView
-                android:id="@+id/home_toolbar_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/home_toolbar_alarm"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/home_toolbar_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:src="@drawable/ic_notifications_none_24px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/home_toolbar_search"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/home_calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:selectionColor="#F4F4F4"
-        app:headerColor="#FFFFFF"
-        app:headerLabelColor="#000000"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/notosanscjkr_regular"
-            android:textSize="14dp"
-            android:layout_marginLeft="16dp"
-            android:textColor="#000000"
-            android:text="오늘의 일정"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-<!--        TODO 일정이 있으면 Constraint, 없는 tv-->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:visibility="invisible"
+            android:layout_height="wrap_content">
+            <com.applandeo.materialcalendarview.CalendarView
+                android:id="@+id/home_calendarView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/home_cl_today_schedule">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:id="@+id/home_ll_today_schedule1"
+                android:layout_height="wrap_content"
+                app:selectionColor="#F4F4F4"
+                app:headerColor="#000000"
+                app:headerLabelColor="#000000"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/home_toolbar_tv_today"
+                    android:layout_marginLeft="18dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="20dp"
+                    android:textColor="#000000"
+                    android:textAlignment="viewStart"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/home_view_divider"
+                    app:layout_constraintLeft_toRightOf="@id/home_toolbar_search_alarm"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    android:drawableRight="@drawable/ic_expand_more_24px"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:text="안녕하세요"
-                        android:id="@+id/home_tv_today_schedule1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <LinearLayout
-                        android:id="@+id/home_ll_schedule_detail1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/home_tv_schedule_detail_time1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/home_tv_schedule_detail_location1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <View
-                    android:id="@+id/home_view_divider"
-                    android:layout_width="1dp"
-                    android:layout_height="19dp"
-                    android:background="#000000"
-                    app:layout_constraintLeft_toRightOf="@id/home_ll_today_schedule1"
-                    app:layout_constraintRight_toLeftOf="@id/home_ll_today_schedule2"
-                    app:layout_constraintTop_toTopOf="parent"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/home_toolbar_search_alarm"
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-
-                    android:alpha="0.1"/>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    app:layout_constraintLeft_toRightOf="@id/home_view_divider"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintLeft_toRightOf="@id/home_toolbar_tv_today"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:id="@+id/home_ll_today_schedule2"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:text="안녕하세요"
-                        android:id="@+id/home_tv_today_schedule2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <LinearLayout
-                        android:id="@+id/home_ll_schedule_detail2"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <ImageView
+                        android:id="@+id/home_toolbar_search"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/home_tv_schedule_detail_time2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/home_tv_schedule_detail_location2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        android:src="@drawable/ic_search_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/home_toolbar_alarm"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    </LinearLayout>
-
-                </LinearLayout>
+                    <ImageView
+                        android:id="@+id/home_toolbar_alarm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_notifications_none_24px"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/home_toolbar_search"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:id="@+id/home_tv_no_schedule"
-                android:textSize="12dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:fontFamily="@font/notosanscjkr_regular"
-                android:alpha="0.6"
-                android:text="진행 예정 일정이 없어요."
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
         </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="81dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/notosanscjkr_regular"
+                android:textSize="14dp"
+                android:layout_marginLeft="16dp"
+                android:textColor="#000000"
+                android:text="오늘의 일정"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <!--        TODO 일정이 있으면 Constraint, 없는 tv-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/home_cl_today_schedule">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:id="@+id/home_ll_today_schedule1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/home_view_divider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="안녕하세요"
+                            android:id="@+id/home_tv_today_schedule1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:id="@+id/home_ll_schedule_detail1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/home_tv_schedule_detail_time1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/home_tv_schedule_detail_location1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/home_view_divider"
+                        android:layout_width="1dp"
+                        android:layout_height="19dp"
+                        android:background="#000000"
+                        app:layout_constraintLeft_toRightOf="@id/home_ll_today_schedule1"
+                        app:layout_constraintRight_toLeftOf="@id/home_ll_today_schedule2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+
+                        android:alpha="0.1"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        app:layout_constraintLeft_toRightOf="@id/home_view_divider"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:id="@+id/home_ll_today_schedule2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="안녕하세요"
+                            android:id="@+id/home_tv_today_schedule2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:id="@+id/home_ll_schedule_detail2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/home_tv_schedule_detail_time2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/home_tv_schedule_detail_location2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/home_tv_no_schedule"
+                    android:textSize="12dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:fontFamily="@font/notosanscjkr_regular"
+                    android:alpha="0.6"
+                    android:text="진행 예정 일정이 없어요."
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

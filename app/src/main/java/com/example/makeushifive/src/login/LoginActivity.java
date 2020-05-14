@@ -2,12 +2,15 @@ package com.example.makeushifive.src.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +23,8 @@ import com.example.makeushifive.src.main.MainActivity;
 import com.example.makeushifive.src.signup.SignupActivity;
 
 import org.json.JSONException;
+
+import java.util.Objects;
 
 import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
 import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
@@ -92,8 +97,17 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
 
     }
     public void ShowDialogFindPwd(){
-        //파라미터에 리스너 등록
         mFindPwdDialog = new FindPwdDialog(this,transferListener,cancelListener);
+        WindowManager.LayoutParams layoutParams =   Objects.requireNonNull(mFindPwdDialog.getWindow()).getAttributes();
+//        Window window = mFindPwdDialog.getWindow();
+//        assert window != null;
+//        window.setBackgroundDrawable(R.drawable.login_custom_dialog_border); //배경
+
+//        layoutParams.screenBrightness= WindowManager.LayoutParams.DIM_AMOUNT_CHANGED;
+//        layoutParams.width= WindowManager.LayoutParams.WRAP_CONTENT; //폭
+//        layoutParams.height=WindowManager.LayoutParams.WRAP_CONTENT; //높이
+        layoutParams.flags= WindowManager.LayoutParams.FLAG_DIM_BEHIND; //배경 흐리게
+
         mFindPwdDialog.show();
     }
 

@@ -1,5 +1,6 @@
 package com.example.makeushifive.src.main.home;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -14,11 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
@@ -32,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.makeushifive.src.ApplicationClass.CALENDAR_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
@@ -40,6 +44,34 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     Context mContext = getContext();
     private ImageView mIvSearch,mIvAlarm;
+    TextView mTvCurrentDate;
+    private Calendar calendar;
+    CalendarView calendarView;
+
+    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            Log.e("받아온거",""+year+" "+month+" "+dayOfMonth);
+            calendar.set(year, month, 1);
+            try {
+                calendarView.setDate(calendar);
+            } catch (OutOfDateRangeException e) {
+                e.printStackTrace();
+            }
+            String showMonth="";
+            if(month<10){
+                showMonth="0";
+            }
+            showMonth+=String.valueOf(month);
+            String ShowDate = String.valueOf(year);
+            ShowDate+=". ";
+            ShowDate+=showMonth;
+            ShowDate+=" ";
+            mTvCurrentDate.setText(ShowDate);
+        }
+    };
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,13 +87,50 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         });
         mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
 
-
-
         List<EventDay> events = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
+        int year,month,day;
+        year=2020;
+        month=5;
+        day=20;
+        calendar.set(year,month-1,day);
         events.add(new EventDay(calendar,R.drawable.ic_account_circle_24px));
-        CalendarView calendarView = rootView.findViewById(R.id.home_calendarView);
+
+        Calendar calendar1=Calendar.getInstance();
+        year=2020;
+        month=5;
+        day=13;
+        calendar1.set(year,month-1,day);
+        events.add(new EventDay(calendar1,R.drawable.ic_hifive_icon));
+        events.add(new EventDay(calendar, new Drawable() {
+            @Override
+            public void draw(@NonNull Canvas canvas) {
+
+            }
+
+            @Override
+            public void setAlpha(int alpha) {
+
+            }
+
+            @Override
+            public void setColorFilter(@Nullable ColorFilter colorFilter) {
+
+            }
+
+            @Override
+            public int getOpacity() {
+                return 0;
+            }
+        }));
+
+        calendarView = rootView.findViewById(R.id.home_calendarView);
         calendarView.setEvents(events);
+
+        //상단에 년월 표시 안보이게
+        calendarView.setHeaderVisibility(View.INVISIBLE);
+
+
 
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
@@ -77,8 +146,25 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
             }
         });
+
+        //상단 날짜 표시
+        String date = CALENDAR_FORMAT.format(calendarView.getCurrentPageDate().getTime());
+        mTvCurrentDate=rootView.findViewById(R.id.home_toolbar_tv_today);
+        mTvCurrentDate.setText(date);
+
+        mTvCurrentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YearMonthPickerDialog yd = new YearMonthPickerDialog();
+                yd.setListener(d);
+                yd.show(Objects.requireNonNull(getFragmentManager()),"YearMonthPicker");
+            }
+        });
+
+
+
+
         return rootView;
     }
-
 
 }

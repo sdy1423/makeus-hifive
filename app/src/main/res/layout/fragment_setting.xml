@@ -88,7 +88,6 @@
         android:alpha="0.35"/>
 
     <TextView
-        android:onClick="SettingClick"
         android:id="@+id/setting_tv_change_user_info"
         android:text="회원 정보 수정"
         android:textColor="#000000"
@@ -108,7 +107,6 @@
 
     <TextView
         android:id="@+id/setting_tv_share_friend"
-        android:onClick="SettingClick"
         android:text="공유 친구 관리"
         android:textColor="#000000"
         android:textSize="16dp"
@@ -126,7 +124,6 @@
         android:alpha="0.35"/>
     <TextView
         android:id="@+id/setting_tv_theme_setting"
-        android:onClick="SettingClick"
         android:text="테마 설정"
         android:textColor="#000000"
         android:textSize="16dp"

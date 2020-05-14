@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".src.main.setting.change.ChangeActivity"/>
         <activity android:name=".src.main.chatting.ChattingActivity" />
         <activity android:name=".src.main.home.search.SearchActivity" />
         <activity android:name=".src.main.home.add.AddActivity" />

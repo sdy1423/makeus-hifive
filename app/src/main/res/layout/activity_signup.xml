@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     tools:context=".src.signup.SignupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -58,6 +58,7 @@
                     android:paddingLeft="16dp"
                     android:textSize="@dimen/user_info_edt_size"
                     android:alpha="1"
+                    android:paddingRight="12dp"
                     android:inputType="textEmailAddress"
                     android:textColorHint="#80000000"
                     android:background="@drawable/login_signup_edt_border"/>
@@ -76,6 +77,7 @@
                     android:paddingLeft="16dp"
                     android:inputType="text"
                     android:textSize="@dimen/user_info_edt_size"
+                    android:paddingRight="12dp"
                     android:textColorHint="#80000000"
                     android:layout_marginTop="21dp"
                     android:background="@drawable/login_signup_edt_border"
@@ -98,6 +100,7 @@
                     android:paddingLeft="16dp"
                     android:textColorHint="#80000000"
                     android:textSize="@dimen/user_info_edt_size"
+                    android:paddingRight="12dp"
                     android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
@@ -109,12 +112,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:alpha="1"
+                    android:paddingRight="12dp"
                     android:paddingLeft="16dp"
                     android:inputType="textPassword"
                     android:layout_marginTop="20dp"
                     android:textSize="@dimen/user_info_edt_size"
                     android:textColorHint="#80000000"
                     android:background="@drawable/login_signup_edt_border"/>
+
+                <TextView
+                    android:text="비밀번호가 일치하지 않아요"
+                    android:textColor="#FF7979"
+                    android:id="@+id/sign_up_tv_pwd_check_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:textSize="12dp"
+                    android:fontFamily="@font/notosanscjkr_regular"/>
+
 
                 <Button
                     android:text="Join"

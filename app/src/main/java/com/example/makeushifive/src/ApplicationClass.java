@@ -33,6 +33,7 @@ public class ApplicationClass extends Application {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
     public static SimpleDateFormat KOREAN_FORMAT = new SimpleDateFormat("MM월 dd일",Locale.KOREA);
     public static SimpleDateFormat DOT_FORMAT = new SimpleDateFormat("MM. dd /",Locale.KOREA);
+    public static SimpleDateFormat CALENDAR_FORMAT = new SimpleDateFormat("yyyy. MM ",Locale.KOREA);
 
     // Retrofit 인스턴스
     public static Retrofit retrofit;

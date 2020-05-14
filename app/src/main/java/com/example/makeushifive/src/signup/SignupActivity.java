@@ -31,7 +31,7 @@ import static com.example.makeushifive.R.id.sign_up_edt_email;
 public class SignupActivity extends BaseActivity implements SignupActivityView {
 
     EditText mEdtEmail,mEdtUserName,mEdtPwd,mEdtPwdCheck;
-    TextView mTvPossible1,mTvPossible2,mTvPossible3,mTvPossible4;
+    TextView mTvPossible1,mTvPossible2,mTvPwdCheckText;
     Button mBtnJoin;
     String mPwd="",mEmail="",mUserName="";
     Drawable img1,img2;
@@ -54,6 +54,8 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
 
         mTvPossible1=findViewById(R.id.sign_up_tv_possible1);
         mTvPossible2=findViewById(R.id.sign_up_tv_possible2);
+        mTvPwdCheckText=findViewById(R.id.sign_up_tv_pwd_check_text);
+        mTvPwdCheckText.setVisibility(View.INVISIBLE);
 
         mSignupService = new SignupService(this);
 
@@ -67,6 +69,7 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
                 }else{
                     if(!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()){
                         Log.e("매치안함", " " + mEmail);
+
 //                    ShowImPossibleEmail("다른 이메일을 사용해주세요.");
                         EmailFlag=false;
                     }else{
@@ -129,20 +132,20 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.toString().equals(mPwd)){
-                    Log.e("equal","equal");
-                    Log.e(" equal mPwd",""+mPwd);
-                    Log.e(" equal s",s.toString());
+//                    Log.e("equal","equal");
+//                    Log.e(" equal mPwd",""+mPwd);
+//                    Log.e(" equal s",s.toString());
                     mEdtPwdCheck.setCompoundDrawables(null,null,img1,null);
-                    mTvPossible4.setText("");
+                    mTvPwdCheckText.setVisibility(View.INVISIBLE);
+
                     PasswordFlag=true;
                 }else{
-                    Log.e("not equal","not equal");
-                    Log.e("not equal mPwd",""+mPwd);
-                    Log.e("not equal s",s.toString());
+//                    Log.e("not equal","not equal");
+//                    Log.e("not equal mPwd",""+mPwd);
+//                    Log.e("not equal s",s.toString());
 
                     mEdtPwdCheck.setCompoundDrawables(null,null,img2,null);
-                    mTvPossible4.setText("비밀번호가 일치하지 않아요");
-                    mTvPossible4.setTextColor(Color.parseColor("#FF7979"));
+                    mTvPwdCheckText.setVisibility(View.VISIBLE);
                     PasswordFlag=false;
                 }
             }

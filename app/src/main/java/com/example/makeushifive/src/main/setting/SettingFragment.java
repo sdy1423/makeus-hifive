@@ -31,7 +31,7 @@ import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
 public class SettingFragment extends BaseFragment implements SettingFragmentView {
 
     ImageView mIvProfileImg;
-    TextView mTvUserName;
+    TextView mTvUserName,mTvChangeUserInfo,mTvShareFriendSetting,mTvThemeSetting;
     int UserNo;
     private String ProfileUrl, NickName, Email;
 
@@ -53,6 +53,19 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
         SettingService settingService = new SettingService(this);
         settingService.getUserInfoDetail(UserNo);
 
+        mTvChangeUserInfo=rootView.findViewById(R.id.setting_tv_change_user_info);
+        mTvShareFriendSetting=rootView.findViewById(R.id.setting_tv_share_friend);
+        mTvThemeSetting=rootView.findViewById(R.id.setting_tv_theme_setting);
+        mTvChangeUserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Objects.requireNonNull(getActivity()).getIntent().putExtra("email",Email);
+                getActivity().getIntent().putExtra("profileUrl",ProfileUrl);
+                Intent intent1 = new Intent(getActivity(), ChangeActivity.class);
+                startActivity(intent1);
+
+            }
+        });
 
         return rootView;
     }
@@ -73,20 +86,4 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
 
     }
 
-    public void SettingClick(View view) {
-        switch (view.getId()){
-            case R.id.setting_tv_change_user_info:
-                Objects.requireNonNull(getActivity()).getIntent().putExtra("email",Email);
-                getActivity().getIntent().putExtra("profileUrl",ProfileUrl);
-                Intent intent1 = new Intent(getActivity(), ChangeActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.setting_tv_share_friend:
-
-                break;
-            case R.id.setting_tv_theme_setting:
-
-                break;
-        }
-    }
 }
