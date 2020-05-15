@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,8 +19,12 @@ import android.widget.TextView;
 
 import com.example.makeushifive.R;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
+
+import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -28,13 +33,12 @@ public class AddActivity extends AppCompatActivity {
     int location_height = 150;
     LinearLayout mLlRepeatSelect,mLlRepeatSelectDay;
     TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
-    mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur;
+    mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
+            ,mTvStartTime,mTvEndTime;
     ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,
-            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove;
+            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove;
     //월,화,수,목,금,토,일 클릭 여부
-    boolean DayFlag[]={false,false,false,false,false,false,false};
-    boolean LocationFlag=false,SelectDayWeekMonthFlag=false;
-    boolean EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false;
+    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false;
 
 
     @Override
@@ -47,9 +51,11 @@ public class AddActivity extends AppCompatActivity {
 
         //TODO 인텐트로 day받으면 터지는거 해결ㄱㄱ
         Intent intent = getIntent();
-//        String day = Objects.requireNonNull(intent.getExtras()).getString("korean");
+        Date date = new Date(Objects.requireNonNull(intent.getExtras()).getLong("date",0));
+        Log.e("add에서 받은 날짜정보", String.valueOf(date));
+        String StartDate = KOREAN_FORMAT.format(date);
 
-
+        mTvStartDate.setText(StartDate);
 
     }
 
@@ -158,9 +164,27 @@ public class AddActivity extends AppCompatActivity {
         mIvShowColor7=findViewById(showColor[6]);
         mIvShowColor8=findViewById(showColor[7]);
 
+        mTvStartDate =findViewById(R.id.add_tv_start_date);
+        mTvStartTime =findViewById(R.id.add_tv_start_time);
+        mTvEndDate = findViewById(R.id.add_tv_end_date);
+        mTvEndTime =findViewById(R.id.add_tv_end_time);
 
+        mIvTimeAdd=findViewById(R.id.add_iv_time_add);
+        mIvTimeRemove=findViewById(R.id.add_iv_time_remove);
 
     }
+    public void TimeClick(View view){
+        if(!TimeFlag){
+            //시간 설정 전
+            TimeFlag=true;
+
+        }else{
+            //시간 설정 후
+            TimeFlag=false;
+
+        }
+    }
+
 
     public void locationClick(View view) {
         switch(view.getId()){

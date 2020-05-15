@@ -147,14 +147,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
-                 String korean = KOREAN_FORMAT.format(eventDay.getCalendar().getTime());
-                 String dot = DOT_FORMAT.format(eventDay.getCalendar().getTime());
+                //TODO DATE_FORMAT으로 보내고 필요할때 바꾸자.
 
                 AddScheduleDialog addScheduleDialog = new AddScheduleDialog(getActivity());
-                Bundle args = new Bundle();
-                args.putString("korean", korean);
-                args.putString("dot",dot);
-                addScheduleDialog.setArguments(args);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("date",eventDay.getCalendar().getTime());
+                Log.e("클릭한 날짜(dialog으로 보낼 날짜)",""+eventDay.getCalendar().getTime());
+                addScheduleDialog.setArguments(bundle);
                 addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
             }
         });

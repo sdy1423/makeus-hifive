@@ -117,7 +117,6 @@
                     android:textAlignment="textEnd"
                     android:textColor="#000000"
                     android:textSize="12dp"
-                    app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintLeft_toRightOf="@id/login_tv_log_in_feedback"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -128,7 +127,7 @@
         <LinearLayout
             android:layout_marginTop="79dp"
             android:layout_width="match_parent"
-            android:layout_height="147dp"
+            android:layout_height="259dp"
             android:orientation="vertical">
             <Button
                 android:id="@+id/login_btn_login"
@@ -178,14 +177,16 @@
                     app:layout_constraintRight_toRightOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <Button
-                android:id="@+id/login_btn_sign_up"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:alpha="1"
-                android:background="@drawable/sign_up_btn_border"
-                android:fontFamily="@font/roboto_regular"
-                android:text="Sign Up" />
+                <Button
+                    android:id="@+id/login_btn_sign_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:alpha="1"
+                    android:background="@drawable/sign_up_btn_border"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Sign Up"
+                    android:layout_marginBottom="112dp"/>
+
 
         </LinearLayout>
 

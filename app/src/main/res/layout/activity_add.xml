@@ -11,39 +11,43 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/add_iv_ex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/ic_close_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/add_tv_complete"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/add_tv_complete"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="18dp">
+            <LinearLayout
+                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="18dp"
-                android:fontFamily="@font/notosanscjkr_regular"
-                android:text="완료"
-                android:textAlignment="viewEnd"
-                android:textColor="#FF7979"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/add_iv_ex"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/add_iv_ex"
+                    android:src="@drawable/ic_close_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:gravity="end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/add_tv_complete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:fontFamily="@font/notosanscjkr_regular"
+                    android:text="완료"
+                    android:textAlignment="viewEnd"
+                    android:textColor="#FF7979"
+                    android:textSize="16dp"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -240,57 +244,69 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/add_iv_time"
+                app:layout_constraintRight_toLeftOf="@id/add_fl_time"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/add_iv_time"
+            <FrameLayout
+                android:id="@+id/add_fl_time"
+                android:onClick="TimeClick"
                 android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="end"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_add_24px"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/add_tv_time"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toTopOf="parent" >
+                <ImageView
+                    android:id="@+id/add_iv_time_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_add_24px" />
+                <ImageView
+                    android:id="@+id/add_iv_time_remove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_remove_24px" />
+            </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="58dp"-->
-        <!--                android:gravity="center_vertical">-->
-        <!--                <TextView-->
-        <!--                    android:id="@+id/add_tv_share"-->
-        <!--                    android:drawablePadding="12dp"-->
-        <!--                    android:layout_marginLeft="16dp"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:alpha="0.8"-->
-        <!--                    android:drawableLeft="@drawable/ic_people_outline_24px"-->
-        <!--                    android:text="일정 공유"-->
-        <!--                    android:textColor="#000000"-->
-        <!--                    app:layout_constraintHorizontal_chainStyle="spread_inside"-->
-        <!--                    app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--                    app:layout_constraintRight_toLeftOf="@id/add_iv_share"-->
-        <!--                    app:layout_constraintTop_toTopOf="parent"-->
-        <!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-
-        <!--                <ImageView-->
-        <!--                    android:id="@+id/add_iv_share"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="24dp"-->
-        <!--                    android:layout_gravity="end"-->
-        <!--                    android:src="@drawable/ic_add_24px"-->
-        <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                    app:layout_constraintLeft_toRightOf="@id/add_tv_share"-->
-        <!--                    app:layout_constraintRight_toRightOf="parent"-->
-        <!--                    app:layout_constraintTop_toTopOf="parent"-->
-        <!--                    app:layout_constraintVertical_bias="0.47"-->
-        <!--                    android:layout_marginRight="16dp"/>-->
-        <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
+        <LinearLayout
+            android:weightSum="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/add_tv_start_date"
+                android:paddingLeft="46dp"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/add_tv_start_time"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:weightSum="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/add_tv_end_date"
+                android:paddingLeft="46dp"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/add_tv_end_time"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,10 @@ import androidx.fragment.app.Fragment;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.home.add.AddActivity;
 
+import java.util.Date;
 import java.util.Objects;
+
+import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
 
 public class AddScheduleDialog extends DialogFragment {
 
@@ -41,25 +45,25 @@ public class AddScheduleDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.home_custom_dialog_add_schedule, container, false);
 
-        Bundle args = getArguments();
-        //TODO 날짜 받아오기
-        String korean = Objects.requireNonNull(args).getString("korean");
-        String dot = Objects.requireNonNull(args).getString("dot");
-
+        Bundle bundle =savedInstanceState !=null ? savedInstanceState :getArguments();
+        assert bundle != null;
+        Date ShowDate = (Date)bundle.getSerializable("date");
+        Log.e("show date다이얼로그 내부",""+ShowDate);
+        assert ShowDate != null;
+        String dialogFormDate = DOT_FORMAT.format(ShowDate); //dialog에 표시할 날짜 형식
 
         fragment = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("tag");
-
         mTvToday=rootview.findViewById(R.id.home_custom_dialog_day);
-        mTvToday.setText(dot);
+        mTvToday.setText(dialogFormDate);
 
         mIvAddSchedule=rootview.findViewById(R.id.home_custom_dialog_iv_plus_button);
         mIvAddSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Log.e("add로 보낼 date", String.valueOf(ShowDate));
                 Intent intent = new Intent(activity, AddActivity.class);
-                //TODO today올바른 형식으로 수정할것.
-//                activity.getIntent().putExtra("korean",korean);
+                intent.putExtra("date", ShowDate);
                 startActivity(intent);
 
                 DialogFragment dialogFragment = (DialogFragment) fragment;
