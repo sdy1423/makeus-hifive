@@ -29,28 +29,30 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
 public class AddActivity extends AppCompatActivity {
 
-    ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni;
+    ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni;
     EditText mEdtLocation;
     int location_height = 150;
-    LinearLayout mLlRepeatSelect,mLlRepeatSelectDay;
+    LinearLayout mLlRepeatSelect,mLlRepeatSelectDay,mLlEndTime;
     TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
     mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
-            ,mTvStartTime,mTvEndTime;
+            ,mTvStartTime,mTvEndTime,mTvAlarmSelected;
     ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,
-            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove;
+            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove,mIvAlarmAdd,mIvAlarmRemove;
     //월,화,수,목,금,토,일 클릭 여부
-    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false;
+    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false,AlarmFlag=false;
 
     int getYear,getMonth,getDay;
 
     int PickedStartMonth,PickedStartDay,PickedStartHour,PickedStartMin,
             PickedEndMonth,PickedEndDay,PickedEndHour,PickedEndMin;
 
+    String FirstShowDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +77,14 @@ public class AddActivity extends AppCompatActivity {
         Log.e("받은것들: ",""+getYear+" "+getMonth+" "+getDay);
 
         //TODO mTvStartDate에 날짜 보여주기
-        String ShowDate="";
+        FirstShowDate="";
         String ShowMonth = String.valueOf(getMonth);
         String ShowDay = String.valueOf(getDay);
-        ShowDate+=ShowMonth;
-        ShowDate+="월 ";
-        ShowDate+=ShowDay;
-        ShowDate+="일";
-        mTvStartDate.setText(ShowDate);
+        FirstShowDate+=ShowMonth;
+        FirstShowDate+="월 ";
+        FirstShowDate+=ShowDay;
+        FirstShowDate+="일";
+        mTvStartDate.setText(FirstShowDate);
     }
 
     private void SetVisibility() {
@@ -131,6 +133,8 @@ public class AddActivity extends AppCompatActivity {
         mIvTimeAdd.setVisibility(View.VISIBLE);
         mIvTimeRemove.setVisibility(View.INVISIBLE);
 
+        mIvAlarmAdd.setVisibility(View.VISIBLE);
+        mIvAlarmRemove.setVisibility(View.INVISIBLE);
 
     }
 
@@ -201,11 +205,87 @@ public class AddActivity extends AppCompatActivity {
         mIvTimeAdd=findViewById(R.id.add_iv_time_add);
         mIvTimeRemove=findViewById(R.id.add_iv_time_remove);
 
+        mLlEndTime=findViewById(R.id.add_ll_end_time);
+
+        mIvAlarmAdd=findViewById(R.id.add_iv_alarm_add);
+        mIvAlarmRemove=findViewById(R.id.add_iv_alarm_remove);
+
+        mTvAlarmSelected=findViewById(R.id.add_tv_alarm_what);
     }
+
+    public void AlarmClick(View view){
+        if(!AlarmFlag){
+            //DIALOG띄워
+            final AddAlarmDialog addAlarmDialog = new AddAlarmDialog(this, new AddAlarmDialog.ICustomDialogEventListener() {
+                @Override
+                public void customDialogEvent(int valueYouWantToSendBackToTheActivity) {
+                    mAlarmAni=ValueAnimator.ofArgb(0,location_height);
+                    mAlarmAni.setDuration(1000);
+                    mAlarmAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            Integer value = (Integer)animation.getAnimatedValue();
+                            mTvAlarmSelected.getLayoutParams().height=value;
+                            mTvAlarmSelected.requestLayout();
+                        }
+                    });
+                    mAlarmAni.start();
+                    mIvAlarmAdd.setVisibility(View.INVISIBLE);
+                    mIvAlarmRemove.setVisibility(View.VISIBLE);
+                    AlarmFlag=true;
+                    Log.e("30분부터 1번: ",""+valueYouWantToSendBackToTheActivity);
+                    ShowSelectedAlarm(valueYouWantToSendBackToTheActivity);
+                }
+            });
+            addAlarmDialog.show();
+        }else{
+            AlarmFlag=false;
+            mAlarmAni=ValueAnimator.ofArgb(location_height,0);
+            mAlarmAni.setDuration(1000);
+            mAlarmAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    Integer value = (Integer)animation.getAnimatedValue();
+                    mTvAlarmSelected.getLayoutParams().height=value;
+                    mTvAlarmSelected.requestLayout();
+                }
+            });
+            mAlarmAni.start();
+            mIvAlarmAdd.setVisibility(View.VISIBLE);
+            mIvAlarmRemove.setVisibility(View.INVISIBLE);
+        }
+    }
+    public void ShowSelectedAlarm(int num){
+        switch (num){
+            case 1:
+                mTvAlarmSelected.setText("30분 전");
+                break;
+            case 2:
+                mTvAlarmSelected.setText("1시간 전");
+                break;
+            case 3:
+                mTvAlarmSelected.setText("2시간 전");
+                break;
+            case 4:
+                mTvAlarmSelected.setText("하루 전");
+                break;
+            case 5:
+                mTvAlarmSelected.setText("일주일 전");
+                break;
+        }
+    }
+
+
     public void TimeClick(View view){
         //AddTimeDialog띄우기
-        AddTimeDialog addTimeDialog = new AddTimeDialog(this,startDateListener,startTimeListener,endDateListener,endTimeListener,getYear,getMonth,getDay);
-        addTimeDialog.show();
+        if(!TimeFlag){
+            TimeFlag=true;
+            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startDateListener,startTimeListener,endDateListener,endTimeListener,getYear,getMonth,getDay);
+            addTimeDialog.show();
+        }else{
+            TimeFlag=false;
+            ClosePickedTime();
+        }
     }
 
 
@@ -243,13 +323,94 @@ public class AddActivity extends AppCompatActivity {
             Log.e("endtime",""+hourOfDay+" "+minute);
             PickedEndHour=hourOfDay;
             PickedEndMin=minute;
-            ShowPickedTime();
+            OpenPickedTime();
         }
     };
 
-    public void ShowPickedTime(){
+    public void OpenPickedTime(){
         //TODO 1. 애니메이션으로 도착시간 보여주는 부분 내려오게 하기
+
+        mTimeAni = ValueAnimator.ofArgb(0,location_height);
+        mTimeAni.setDuration(1000);
+        mTimeAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer)animation.getAnimatedValue();
+                mLlEndTime.getLayoutParams().height=value;
+                mLlEndTime.requestLayout();
+            }
+        });
+        mTimeAni.start();
+
         //TODO 2. setText로 보여주기 (시작시간, 끝나는 시간)
+        mIvTimeAdd.setVisibility(View.INVISIBLE);
+        mIvTimeRemove.setVisibility(View.VISIBLE);
+
+        String ShowStartDate="",ShowStartTime="",ShowEndDate="",ShowEndTime="";
+
+        //시작(몇월몇일)
+        ShowStartDate+=String.valueOf(PickedStartMonth);
+        ShowStartDate+="월 ";
+        ShowStartDate+=String.valueOf(PickedStartDay);
+        ShowStartDate+=String.valueOf("일");
+
+        //끝(몇월및일)
+        ShowEndDate+=String.valueOf(PickedEndMonth);
+        ShowEndDate+="월 ";
+        ShowEndDate+=String.valueOf(PickedEndDay);
+        ShowEndDate+=String.valueOf("일");
+
+        //시작(시간)
+        if(PickedStartHour<10){
+            ShowStartTime+="0";
+        }
+        ShowStartTime+=PickedStartHour;
+        ShowStartTime+=":";
+        if(PickedStartMin<10){
+            ShowStartTime+="0";
+        }
+        ShowStartTime+=PickedStartMin;
+
+        //끝(시간)
+        if(PickedEndHour<10){
+            ShowEndTime+="0";
+        }
+        ShowEndTime+=PickedEndHour;
+        ShowEndTime+=":";
+        if(PickedEndMin<10){
+            ShowEndTime+="0";
+        }
+        ShowEndTime+=PickedEndMin;
+
+        mTvStartDate.setText(ShowStartDate);
+        mTvStartTime.setText(ShowStartTime);
+        mTvEndDate.setText(ShowEndDate);
+        mTvEndTime.setText(ShowEndTime);
+
+
+    }
+    public void ClosePickedTime(){
+        mTimeAni = ValueAnimator.ofArgb(location_height,0);
+        mTimeAni.setDuration(1000);
+        mTimeAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer)animation.getAnimatedValue();
+                mLlEndTime.getLayoutParams().height=value;
+                mLlEndTime.requestLayout();
+            }
+        });
+        mTimeAni.start();
+        mTvStartDate.setText(FirstShowDate);
+
+        mTvStartTime.setText("");
+        mTvEndDate.setText("");
+        mTvEndTime.setText("");
+
+
+
+        mIvTimeAdd.setVisibility(View.VISIBLE);
+        mIvTimeRemove.setVisibility(View.INVISIBLE);
 
     }
 
