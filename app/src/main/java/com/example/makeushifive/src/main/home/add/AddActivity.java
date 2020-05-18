@@ -35,17 +35,18 @@ import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
 public class AddActivity extends AppCompatActivity {
 
-    ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni;
-    EditText mEdtLocation;
+    ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
+    EditText mEdtLocation,mEdtTag;
     int location_height = 150;
     LinearLayout mLlRepeatSelect,mLlRepeatSelectDay,mLlEndTime;
     TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
     mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
             ,mTvStartTime,mTvEndTime,mTvAlarmSelected;
     ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,
-            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove,mIvAlarmAdd,mIvAlarmRemove;
+            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove,mIvAlarmAdd,mIvAlarmRemove,mIvTagAdd,mIvTagRemove;
     //월,화,수,목,금,토,일 클릭 여부
-    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false,AlarmFlag=false;
+    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false,AlarmFlag=false
+            ,TagFlag=false;
 
     int getYear,getMonth,getDay;
 
@@ -136,6 +137,8 @@ public class AddActivity extends AppCompatActivity {
         mIvAlarmAdd.setVisibility(View.VISIBLE);
         mIvAlarmRemove.setVisibility(View.INVISIBLE);
 
+        mIvTagAdd.setVisibility(View.VISIBLE);
+        mIvTagRemove.setVisibility(View.INVISIBLE);
     }
 
     private void FindViewById() {
@@ -211,6 +214,49 @@ public class AddActivity extends AppCompatActivity {
         mIvAlarmRemove=findViewById(R.id.add_iv_alarm_remove);
 
         mTvAlarmSelected=findViewById(R.id.add_tv_alarm_what);
+        mIvTagAdd=findViewById(R.id.add_iv_tag_add);
+        mIvTagRemove=findViewById(R.id.add_iv_tag_remove);
+        mEdtTag=findViewById(R.id.add_edt_tag);
+    }
+    public void TagClick(View view){
+        if(!TagFlag){
+            OpenTag();
+            TagFlag=true;
+        }else{
+            CloseTag();
+            TagFlag=false;
+        }
+    }
+    public void OpenTag(){
+        mTagAni=ValueAnimator.ofArgb(0,location_height);
+        mTagAni.setDuration(1000);
+        mTagAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                mEdtTag.getLayoutParams().height=value;
+                mEdtTag.requestLayout();
+            }
+        });
+        mTagAni.start();
+
+        mIvTagAdd.setVisibility(View.INVISIBLE);
+        mIvTagRemove.setVisibility(View.VISIBLE);
+    }
+    public void CloseTag(){
+        mTagAni=ValueAnimator.ofArgb(location_height,0);
+        mTagAni.setDuration(1000);
+        mTagAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                mEdtTag.getLayoutParams().height=value;
+                mEdtTag.requestLayout();
+            }
+        });
+        mTagAni.start();
+        mIvTagAdd.setVisibility(View.VISIBLE);
+        mIvTagRemove.setVisibility(View.INVISIBLE);
     }
 
     public void AlarmClick(View view){

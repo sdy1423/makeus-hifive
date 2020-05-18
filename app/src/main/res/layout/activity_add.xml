@@ -1,840 +1,867 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".src.main.home.add.AddActivity">
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="18dp">
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:gravity="center_vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="18dp">
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/add_iv_ex"
-                    android:src="@drawable/ic_close_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_weight="1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/add_iv_ex"
+                android:src="@drawable/ic_close_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/add_tv_complete"
                 android:gravity="end"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:gravity="end"
-                    android:id="@+id/add_tv_complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:text="완료"
-                    android:textAlignment="viewEnd"
-                    android:textColor="#FF7979"
-                    android:textSize="16dp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:alpha="0.07"
-            android:background="#707070" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:layout_width="12dp"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/add_iv_show_color1"
-                    android:layout_width="12dp"
-                    android:background="@color/one"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color2"
-                    android:layout_width="12dp"
-                    android:background="@color/two"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color3"
-                    android:layout_width="12dp"
-                    android:background="@color/three"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color4"
-                    android:layout_width="12dp"
-                    android:background="@color/four"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color5"
-                    android:layout_width="12dp"
-                    android:background="@color/five"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color6"
-                    android:layout_width="12dp"
-                    android:background="@color/six"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color7"
-                    android:layout_width="12dp"
-                    android:background="@color/seven"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:id="@+id/add_iv_show_color8"
-                    android:layout_width="12dp"
-                    android:background="@color/eight"
-                    android:layout_height="match_parent" />
-
-            </FrameLayout>
-
-            <EditText
-                android:id="@+id/add_edt_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
                 android:fontFamily="@font/notosanscjkr_regular"
-                android:gravity="center_vertical"
-                android:hint="Title"
-                android:background="@drawable/background_transparent"
-                android:textColor="#000000"
-                android:textSize="20dp" />
-
+                android:text="완료"
+                android:textAlignment="viewEnd"
+                android:textColor="#FF7979"
+                android:textSize="16dp"/>
         </LinearLayout>
+    </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="91dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.07"
+                android:background="#707070" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="16dp"
+                android:layout_height="66dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/add_iv_show_color1"
+                        android:layout_width="12dp"
+                        android:background="@color/one"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color2"
+                        android:layout_width="12dp"
+                        android:background="@color/two"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color3"
+                        android:layout_width="12dp"
+                        android:background="@color/three"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color4"
+                        android:layout_width="12dp"
+                        android:background="@color/four"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color5"
+                        android:layout_width="12dp"
+                        android:background="@color/five"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color6"
+                        android:layout_width="12dp"
+                        android:background="@color/six"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color7"
+                        android:layout_width="12dp"
+                        android:background="@color/seven"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/add_iv_show_color8"
+                        android:layout_width="12dp"
+                        android:background="@color/eight"
+                        android:layout_height="match_parent" />
+
+                </FrameLayout>
+
+                <EditText
+                    android:id="@+id/add_edt_title"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_color_lens_24px" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="11.98dp"
-                    android:alpha="0.8"
+                    android:layout_marginLeft="20dp"
                     android:fontFamily="@font/notosanscjkr_regular"
-                    android:text="색상"
-                    android:textSize="12dp" />
+                    android:gravity="center_vertical"
+                    android:hint="Title"
+                    android:background="@drawable/background_transparent"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="46dp"
-                android:orientation="horizontal">
+                android:layout_height="91dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/add_iv_color1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border1" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/add_iv_color2"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border2" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:src="@drawable/ic_color_lens_24px" />
 
-                <ImageView
-                    android:id="@+id/add_iv_color3"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border3" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="11.98dp"
+                        android:alpha="0.8"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:text="색상"
+                        android:textSize="12dp" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/add_iv_color4"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border4" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/add_iv_color5"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border5" />
+                    <ImageView
+                        android:id="@+id/add_iv_color1"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border1" />
 
-                <ImageView
-                    android:id="@+id/add_iv_color6"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border6" />
+                    <ImageView
+                        android:id="@+id/add_iv_color2"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border2" />
 
-                <ImageView
-                    android:id="@+id/add_iv_color7"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border7" />
+                    <ImageView
+                        android:id="@+id/add_iv_color3"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border3" />
 
-                <ImageView
-                    android:id="@+id/add_iv_color8"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:onClick="ColorClick"
-                    android:background="@drawable/color_border8" />
+                    <ImageView
+                        android:id="@+id/add_iv_color4"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border4" />
 
+                    <ImageView
+                        android:id="@+id/add_iv_color5"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border5" />
+
+                    <ImageView
+                        android:id="@+id/add_iv_color6"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border6" />
+
+                    <ImageView
+                        android:id="@+id/add_iv_color7"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border7" />
+
+                    <ImageView
+                        android:id="@+id/add_iv_color8"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="12dp"
+                        android:onClick="ColorClick"
+                        android:background="@drawable/color_border8" />
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="#F4F4F4" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/add_tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:alpha="0.8"
-                android:drawableLeft="@drawable/ic_schedule_24px"
-                android:drawablePadding="12dp"
-                android:text="시간"
-                android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/add_fl_time"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <FrameLayout
-                android:id="@+id/add_fl_time"
-                android:onClick="TimeClick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/add_tv_time"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" >
-                <ImageView
-                    android:id="@+id/add_iv_time_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_add_24px" />
-                <ImageView
-                    android:id="@+id/add_iv_time_remove"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_remove_24px" />
-            </FrameLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
-            android:weightSum="10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/add_tv_start_date"
-                android:paddingLeft="46dp"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/add_tv_start_time"
-                android:layout_weight="3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/add_ll_end_time"
-            android:weightSum="10"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/add_tv_end_date"
-                android:paddingLeft="46dp"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/add_tv_end_time"
-                android:layout_weight="3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:alpha="0.15"
-            android:background="#000000" />
-
-        <LinearLayout
-            android:id="@+id/add_ll_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#F4F4F4" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/add_cl_location_btn"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:layout_gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/add_tv_location"
+                    android:id="@+id/add_tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:alpha="0.8"
-                    android:drawableLeft="@drawable/ic_place_black_18dp"
+                    android:drawableLeft="@drawable/ic_schedule_24px"
                     android:drawablePadding="12dp"
-                    android:text="장소"
+                    android:text="시간"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/add_fl_location"
+                    app:layout_constraintRight_toLeftOf="@id/add_fl_time"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <FrameLayout
-                    android:id="@+id/add_fl_location"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="16dp"
-                    android:onClick="locationClick"
+                    android:id="@+id/add_fl_time"
+                    android:onClick="TimeClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/add_tv_location"
+                    app:layout_constraintLeft_toRightOf="@id/add_tv_time"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent" >
+                    <ImageView
+                        android:id="@+id/add_iv_time_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/ic_add_24px" />
+                    <ImageView
+                        android:id="@+id/add_iv_time_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/ic_remove_24px" />
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:weightSum="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/add_tv_start_date"
+                    android:paddingLeft="46dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/add_tv_start_time"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/add_ll_end_time"
+                android:weightSum="10"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/add_tv_end_date"
+                    android:paddingLeft="46dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/add_tv_end_time"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:alpha="0.15"
+                android:background="#000000" />
+
+            <LinearLayout
+                android:id="@+id/add_ll_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/add_cl_location_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/add_tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:alpha="0.8"
+                        android:drawableLeft="@drawable/ic_place_black_18dp"
+                        android:drawablePadding="12dp"
+                        android:text="장소"
+                        android:textColor="#000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/add_fl_location"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <FrameLayout
+                        android:id="@+id/add_fl_location"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="16dp"
+                        android:onClick="locationClick"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/add_tv_location"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/add_iv_location_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="end"
+                            android:src="@drawable/ic_add_24px" />
+                        <ImageView
+                            android:id="@+id/add_iv_location_remove"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="end"
+                            android:src="@drawable/ic_remove_24px" />
+
+                    </FrameLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/add_edt_location"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="42dp"
+                android:fontFamily="@font/notosanscjkr_regular"
+                android:hint="장소입력"
+                android:background="@drawable/background_transparent"
+                android:textColorHint="#66000000"
+                android:textSize="14dp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:alpha="0.15"
+                android:background="#000000" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/add_tv_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:alpha="0.8"
+                    android:drawableLeft="@drawable/ic_loop_24px"
+                    android:drawablePadding="12dp"
+                    android:text="일정 반복"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/add_fl_repeat_btn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <FrameLayout
+                    android:id="@+id/add_fl_repeat_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="16dp"
+                    android:onClick="dayClick"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/add_tv_repeat"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" >
+                    <ImageView
+                        android:id="@+id/add_iv_repeat_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_24px"
+                        />
+                    <ImageView
+                        android:id="@+id/add_iv_repeat_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_remove_24px"
+                        />
+                </FrameLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_marginLeft="40dp"
+                android:id="@+id/add_ll_repeat_select"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <FrameLayout
+                    android:id="@+id/add_fl_repeat_everyday"
+                    android:onClick="dayClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="매일"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:alpha="0.3"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:id="@+id/add_tv_repeat_everyday_blur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="매일"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:id="@+id/add_tv_repeat_everyday_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_marginLeft="16dp"
+                    android:onClick="dayClick"
+                    android:id="@+id/add_fl_repeat_every_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="매주"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:alpha="0.3"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:id="@+id/add_tv_repeat_every_week_blur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="매주"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:id="@+id/add_tv_repeat_every_week_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_marginLeft="16dp"
+                    android:onClick="dayClick"
+                    android:id="@+id/add_fl_repeat_every_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="매월"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:alpha="0.3"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:id="@+id/add_tv_repeat_every_month_blur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="매월"
+                        android:fontFamily="@font/notosanscjkr_regular"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:id="@+id/add_tv_repeat_every_month_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </FrameLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="40dp"
+                android:id="@+id/add_ll_repeat_select_day"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp">
+                <FrameLayout
+                    android:id="@+id/add_fl_repeat_select_day_mon"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:onClick="dayClick"
+                    android:layout_marginBottom="20.5dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_mon_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:text="월"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_mon_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:text="월"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/add_fl_repeat_select_day_tue"
+                    android:layout_width="27dp"
+                    android:onClick="dayClick"
+                    android:layout_height="27dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_tue_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="화"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_tue_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="월"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/add_fl_repeat_select_day_wed"
+                    android:layout_width="27dp"
+                    android:onClick="dayClick"
+                    android:layout_height="27dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_wed_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="수"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_wed_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="수"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/add_fl_repeat_select_day_thu"
+                    android:layout_width="27dp"
+                    android:onClick="dayClick"
+                    android:layout_height="27dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_thu_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="목"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_thu_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="목"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/add_fl_repeat_select_day_fri"
+                    android:layout_width="27dp"
+                    android:onClick="dayClick"
+                    android:layout_height="27dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_fri_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="금"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_fri_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="금"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/add_fl_repeat_select_day_sat"
+                    android:layout_width="27dp"
+                    android:onClick="dayClick"
+                    android:layout_height="27dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_sat_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="토"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_sat_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="토"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/add_fl_repeat_select_day_sun"
+                    android:layout_width="27dp"
+                    android:onClick="dayClick"
+                    android:layout_height="27dp">
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_black"
+                        android:id="@+id/add_tv_repeat_select_day_sun_black"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="일"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:background="@drawable/add_repeat_select_day_border_blur"
+                        android:id="@+id/add_tv_repeat_select_day_sun_blur"
+                        android:textColor="#707070"
+                        android:textSize="14dp"
+                        android:textAlignment="center"
+                        android:text="일"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:alpha="0.15"
+                android:background="#000000" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_gravity="center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/add_tv_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:alpha="0.8"
+                    android:drawableLeft="@drawable/ic_alarm_24px"
+                    android:drawablePadding="12dp"
+                    android:text="알람"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/add_fl_alarm"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <FrameLayout
+                    android:onClick="AlarmClick"
+                    android:id="@+id/add_fl_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/add_tv_alarm"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintTop_toTopOf="parent" >
 
                     <ImageView
-                        android:id="@+id/add_iv_location_add"
+                        android:id="@+id/add_iv_alarm_add"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
                         android:layout_gravity="end"
                         android:src="@drawable/ic_add_24px" />
                     <ImageView
-                        android:id="@+id/add_iv_location_remove"
+                        android:id="@+id/add_iv_alarm_remove"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
                         android:layout_gravity="end"
                         android:src="@drawable/ic_remove_24px" />
-
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/add_edt_location"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="42dp"
-            android:fontFamily="@font/notosanscjkr_regular"
-            android:hint="장소입력"
-            android:background="@drawable/background_transparent"
-            android:textColorHint="#66000000"
-            android:textSize="14dp" />
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:alpha="0.15"
-            android:background="#000000" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_gravity="center_vertical">
-
             <TextView
-                android:id="@+id/add_tv_repeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:alpha="0.8"
-                android:drawableLeft="@drawable/ic_loop_24px"
-                android:drawablePadding="12dp"
-                android:text="일정 반복"
+                android:id="@+id/add_tv_alarm_what"
+                android:fontFamily="@font/notosanscjkr_regular"
                 android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/add_fl_repeat_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="14dp"
+                android:layout_marginLeft="46dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
 
-            <FrameLayout
-                android:id="@+id/add_fl_repeat_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="end"
-                android:layout_marginRight="16dp"
-                android:onClick="dayClick"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/add_tv_repeat"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" >
-                <ImageView
-                    android:id="@+id/add_iv_repeat_add"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:alpha="0.15"
+                android:background="#000000" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/add_tv_tag"
                     android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_add_24px"
-                    />
-                <ImageView
-                    android:id="@+id/add_iv_repeat_remove"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:alpha="0.8"
+                    android:drawableLeft="@drawable/ic_label_24px"
+                    android:drawablePadding="12dp"
+                    android:text="태그"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/add_fl_tag_add_remove"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <FrameLayout
+                    android:onClick="TagClick"
+                    android:id="@+id/add_fl_tag_add_remove"
                     android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_remove_24px"
-                    />
-            </FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/add_tv_tag"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" >
+                    <ImageView
+                        android:id="@+id/add_iv_tag_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:src="@drawable/ic_add_24px" />
+                    <ImageView
+                        android:id="@+id/add_iv_tag_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:src="@drawable/ic_remove_24px" />
+                </FrameLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        <LinearLayout
-            android:layout_marginLeft="40dp"
-            android:id="@+id/add_ll_repeat_select"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-            <FrameLayout
-                android:id="@+id/add_fl_repeat_everyday"
-                android:onClick="dayClick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="매일"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:alpha="0.3"
-                    android:textSize="14dp"
-                    android:textColor="#000000"
-                    android:id="@+id/add_tv_repeat_everyday_blur"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:text="매일"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:textSize="14dp"
-                    android:textColor="#000000"
-                    android:id="@+id/add_tv_repeat_everyday_black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </FrameLayout>
-            <FrameLayout
-                android:layout_marginLeft="16dp"
-                android:onClick="dayClick"
-                android:id="@+id/add_fl_repeat_every_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="매주"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:alpha="0.3"
-                    android:textSize="14dp"
-                    android:textColor="#000000"
-                    android:id="@+id/add_tv_repeat_every_week_blur"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:text="매주"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:textSize="14dp"
-                    android:textColor="#000000"
-                    android:id="@+id/add_tv_repeat_every_week_black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/add_edt_tag"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="42dp"
+                android:fontFamily="@font/notosanscjkr_regular"
+                android:hint="태그입력"
+                android:background="@drawable/background_transparent"
+                android:textColorHint="#66000000"
+                android:textSize="14dp" />
 
-            </FrameLayout>
-            <FrameLayout
-                android:layout_marginLeft="16dp"
-                android:onClick="dayClick"
-                android:id="@+id/add_fl_repeat_every_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="매월"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:alpha="0.3"
-                    android:textSize="14dp"
-                    android:textColor="#000000"
-                    android:id="@+id/add_tv_repeat_every_month_blur"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:text="매월"
-                    android:fontFamily="@font/notosanscjkr_regular"
-                    android:textSize="14dp"
-                    android:textColor="#000000"
-                    android:id="@+id/add_tv_repeat_every_month_black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
 
-            </FrameLayout>
+            <!--        <Button-->
+            <!--            android:id="@+id/add_btn_delete"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="44dp"-->
+            <!--            android:layout_marginLeft="28dp"-->
+            <!--            android:layout_marginTop="39.5dp"-->
+            <!--            android:layout_marginRight="28dp"-->
+            <!--            android:layout_marginBottom="11dp"-->
+            <!--            android:background="@drawable/add_btn_delete_border"-->
+            <!--            android:fontFamily="@font/notosanscjkr_regular"-->
+            <!--            android:text="삭제"-->
+            <!--            android:textSize="16dp" />-->
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="40dp"
-            android:id="@+id/add_ll_repeat_select_day"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp">
-            <FrameLayout
-                android:id="@+id/add_fl_repeat_select_day_mon"
-                android:layout_width="27dp"
-                android:layout_height="27dp"
-                android:onClick="dayClick"
-                android:layout_marginBottom="20.5dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_mon_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:text="월"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_mon_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:text="월"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-            </FrameLayout>
-            <FrameLayout
-                android:layout_marginLeft="12dp"
-                android:id="@+id/add_fl_repeat_select_day_tue"
-                android:layout_width="27dp"
-                android:onClick="dayClick"
-                android:layout_height="27dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_tue_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="화"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_tue_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="월"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_marginLeft="12dp"
-                android:id="@+id/add_fl_repeat_select_day_wed"
-                android:layout_width="27dp"
-                android:onClick="dayClick"
-                android:layout_height="27dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_wed_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="수"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_wed_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="수"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_marginLeft="12dp"
-                android:id="@+id/add_fl_repeat_select_day_thu"
-                android:layout_width="27dp"
-                android:onClick="dayClick"
-                android:layout_height="27dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_thu_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="목"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_thu_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="목"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_marginLeft="12dp"
-                android:id="@+id/add_fl_repeat_select_day_fri"
-                android:layout_width="27dp"
-                android:onClick="dayClick"
-                android:layout_height="27dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_fri_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="금"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_fri_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="금"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_marginLeft="12dp"
-                android:id="@+id/add_fl_repeat_select_day_sat"
-                android:layout_width="27dp"
-                android:onClick="dayClick"
-                android:layout_height="27dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_sat_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="토"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_sat_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="토"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_marginLeft="12dp"
-                android:id="@+id/add_fl_repeat_select_day_sun"
-                android:layout_width="27dp"
-                android:onClick="dayClick"
-                android:layout_height="27dp">
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_black"
-                    android:id="@+id/add_tv_repeat_select_day_sun_black"
-                    android:textColor="#000000"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="일"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:background="@drawable/add_repeat_select_day_border_blur"
-                    android:id="@+id/add_tv_repeat_select_day_sun_blur"
-                    android:textColor="#707070"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:text="일"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-        </LinearLayout>
-        
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:alpha="0.15"
-            android:background="#000000" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_gravity="center_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/add_tv_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:alpha="0.8"
-                android:drawableLeft="@drawable/ic_alarm_24px"
-                android:drawablePadding="12dp"
-                android:text="알람"
-                android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/add_fl_alarm"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <FrameLayout
-                android:onClick="AlarmClick"
-                android:id="@+id/add_fl_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/add_tv_alarm"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginRight="16dp"
-                app:layout_constraintTop_toTopOf="parent" >
-
-                <ImageView
-                    android:id="@+id/add_iv_alarm_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/ic_add_24px" />
-                <ImageView
-                    android:id="@+id/add_iv_alarm_remove"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/ic_remove_24px" />
-            </FrameLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <TextView
-            android:id="@+id/add_tv_alarm_what"
-            android:fontFamily="@font/notosanscjkr_regular"
-            android:textColor="#000000"
-            android:textSize="14dp"
-            android:layout_marginLeft="46dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:alpha="0.15"
-            android:background="#000000" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/add_tv_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:alpha="0.8"
-                android:drawableLeft="@drawable/ic_label_24px"
-                android:drawablePadding="12dp"
-                android:text="태그"
-                android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/add_iv_tag"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/add_iv_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="end"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_add_24px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/add_tv_tag"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <Button
-            android:id="@+id/add_btn_delete"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="39.5dp"
-            android:layout_marginRight="28dp"
-            android:layout_marginBottom="11dp"
-            android:background="@drawable/add_btn_delete_border"
-            android:fontFamily="@font/notosanscjkr_regular"
-            android:text="삭제"
-            android:textSize="16dp" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
