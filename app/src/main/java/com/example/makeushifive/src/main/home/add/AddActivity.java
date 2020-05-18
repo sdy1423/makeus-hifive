@@ -18,12 +18,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.home.AddScheduleDialog;
+import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -33,15 +39,15 @@ import java.util.Set;
 
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements AddActivityView {
 
     ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
-    EditText mEdtLocation,mEdtTag;
+    EditText mEdtLocation,mEdtTag,mEdtTitle;
     int location_height = 150;
     LinearLayout mLlRepeatSelect,mLlRepeatSelectDay,mLlEndTime;
     TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
     mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
-            ,mTvStartTime,mTvEndTime,mTvAlarmSelected;
+            ,mTvStartTime,mTvEndTime,mTvAlarmSelected,mTvAddComplete;
     ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,
             mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove,mIvAlarmAdd,mIvAlarmRemove,mIvTagAdd,mIvTagRemove;
     //월,화,수,목,금,토,일 클릭 여부
@@ -54,6 +60,7 @@ public class AddActivity extends AppCompatActivity {
             PickedEndMonth,PickedEndDay,PickedEndHour,PickedEndMin;
 
     String FirstShowDate;
+    ArrayList<DAYS> days = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +93,40 @@ public class AddActivity extends AppCompatActivity {
         FirstShowDate+=ShowDay;
         FirstShowDate+="일";
         mTvStartDate.setText(FirstShowDate);
+
+        mTvAddComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO 모든 정보 취합하기
+                String title = mEdtTitle.getText().toString();
+                String location = mEdtLocation.getText().toString();
+                String tag = mEdtTag.getText().toString();
+
+                JsonObject jsonObject = new JsonObject();
+                JsonArray jsonArray = new JsonArray();
+                jsonObject.addProperty("title",title);
+                jsonObject.addProperty("location",location);
+                jsonObject.addProperty("tag",tag);
+
+                //TODO 시간추가에서 days 넣기
+                for(int i=0;i<days.size();i++){
+                    JsonObject dayInfo = new JsonObject();
+                    dayInfo.addProperty("day",days.get(i).getDay());
+                    dayInfo.addProperty("time",days.get(i).getTime());
+                    jsonArray.add(dayInfo);
+                }
+                jsonObject.add("days",jsonArray);
+                try {
+                    PostAddSchedule(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    public void PostAddSchedule(JsonObject jsonObject) throws JSONException {
+        AddService addService = new AddService(this);
+        addService.PostAddSchedule(jsonObject);
     }
 
     private void SetVisibility() {
@@ -217,6 +258,9 @@ public class AddActivity extends AppCompatActivity {
         mIvTagAdd=findViewById(R.id.add_iv_tag_add);
         mIvTagRemove=findViewById(R.id.add_iv_tag_remove);
         mEdtTag=findViewById(R.id.add_edt_tag);
+        mTvAddComplete=findViewById(R.id.add_tv_complete);
+
+        mEdtTitle=findViewById(R.id.add_edt_title);
     }
     public void TagClick(View view){
         if(!TagFlag){
@@ -432,6 +476,7 @@ public class AddActivity extends AppCompatActivity {
         mTvStartTime.setText(ShowStartTime);
         mTvEndDate.setText(ShowEndDate);
         mTvEndTime.setText(ShowEndTime);
+
 
 
     }
@@ -805,5 +850,15 @@ public class AddActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void postAddSuccess() {
+
+    }
+
+    @Override
+    public void postAddFail() {
+
     }
 }
