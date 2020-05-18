@@ -20,7 +20,6 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_weight="1"
-                android:background=""
                 android:fontFamily="@font/notosanscjkr_regular"
                 android:textSize="18dp"
                 android:gravity="bottom"

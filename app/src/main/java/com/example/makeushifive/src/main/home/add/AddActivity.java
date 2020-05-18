@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.animation.ValueAnimator;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -11,13 +13,17 @@ import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
+import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.example.makeushifive.R;
+import com.example.makeushifive.src.main.home.AddScheduleDialog;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -40,6 +46,10 @@ public class AddActivity extends AppCompatActivity {
     //월,화,수,목,금,토,일 클릭 여부
     boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false;
 
+    int getYear,getMonth,getDay;
+
+    int PickedStartMonth,PickedStartDay,PickedStartHour,PickedStartMin,
+            PickedEndMonth,PickedEndDay,PickedEndHour,PickedEndMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +61,28 @@ public class AddActivity extends AppCompatActivity {
 
         //TODO 인텐트로 day받으면 터지는거 해결ㄱㄱ
         Intent intent = getIntent();
-        Date date = new Date(Objects.requireNonNull(intent.getExtras()).getLong("date",0));
-        Log.e("add에서 받은 날짜정보", String.valueOf(date));
-        String StartDate = KOREAN_FORMAT.format(date);
+        String year = intent.getExtras().getString("year");
+        String month = intent.getExtras().getString("month");
+        String day = intent.getExtras().getString("day");
+        assert year != null;
+        getYear=Integer.parseInt(year);
+        assert month != null;
+        getMonth=Integer.parseInt(month);
+        assert day != null;
+        getDay=Integer.parseInt(day);
 
-        mTvStartDate.setText(StartDate);
 
+        Log.e("받은것들: ",""+getYear+" "+getMonth+" "+getDay);
+
+        //TODO mTvStartDate에 날짜 보여주기
+        String ShowDate="";
+        String ShowMonth = String.valueOf(getMonth);
+        String ShowDay = String.valueOf(getDay);
+        ShowDate+=ShowMonth;
+        ShowDate+="월 ";
+        ShowDate+=ShowDay;
+        ShowDate+="일";
+        mTvStartDate.setText(ShowDate);
     }
 
     private void SetVisibility() {
@@ -101,6 +127,9 @@ public class AddActivity extends AppCompatActivity {
 
         mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
         mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
+
+        mIvTimeAdd.setVisibility(View.VISIBLE);
+        mIvTimeRemove.setVisibility(View.INVISIBLE);
 
 
     }
@@ -174,16 +203,56 @@ public class AddActivity extends AppCompatActivity {
 
     }
     public void TimeClick(View view){
-        if(!TimeFlag){
-            //시간 설정 전
-            TimeFlag=true;
+        //AddTimeDialog띄우기
+        AddTimeDialog addTimeDialog = new AddTimeDialog(this,startDateListener,startTimeListener,endDateListener,endTimeListener,getYear,getMonth,getDay);
+        addTimeDialog.show();
+    }
 
-        }else{
-            //시간 설정 후
-            TimeFlag=false;
+
+    DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            Log.e("startdate",""+year+" "+month+" "+dayOfMonth);
+            PickedStartMonth = month;
+            PickedStartDay=dayOfMonth;
+
 
         }
+    };
+    TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Log.e("starttime",""+hourOfDay+" "+minute);
+            PickedStartHour = hourOfDay;
+            PickedStartMin = minute;
+
+        }
+    };
+    DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            Log.e("enddate",""+year+" "+month+" "+dayOfMonth);
+            PickedEndMonth=month;
+            PickedEndDay=dayOfMonth;
+
+        }
+    };
+    TimePickerDialog.OnTimeSetListener endTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Log.e("endtime",""+hourOfDay+" "+minute);
+            PickedEndHour=hourOfDay;
+            PickedEndMin=minute;
+            ShowPickedTime();
+        }
+    };
+
+    public void ShowPickedTime(){
+        //TODO 1. 애니메이션으로 도착시간 보여주는 부분 내려오게 하기
+        //TODO 2. setText로 보여주기 (시작시간, 끝나는 시간)
+
     }
+
 
 
     public void locationClick(View view) {

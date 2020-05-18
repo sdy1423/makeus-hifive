@@ -27,7 +27,10 @@ import com.example.makeushifive.src.main.home.add.AddActivity;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.example.makeushifive.src.ApplicationClass.DAY;
 import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.MONTH;
+import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class AddScheduleDialog extends DialogFragment {
 
@@ -40,6 +43,7 @@ public class AddScheduleDialog extends DialogFragment {
         this.activity = activity;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,9 +52,14 @@ public class AddScheduleDialog extends DialogFragment {
         Bundle bundle =savedInstanceState !=null ? savedInstanceState :getArguments();
         assert bundle != null;
         Date ShowDate = (Date)bundle.getSerializable("date");
-        Log.e("show date다이얼로그 내부",""+ShowDate);
         assert ShowDate != null;
         String dialogFormDate = DOT_FORMAT.format(ShowDate); //dialog에 표시할 날짜 형식
+
+        //addActivity로 보낼것들
+        String year = YEAR.format(ShowDate);
+        String month = MONTH.format(ShowDate);
+        String day = DAY.format(ShowDate);
+
 
         fragment = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("tag");
         mTvToday=rootview.findViewById(R.id.home_custom_dialog_day);
@@ -61,9 +70,10 @@ public class AddScheduleDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                Log.e("add로 보낼 date", String.valueOf(ShowDate));
                 Intent intent = new Intent(activity, AddActivity.class);
-                intent.putExtra("date", ShowDate);
+                intent.putExtra("year", year);
+                intent.putExtra("month",month);
+                intent.putExtra("day",day);
                 startActivity(intent);
 
                 DialogFragment dialogFragment = (DialogFragment) fragment;
