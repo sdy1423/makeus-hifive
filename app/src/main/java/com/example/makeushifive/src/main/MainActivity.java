@@ -1,10 +1,13 @@
 package com.example.makeushifive.src.main;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.interfaces.MainActivityView;
@@ -53,7 +56,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
             }
         });
-
 
 
 

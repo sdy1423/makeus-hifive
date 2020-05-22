@@ -38,6 +38,7 @@ public class LogInService {
         loginRetrofitInterface.PostLogIn(RequestBody.create(params.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(@NotNull Call<LoginResponse> call, @NotNull Response<LoginResponse> response) {
+
                 LoginResponse loginResponse = response.body();
                 if (loginResponse != null) {
                     int code = loginResponse.getCode();

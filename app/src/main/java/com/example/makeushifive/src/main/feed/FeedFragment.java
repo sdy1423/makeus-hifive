@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,11 +15,8 @@ import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
 import com.example.makeushifive.src.main.feed.interfaces.FeedFragmentView;
 import com.example.makeushifive.src.main.feed.models.FeedResponse;
-import com.google.firebase.auth.FederatedAuthProvider;
 
 import java.util.ArrayList;
-
-import okhttp3.internal.concurrent.Task;
 
 public class FeedFragment extends BaseFragment implements FeedFragmentView {
 
@@ -41,17 +37,23 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
     }
 
     @Override
-    public void getScheduleSuccess(ArrayList<FeedResponse.Result> result) {
-        //TODO RecyclerView만들기
-        int taskNo = 0;
-        String title = null,location=null,day=null,time=null,count=null;
-        for(int i=0;i<result.size();i++){
-            TASK task = new TASK(taskNo,title,location,day,time,count);
-            tasks.add(task);
+    public void getScheduleSuccess(FeedResponse result) {
+        //TODO
+        if(result.getCode()==100){
+            int taskNo = 0;
+            String title = null,location=null,day=null,time=null,count=null;
+            for(int i=0;i<result.getResult().size();i++){
+                TASK task = new TASK(taskNo,title,location,day,time,count);
+                tasks.add(task);
+            }
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+            feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
+            mRecyclerView.setAdapter(feedRecyclerAdapter);
+        }else if(result.getCode()==201){
+            //일정이 없다
+        }else if(result.getCode()==200){
+            //유효하지 않은 토큰
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-        feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
-        mRecyclerView.setAdapter(feedRecyclerAdapter);
     }
 
     @Override

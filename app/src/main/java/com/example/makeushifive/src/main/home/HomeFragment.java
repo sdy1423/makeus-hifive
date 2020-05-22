@@ -9,10 +9,12 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ import java.util.Objects;
 
 import static com.example.makeushifive.src.ApplicationClass.CALENDAR_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.DAY;
 import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
@@ -77,6 +80,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("WrongConstant")
     @Nullable
     @Override
@@ -94,47 +98,17 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
 
         List<EventDay> events = new ArrayList<>();
-        calendar = Calendar.getInstance();
-        int year,month,day;
-        year=2020;
-        month=5;
-        day=20;
-        calendar.set(year,month-1,day);
-        events.add(new EventDay(calendar,R.drawable.ic_account_circle_24px));
+        for(int i=0;i<3;i++){
+            calendar = Calendar.getInstance();
+            int year,month,day;
+            year=2020;
+            month=5;
+            day=20+i;
+            calendar.set(year,month-1,day);
+            TextDrawable textDrawable = new TextDrawable("song");
+            events.add(new EventDay(calendar,textDrawable));
+        }
 
-        Calendar calendar1=Calendar.getInstance();
-        year=2020;
-        month=5;
-        day=13;
-        calendar1.set(year,month-1,day);
-        events.add(new EventDay(calendar1,R.drawable.ic_hifive_icon));
-
-//        CalendarUtils.getDrawableText(mContext,"song",Typeface.defaultFromStyle(R.style.TabLayoutStyle),    Color.parseColor("#FFFFFF"),10);
-//        events.add(new EventDay(calendar, new Drawable() {
-//            @Override
-//            public void draw(@NonNull Canvas canvas) {
-//
-//            }
-//
-//            @Override
-//            public void setAlpha(int alpha) {
-//
-//            }
-//
-//            @Override
-//            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-//                String text="song";
-//                Typeface typeface = null;
-//                int size = 10;
-//                CalendarUtils.getDrawableText(mContext,text, typeface, Color.parseColor("#228B22"), size);
-//
-//            }
-//
-//            @Override
-//            public int getOpacity() {
-//                return 0;
-//            }
-//        }));
 
         calendarView = rootView.findViewById(R.id.home_calendarView);
         calendarView.setEvents(events);
@@ -149,12 +123,21 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             public void onDayClick(EventDay eventDay) {
                 //TODO DATE_FORMAT으로 보내고 필요할때 바꾸자.
 
-                AddScheduleDialog addScheduleDialog = new AddScheduleDialog(getActivity());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("date",eventDay.getCalendar().getTime());
-                Log.e("클릭한 날짜(dialog으로 보낼 날짜)",""+eventDay.getCalendar().getTime());
-                addScheduleDialog.setArguments(bundle);
-                addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
+                //오늘날짜
+                String pickedDate = DAY.format(eventDay.getCalendar().getTime()); //dialog에 표시할 날짜 형식
+                int pickedNum = Integer.parseInt(pickedDate);
+//                Log.e("picked",""+pickedNum);
+                String today = DAY.format(Calendar.getInstance().getTime());
+                int todayNum = Integer.parseInt(today);
+//                Log.e("today",""+todayNum);
+                if(todayNum<=pickedNum){
+                    AddScheduleDialog addScheduleDialog = new AddScheduleDialog(getActivity());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("date",eventDay.getCalendar().getTime());
+//                    Log.e("클릭한 날짜(dialog으로 보낼 날짜)",""+eventDay.getCalendar().getTime());
+                    addScheduleDialog.setArguments(bundle);
+                    addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
+                }
             }
         });
 

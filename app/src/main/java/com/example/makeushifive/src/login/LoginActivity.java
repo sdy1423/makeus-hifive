@@ -132,7 +132,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         editor.putInt("userNo",mUserNo);
         editor.apply();
 
-        Log.e("jwt",""+mJwtToken);
+//        Log.e("jwt",""+mJwtToken);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
@@ -143,6 +143,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     @Override
     public void LoginFail() {
         ShowLoginFail();
+
     }
 
 

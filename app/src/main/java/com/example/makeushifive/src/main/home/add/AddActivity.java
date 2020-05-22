@@ -24,6 +24,7 @@ import android.widget.TimePicker;
 
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.example.makeushifive.R;
+import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.home.AddScheduleDialog;
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
 import com.google.gson.JsonArray;
@@ -39,8 +40,9 @@ import java.util.Set;
 
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 
-public class AddActivity extends AppCompatActivity implements AddActivityView {
+public class AddActivity extends BaseActivity implements AddActivityView {
 
+    int color=0;
     ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
     EditText mEdtLocation,mEdtTag,mEdtTitle;
     int location_height = 150;
@@ -82,7 +84,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
         getDay=Integer.parseInt(day);
 
 
-        Log.e("받은것들: ",""+getYear+" "+getMonth+" "+getDay);
+//        Log.e("받은것들: ",""+getYear+" "+getMonth+" "+getDay);
 
         //TODO mTvStartDate에 날짜 보여주기
         FirstShowDate="";
@@ -107,15 +109,63 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 jsonObject.addProperty("title",title);
                 jsonObject.addProperty("location",location);
                 jsonObject.addProperty("tag",tag);
-
+                jsonObject.addProperty("color",color);
+                JsonObject dayInfo = new JsonObject();
                 //TODO 시간추가에서 days 넣기
-                for(int i=0;i<days.size();i++){
-                    JsonObject dayInfo = new JsonObject();
-                    dayInfo.addProperty("day",days.get(i).getDay());
-                    dayInfo.addProperty("time",days.get(i).getTime());
-                    jsonArray.add(dayInfo);
+                if(PickedStartMonth==PickedEndMonth){//시작과 끝달이 같을 때
+                    //2020-05-14 , 10:00
+                   int s = PickedStartDay;
+                   int e = PickedEndDay;
+                   int sub = e-s;
+                   String tempDate = "";
+                   tempDate+= String.valueOf(getYear);
+                   tempDate+= "-";
+                   if(PickedStartMonth<10){
+                       tempDate+="0";
+                   }
+                   tempDate+=String.valueOf(PickedStartMonth);
+                   tempDate+="-";
+                   String sendDate;
+                   for(int i=s;i<=s+sub;i++){
+                       sendDate=tempDate;
+                        if(i<10){
+                            sendDate+="0";
+                        }
+                        sendDate+=String.valueOf(i);
+                        String time = "";
+                        if(i<s+sub){
+                            if(PickedStartHour<10){
+                                time+="0";
+                            }
+                            time += String.valueOf(PickedStartHour);
+                            time+=":";
+                            if(PickedStartMin<10){
+                                time+="0";
+                            }
+                            time+= String.valueOf(PickedStartMin);
+                        }else{
+                            if(PickedEndHour<10){
+                                time+="0";
+                            }
+                            time+=String.valueOf(PickedEndHour);
+                            time+=":";
+                            if(PickedEndMin<10){
+                                time+="0";
+                            }
+                            time+=String.valueOf(PickedEndMin);
+                        }
+                        dayInfo.addProperty("day",sendDate);
+                        dayInfo.addProperty("time",time);
+                       jsonArray.add(dayInfo);
+                   }
+                }else{
+                    //TODO 시작월, 끝 월 다를 경우 만들기
+
+
                 }
                 jsonObject.add("days",jsonArray);
+                Log.e("jsonarray",""+jsonArray);
+                Log.e("jsonObject",""+jsonObject);
                 try {
                     PostAddSchedule(jsonObject);
                 } catch (JSONException e) {
@@ -768,6 +818,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
     public void ColorClick(View view) {
         switch (view.getId()){
             case R.id.add_iv_color1:
+                color=1;
                 mIvShowColor1.setVisibility(View.VISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -778,6 +829,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color2:
+                color=2;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.VISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -788,6 +840,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color3:
+                color=3;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.VISIBLE);
@@ -798,6 +851,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color4:
+                color=4;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -808,6 +862,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color5:
+                color=5;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -818,6 +873,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color6:
+                color=6;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -828,6 +884,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color7:
+                color=7;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -838,6 +895,7 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
                 mIvShowColor8.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_iv_color8:
+                color=8;
                 mIvShowColor1.setVisibility(View.INVISIBLE);
                 mIvShowColor2.setVisibility(View.INVISIBLE);
                 mIvShowColor3.setVisibility(View.INVISIBLE);
@@ -854,7 +912,8 @@ public class AddActivity extends AppCompatActivity implements AddActivityView {
 
     @Override
     public void postAddSuccess() {
-
+        showCustomToast("일정이 등록되었습니다.");
+        onBackPressed();
     }
 
     @Override
