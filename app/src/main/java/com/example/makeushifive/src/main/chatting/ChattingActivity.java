@@ -1,14 +1,18 @@
 package com.example.makeushifive.src.main.chatting;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.view.Gravity;
 
 import com.example.makeushifive.R;
+import com.example.makeushifive.src.BaseActivity;
+import com.example.makeushifive.src.main.chatting.interfaces.ChattingActivityView;
+import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
 
-public class ChattingActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class ChattingActivity extends BaseActivity implements ChattingActivityView {
 
     DrawerLayout drawerLayout;
 
@@ -25,6 +29,16 @@ public class ChattingActivity extends AppCompatActivity {
         }
 
 
+
+    }
+
+    @Override
+    public void getScheduleDetailSuccess(ArrayList<ChattingResponse.Result> result) {
+
+    }
+
+    @Override
+    public void getScheduleDetailFail() {
 
     }
 }

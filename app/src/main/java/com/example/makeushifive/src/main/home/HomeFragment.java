@@ -33,6 +33,7 @@ import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
 import com.example.makeushifive.src.main.home.add.AddActivity;
 import com.example.makeushifive.src.main.home.interfaces.HomeFragmentView;
+import com.example.makeushifive.src.main.home.models.HomeResponse;
 import com.example.makeushifive.src.main.home.search.SearchActivity;
 
 import java.lang.reflect.Type;
@@ -55,6 +56,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     TextView mTvCurrentDate;
     private Calendar calendar;
     CalendarView calendarView;
+    HomeService homeService;
 
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -131,6 +133,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 int todayNum = Integer.parseInt(today);
 //                Log.e("today",""+todayNum);
                 if(todayNum<=pickedNum){
+
+                    //TODO dialog내부 recyclerview에 해당 날짜 일정 쏴주기
                     AddScheduleDialog addScheduleDialog = new AddScheduleDialog(getActivity());
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("date",eventDay.getCalendar().getTime());
@@ -156,9 +160,27 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         });
 
 
+        homeService = new HomeService(this);
+        homeService.getSchedule();
+
 
 
         return rootView;
     }
 
+    @Override
+    public void getScheduleSuccess(ArrayList<HomeResponse.Result> result) {
+
+        Log.e("home에서 show",""+result);
+        for(int i=0;i<result.size();i++){
+            //TODO 달력에 쏴준다.
+
+            //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
+        }
+    }
+
+    @Override
+    public void getScheduleFail() {
+
+    }
 }
