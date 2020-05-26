@@ -8,32 +8,43 @@ public class FeedResponse {
     @SerializedName("result")
     public ArrayList<Result> result;
     public class Result{
+
         @SerializedName("taskNo")
         public int taskNo;
         public int getTaskNo() {
             return taskNo;
         }
+
         @SerializedName("title")
         public String title;
         public String getTitle() {
             return title;
         }
+
+        @SerializedName("color")
+        public int color;
+        public int getColor(){
+            return color;
+        }
+
         @SerializedName("day")
         public String day;
         public String getDay() {
             return day;
         }
-        @SerializedName("time")
-        public String time;
-        public String getTime() {
-            return time;
+
+        @SerializedName("week")
+        public int week;
+        public int getWeek() {
+            return week;
         }
+
         @SerializedName("count")
         public int count;
-
         public int getCount() {
             return count;
         }
+
         @SerializedName("userInfo")
         public ArrayList<UserInfo> userInfo;
         public class UserInfo{

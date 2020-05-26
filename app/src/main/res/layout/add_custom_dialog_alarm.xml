@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/add_custom_dialog_alarm_border"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
         <TextView
+            android:layout_marginLeft="95dp"
+            android:layout_marginRight="55dp"
             android:id="@+id/add_dialog_alarm_tv_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="95dp"
-            android:layout_marginTop="22dp"
             android:fontFamily="@font/notosanscjkr_regular"
             android:text="알람"
             android:textColor="#000000"
             android:textSize="16dp" />
 
         <ImageView
+            android:layout_gravity="center_vertical"
             android:id="@+id/add_dialog_alarm_iv_close"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginRight="16dp"
             android:src="@drawable/ic_close_black_24dp" />
     </LinearLayout>
     <FrameLayout
         android:onClick="alarmClick"
-        android:layout_marginTop="16dp"
         android:id="@+id/add_dialog_fl_30min"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -142,8 +139,7 @@
         android:onClick="alarmClick"
         android:id="@+id/add_dialog_fl_1_week"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="0dp">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/add_dialog_alarm_tv_1week_blur"
             android:layout_width="match_parent"
@@ -166,9 +162,9 @@
     </FrameLayout>
 
     <Button
-        android:layout_marginTop="28dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
         android:id="@+id/add_dialog_alarm_btn_complete"
         android:text="완료"
         android:textColor="#FFFFFF"

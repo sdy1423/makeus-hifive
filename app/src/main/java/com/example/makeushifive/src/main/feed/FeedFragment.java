@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,23 +38,32 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
     }
 
     @Override
-    public void getScheduleSuccess(FeedResponse result) {
+    public void getScheduleSuccess(ArrayList<FeedResponse.Result> result) {
         //TODO
-        if(result.getCode()==100){
-            int taskNo = 0;
-            String title = null,location=null,day=null,time=null,count=null;
-            for(int i=0;i<result.getResult().size();i++){
-                TASK task = new TASK(taskNo,title,location,day,time,count);
-                tasks.add(task);
-            }
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-            feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
-            mRecyclerView.setAdapter(feedRecyclerAdapter);
-        }else if(result.getCode()==201){
-            //일정이 없다
-        }else if(result.getCode()==200){
-            //유효하지 않은 토큰
+        int taskNo = 0,color=0,week=0,count=0;
+        String title = null, location = null, day = null, time = null;
+        for (int i = 0; i < result.size(); i++) {
+            taskNo=result.get(i).getTaskNo();
+            title=result.get(i).getTitle();
+            color=result.get(i).getColor();
+            day=result.get(i).getDay();
+            week=result.get(i).getWeek();
+            count=result.get(i).getCount();
+
+            TASK task = new TASK(taskNo, title, color, day, week, count);
+            Log.e("taskNo", "" + taskNo);
+            Log.e("title", "" + title);
+            Log.e("color", "" + color);
+            Log.e("day", "" + day);
+            Log.e("week", "" + week);
+            Log.e("count", "" + count);
+
+            tasks.add(task);
         }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
+        mRecyclerView.setAdapter(feedRecyclerAdapter);
+
     }
 
     @Override

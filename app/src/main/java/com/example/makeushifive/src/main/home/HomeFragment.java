@@ -4,11 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,19 +19,18 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.applandeo.materialcalendarview.CalendarUtils;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
-import com.example.makeushifive.src.main.home.add.AddActivity;
 import com.example.makeushifive.src.main.home.interfaces.HomeFragmentView;
 import com.example.makeushifive.src.main.home.models.HomeResponse;
+import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
 import com.example.makeushifive.src.main.home.search.SearchActivity;
 
-import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,8 +40,9 @@ import java.util.Objects;
 import static com.example.makeushifive.src.ApplicationClass.CALENDAR_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DAY;
-import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.MONTH;
+import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
@@ -57,17 +52,27 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     private Calendar calendar;
     CalendarView calendarView;
     HomeService homeService;
+    AddScheduleDialog addScheduleDialog;
+    ArrayList<CalendarItem> calendarItems = new ArrayList<>();
+
+    int taskNo,color,count,week;
+    String title;
+    Date day;
+
 
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            Log.e("받아온거",""+year+" "+month+" "+dayOfMonth);
-            calendar.set(year, month, 1);
+
+
+            calendar.set(year, month,dayOfMonth);
             try {
                 calendarView.setDate(calendar);
             } catch (OutOfDateRangeException e) {
                 e.printStackTrace();
             }
+            ShowScheduleInfo();
+
             String showMonth="";
             if(month<10){
                 showMonth="0";
@@ -99,24 +104,11 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         });
         mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
 
-        List<EventDay> events = new ArrayList<>();
-        for(int i=0;i<3;i++){
-            calendar = Calendar.getInstance();
-            int year,month,day;
-            year=2020;
-            month=5;
-            day=20+i;
-            calendar.set(year,month-1,day);
-            TextDrawable textDrawable = new TextDrawable("song");
-            events.add(new EventDay(calendar,textDrawable));
-        }
-
 
         calendarView = rootView.findViewById(R.id.home_calendarView);
-        calendarView.setEvents(events);
 
-        //상단에 년월 표시 안보이게
-        calendarView.setHeaderVisibility(View.INVISIBLE);
+        //        //상단에 년월 표시 안보이게
+//        calendarView.setHeaderVisibility(View.INVISIBLE);
 
 
 
@@ -135,9 +127,11 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 if(todayNum<=pickedNum){
 
                     //TODO dialog내부 recyclerview에 해당 날짜 일정 쏴주기
-                    AddScheduleDialog addScheduleDialog = new AddScheduleDialog(getActivity());
+                    addScheduleDialog = new AddScheduleDialog(getActivity());
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("date",eventDay.getCalendar().getTime());
+
 //                    Log.e("클릭한 날짜(dialog으로 보낼 날짜)",""+eventDay.getCalendar().getTime());
                     addScheduleDialog.setArguments(bundle);
                     addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
@@ -163,24 +157,88 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         homeService = new HomeService(this);
         homeService.getSchedule();
 
+        Date CurrentDate = Calendar.getInstance().getTime();
+        String Today =DATE_FORMAT.format(CurrentDate);
 
-
+        HomeService homeService1 = new HomeService(this);
+        homeService1.getTodaySchedule(Today);
         return rootView;
     }
 
     @Override
-    public void getScheduleSuccess(ArrayList<HomeResponse.Result> result) {
+    public void getScheduleSuccess(ArrayList<HomeResponse.Result> result) throws ParseException {
 
-        Log.e("home에서 show",""+result);
         for(int i=0;i<result.size();i++){
             //TODO 달력에 쏴준다.
-
             //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
+            //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
+            taskNo=result.get(i).getTaskNo();
+            title=result.get(i).getTitle();
+            color=result.get(i).getCount();
+            count=result.get(i).getCount();
+            day = DATE_FORMAT.parse(result.get(i).getDay());
+
+            CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
+            calendarItems.add(calendarItem);
+            }
+            ShowScheduleInfo();
+    }
+
+    private void ShowScheduleInfo() {
+        String ThisMonth = MONTH.format(calendarView.getCurrentPageDate().getTime());
+        Log.e("thismonth",""+calendarView.getCurrentPageDate().getTime());
+        List<EventDay> events = new ArrayList<>();
+        int year_int,month_int,day_int;
+        String year_st,month_st,day_st;
+        for(int i=0;i<calendarItems.size();i++){
+            month_st = MONTH.format(calendarItems.get(i).getDay());
+            if(month_st.equals(ThisMonth)){//이번달이면
+                year_st=YEAR.format(calendarItems.get(i).getDay());
+                year_int=Integer.parseInt(year_st);
+                month_int=Integer.parseInt(month_st);
+                day_st=DAY.format(calendarItems.get(i).getDay());
+                day_int=Integer.parseInt(day_st);
+                calendar=Calendar.getInstance();
+
+                calendar.set(year_int,month_int-1,day_int);
+                events.add(new EventDay(calendar, R.drawable.ic_hifive_icon));
+//                TextDrawable textDrawable = new TextDrawable("song");
+//                    events.add(new EventDay(calendar,textDrawable));
+                calendarView.setEvents(events);
+            }else{
+                continue;
+            }
         }
+
+
     }
 
     @Override
     public void getScheduleFail() {
+
+    }
+
+    @Override
+    public void getTodayScheduleSuccess(ArrayList<HomeTodayResponse.Result> result) {
+        //TODO 오늘에 일정에도 보여주고 dialog로도 보내야 한다.
+
+        //TODO result.size =0 오늘의 일정이 없다. !=0 오늘 일정 있다.
+        if(result.size()==0){
+            //TODO 오늘일정 존재
+
+        }else if(result.size()==1){
+            //TODO 1개
+
+        }else if(result.size()==2){
+            //TODO 2개
+
+        }
+
+
+    }
+
+    @Override
+    public void getTodayScheduleFail() {
 
     }
 }

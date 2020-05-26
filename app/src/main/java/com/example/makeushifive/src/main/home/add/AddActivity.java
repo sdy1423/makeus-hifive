@@ -8,11 +8,17 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,7 +51,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     int color=0;
     ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
     EditText mEdtLocation,mEdtTag,mEdtTitle;
-    int location_height = 150;
+    int location_height = 150,time_height=110,location_heightt=110,tag_height=110;
     LinearLayout mLlRepeatSelect,mLlRepeatSelectDay,mLlEndTime;
     TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
     mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
@@ -322,7 +328,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         }
     }
     public void OpenTag(){
-        mTagAni=ValueAnimator.ofArgb(0,location_height);
+        mTagAni=ValueAnimator.ofArgb(0,tag_height);
         mTagAni.setDuration(1000);
         mTagAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -338,7 +344,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mIvTagRemove.setVisibility(View.VISIBLE);
     }
     public void CloseTag(){
-        mTagAni=ValueAnimator.ofArgb(location_height,0);
+        mTagAni=ValueAnimator.ofArgb(tag_height,0);
         mTagAni.setDuration(1000);
         mTagAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -377,7 +383,17 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     ShowSelectedAlarm(valueYouWantToSendBackToTheActivity);
                 }
             });
+            Objects.requireNonNull(addAlarmDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             addAlarmDialog.show();
+
+//            Display display = getWindowManager().getDefaultDisplay();
+//            Point size = new Point();
+//            display.getSize(size);
+//            Window window = addAlarmDialog.getWindow();
+//            int x = (int)(size.x*0.61f);
+//            int y =(int)(size.y*0.49f);
+//            assert window != null;
+//            window.setLayout(x,y);
         }else{
             AlarmFlag=false;
             mAlarmAni=ValueAnimator.ofArgb(location_height,0);
@@ -421,7 +437,18 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         if(!TimeFlag){
             TimeFlag=true;
             AddTimeDialog addTimeDialog = new AddTimeDialog(this,startDateListener,startTimeListener,endDateListener,endTimeListener,getYear,getMonth,getDay);
+            Objects.requireNonNull(addTimeDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             addTimeDialog.show();
+
+//            Display display = getWindowManager().getDefaultDisplay();
+//            Point size = new Point();
+//            display.getSize(size);
+//            Window window = addTimeDialog.getWindow();
+//            int x = (int)(size.x*0.82f);
+//            int y =(int)(size.y*0.6f);
+//            assert window != null;
+//            window.setLayout(x,y);
+
         }else{
             TimeFlag=false;
             ClosePickedTime();
@@ -470,7 +497,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     public void OpenPickedTime(){
         //TODO 1. 애니메이션으로 도착시간 보여주는 부분 내려오게 하기
 
-        mTimeAni = ValueAnimator.ofArgb(0,location_height);
+        mTimeAni = ValueAnimator.ofArgb(0,time_height);
         mTimeAni.setDuration(1000);
         mTimeAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -531,7 +558,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
     }
     public void ClosePickedTime(){
-        mTimeAni = ValueAnimator.ofArgb(location_height,0);
+        mTimeAni = ValueAnimator.ofArgb(time_height,0);
         mTimeAni.setDuration(1000);
         mTimeAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -572,7 +599,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     }
     //장소선택 오픈
     public void openLocation(){
-        mlocationAni = ValueAnimator.ofArgb(0,location_height);
+        mlocationAni = ValueAnimator.ofArgb(0,location_heightt);
         mlocationAni.setDuration(1000);
         mlocationAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -590,7 +617,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     }
     //장소선택 클로즈
     public void closeLocation(){
-        mlocationAni = ValueAnimator.ofArgb(location_height,0);
+        mlocationAni = ValueAnimator.ofArgb(location_heightt,0);
         mlocationAni.setDuration(1000);
         mlocationAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

@@ -19,4 +19,9 @@
         android:fontStyle="normal"
         android:fontWeight="400"
         android:font="@font/notosanscjkr_regular"/>
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/noto_sans_cjk_kr_medium"/>
 </font-family>

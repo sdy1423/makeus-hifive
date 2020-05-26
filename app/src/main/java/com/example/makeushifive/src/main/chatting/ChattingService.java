@@ -4,6 +4,8 @@ import com.example.makeushifive.src.main.chatting.interfaces.ChattingActivityVie
 import com.example.makeushifive.src.main.chatting.interfaces.ChattingRetrofitInterface;
 import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
 
+import java.text.ParseException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,7 +15,7 @@ import static com.example.makeushifive.src.ApplicationClass.getRetrofit;
 public class ChattingService {
     ChattingActivityView chattingActivityView;
 
-    public ChattingService(ChattingActivityView chattingActivityView) {
+    public ChattingService(final ChattingActivityView chattingActivityView) {
         this.chattingActivityView = chattingActivityView;
     }
 
@@ -25,7 +27,11 @@ public class ChattingService {
             public void onResponse(Call<ChattingResponse> call, Response<ChattingResponse> response) {
                 assert response.body() != null;
                 if(response.body().getCode()==100){
-                    chattingActivityView.getScheduleDetailSuccess(response.body().getResult());
+                    try {
+                        chattingActivityView.getScheduleDetailSuccess(response.body().getResult());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }else{
                     chattingActivityView.getScheduleDetailFail();
                 }

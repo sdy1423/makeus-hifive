@@ -2,4 +2,11 @@
 <resources>
     <!-- 로그인,회원가입창 입력받는 edt 크기-->
     <dimen name="user_info_edt_size">18dp</dimen>
+
+    <dimen name="day_pick_dialog_width">311.5dp</dimen>
+    <dimen name="day_pick_dialog_height">440dp</dimen>
+
+    <dimen name="time_pick_dialog_width">100dp</dimen>
+    <dimen name="time_pick_dialog_height">340dp</dimen>
+
 </resources>

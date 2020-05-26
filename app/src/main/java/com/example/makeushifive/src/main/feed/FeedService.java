@@ -27,13 +27,12 @@ public class FeedService {
         feedRetrofitInterface.getSchedule().enqueue(new Callback<FeedResponse>() {
             @Override
             public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
-//                Log.e("feedservice",""+ Objects.requireNonNull(response.body()).getResult());
-//                Log.e("feed_message",""+response.body().getMessage());
-//                Log.e("feed_code",""+response.body().getCode());
-
-
                 if (response.body() != null) {
-                    feedFragmentView.getScheduleSuccess(response.body());
+                    if(response.body().getCode()==100) {
+                        feedFragmentView.getScheduleSuccess(response.body().getResult());
+                    }else{
+                        feedFragmentView.getScheduleFail();
+                    }
                 }else{
                     feedFragmentView.getScheduleFail();
                 }

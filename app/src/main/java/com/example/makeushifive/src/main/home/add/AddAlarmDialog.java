@@ -25,6 +25,7 @@ public class AddAlarmDialog extends Dialog {
     mTvOneWeekBlur,mTvOneWeekBlack;
     Button mBtnComplete;
     int Picked=0;
+    Context context;
 
     public interface ICustomDialogEventListener {
         void customDialogEvent(int valueYouWantToSendBackToTheActivity);
@@ -38,12 +39,22 @@ public class AddAlarmDialog extends Dialog {
     public AddAlarmDialog(@NonNull Context context,ICustomDialogEventListener iCustomDialogEventListener) {
         super(context);
         this.onCustomDialogEventListener=iCustomDialogEventListener;
+        this.context=context;
+    }
+
+    public static int dpToPx(int dp,Context context) {
+        float density = context.getResources()
+                .getDisplayMetrics()
+                .density;
+        return Math.round((float) dp * density);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_custom_dialog_alarm);
+
+
 
         mIvClose=findViewById(R.id.add_dialog_alarm_iv_close);
         mIvClose.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +134,12 @@ public class AddAlarmDialog extends Dialog {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.flags=WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
+        layoutParams.height = dpToPx(320,context);
+        layoutParams.width = dpToPx(220,context);
+
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
+
+
 
         mBtnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,4 +234,6 @@ public class AddAlarmDialog extends Dialog {
         mTvOneWeekBlur.setVisibility(View.INVISIBLE);
         Picked=5;
     }
+
+
 }

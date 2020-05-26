@@ -18,6 +18,11 @@ public class HomeResponse {
         public String getTitle() {
             return title;
         }
+        @SerializedName("color")
+        public int color;
+        public int getColor() {
+            return color;
+        }
         @SerializedName("day")
         public String day;
         public String getDay() {

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="86dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
     <ImageView
+        android:background="@drawable/color_border"
         android:id="@+id/item_feed_iv_color"
         android:layout_width="12dp"
         android:layout_height="match_parent"/>
@@ -14,8 +15,8 @@
         android:layout_height="36dp"
         android:orientation="vertical">
         <LinearLayout
-            android:weightSum="2"
             android:layout_width="match_parent"
+            android:weightSum="2"
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <TextView
@@ -34,6 +35,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/item_feed_tv_num_of_chatting"
                     android:layout_marginBottom="1dp"
                     android:textSize="12dp"
@@ -62,7 +64,7 @@
                     android:alpha="0.7"
                     android:textSize="14dp"
                     android:id="@+id/item_feed_tv_date"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
@@ -76,14 +78,7 @@
                     android:drawableLeft="@drawable/ic_people_outline_24px"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <LinearLayout
-                    android:id="@+id/item_feed_ll_profile_images"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
-<!--                    TODO 프로필 이미지들-->
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

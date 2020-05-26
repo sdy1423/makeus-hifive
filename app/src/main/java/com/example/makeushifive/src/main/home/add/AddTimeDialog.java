@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -33,6 +34,7 @@ public class AddTimeDialog extends Dialog {
     private DatePickerDialog.OnDateSetListener endDateListener;
     private TimePickerDialog.OnTimeSetListener endTimeListener;
     public Calendar calendar = Calendar.getInstance();
+    private Context context;
 
     public AddTimeDialog(@NonNull Context context,DatePickerDialog.OnDateSetListener startDateListener,
                          TimePickerDialog.OnTimeSetListener startTimeListener,
@@ -40,6 +42,7 @@ public class AddTimeDialog extends Dialog {
                          TimePickerDialog.OnTimeSetListener endTimeListener,
                          int getYear,int getMonth,int getDay) {
         super(context);
+        this.context=context;
         this.startDateListener = startDateListener;
         this.startTimeListener = startTimeListener;
         this.endDateListener=endDateListener;
@@ -63,7 +66,13 @@ public class AddTimeDialog extends Dialog {
         WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
+        layoutParams.height = dpToPx(380,context);
+        layoutParams.width = dpToPx(296,context);
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
+
+
+
+
 
         btnComplete = findViewById(R.id.add_time_dialog_btn_complete);
 
@@ -172,5 +181,12 @@ public class AddTimeDialog extends Dialog {
         mTvLeftBlack.setVisibility(View.INVISIBLE);
         mTvRightBlur.setVisibility(View.INVISIBLE);
         mTvRightBlack.setVisibility(View.VISIBLE);
+    }
+
+    public int dpToPx(int dp,Context context) {
+        float density = context.getResources()
+                .getDisplayMetrics()
+                .density;
+        return Math.round((float) dp * density);
     }
 }
