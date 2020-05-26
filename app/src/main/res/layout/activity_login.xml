@@ -130,6 +130,7 @@
             android:layout_height="259dp"
             android:orientation="vertical">
             <Button
+                android:stateListAnimator="@null"
                 android:id="@+id/login_btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
@@ -178,6 +179,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
                 <Button
+                    android:stateListAnimator="@null"
                     android:id="@+id/login_btn_sign_up"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"

@@ -131,8 +131,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("date",eventDay.getCalendar().getTime());
-
-//                    Log.e("클릭한 날짜(dialog으로 보낼 날짜)",""+eventDay.getCalendar().getTime());
                     addScheduleDialog.setArguments(bundle);
                     addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
                 }
@@ -186,7 +184,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     private void ShowScheduleInfo() {
         String ThisMonth = MONTH.format(calendarView.getCurrentPageDate().getTime());
-        Log.e("thismonth",""+calendarView.getCurrentPageDate().getTime());
+//        Log.e("thismonth",""+calendarView.getCurrentPageDate().getTime());
         List<EventDay> events = new ArrayList<>();
         int year_int,month_int,day_int;
         String year_st,month_st,day_st;

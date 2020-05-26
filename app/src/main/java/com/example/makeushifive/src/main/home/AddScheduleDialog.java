@@ -1,21 +1,15 @@
 package com.example.makeushifive.src.main.home;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,26 +17,34 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.home.add.AddActivity;
-import com.example.makeushifive.src.main.home.interfaces.HomeFragmentView;
+import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DAY;
 import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.MONTH;
 import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
-public class AddScheduleDialog extends DialogFragment {
+public class AddScheduleDialog extends DialogFragment implements AddScheduleView{
 
     private Activity activity;
     private Context mContext;
     TextView mTvToday;
     private ImageView mIvAddSchedule;
     private Fragment fragment;
+    ArrayList<PickedDayTasks> tasks = new ArrayList<>();
+    RecyclerView recyclerView;
+
+
     public AddScheduleDialog(Activity activity) {
         this.activity = activity;
     }
@@ -69,7 +71,11 @@ public class AddScheduleDialog extends DialogFragment {
         assert bundle != null;
         Date ShowDate = (Date)bundle.getSerializable("date");
         assert ShowDate != null;
+
         String dialogFormDate = DOT_FORMAT.format(ShowDate); //dialog에 표시할 날짜 형식
+        String getScheduleFormat = DATE_FORMAT.format(ShowDate);
+        AddScheduleService addScheduleService = new AddScheduleService(this);
+        addScheduleService.getPickedDaySchedule(getScheduleFormat);
 
         //addActivity로 보낼것들
         String year = YEAR.format(ShowDate);
@@ -89,9 +95,10 @@ public class AddScheduleDialog extends DialogFragment {
             public void onClick(View v) {
 
                 Intent intent = new Intent(activity, AddActivity.class);
-                intent.putExtra("year", year);
-                intent.putExtra("month",month);
-                intent.putExtra("day",day);
+                intent.putExtra("date",getScheduleFormat);
+//                intent.putExtra("year", year);
+//                intent.putExtra("month",month);
+//                intent.putExtra("day",day);
                 startActivity(intent);
 
                 DialogFragment dialogFragment = (DialogFragment) fragment;
@@ -100,11 +107,47 @@ public class AddScheduleDialog extends DialogFragment {
             }
         });
 
-
+        recyclerView=rootview.findViewById(R.id.home_dialog_add_schedule_recyclerview);
+        //TODO 리사이클러뷰 만들기
 
 
         return rootview;
     }
 
 
+    @Override
+    public void getPickedScheduleSuccess(ArrayList<HomeTodayResponse.Result> result) {
+        //TODO 리사이클러뷰 만들기
+
+        String title,location,time;
+        int color;
+        try {
+            if(!result.isEmpty()){
+                for(int i=0;i<result.size();i++){
+                    title=result.get(i).getTitle();
+                    location=result.get(i).getLocation();
+                    time=result.get(i).getTime();
+                    color=result.get(i).getColor();
+                    PickedDayTasks task = new PickedDayTasks(title,location,color,time);
+                    tasks.add(task);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//        feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
+//        mRecyclerView.setAdapter(feedRecyclerAdapter);
+
+
+
+
+    }
+
+    @Override
+    public void getPickedScheduleFail() {
+
+    }
 }

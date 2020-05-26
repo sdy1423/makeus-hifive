@@ -3,9 +3,14 @@ package com.example.makeushifive.src.main.home;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
@@ -16,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.makeushifive.R;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class YearMonthPickerDialog extends DialogFragment {
 
@@ -34,9 +40,16 @@ public class YearMonthPickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow()).requestFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(getDialog().getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialog =inflater.inflate(R.layout.year_month_picker,null);
+
+
+
 
         btnConfirm=dialog.findViewById(R.id.home_year_month_btn);
 
@@ -61,4 +74,12 @@ public class YearMonthPickerDialog extends DialogFragment {
         return builder.create();
 //        return super.onCreateDialog(savedInstanceState);
     }
+
+    public void onResume() {
+        super.onResume();
+        int width = getResources().getDimensionPixelSize(R.dimen.year_month_pick_dialog_width);
+        int height = getResources().getDimensionPixelSize(R.dimen.year_month_pick_dialog_height);
+        Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow()).setLayout(width,height);
+    }
+
 }

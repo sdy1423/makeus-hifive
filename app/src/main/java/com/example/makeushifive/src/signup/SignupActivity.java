@@ -115,9 +115,10 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
             @Override
             public void afterTextChanged(Editable s) {
                 mPwd = mEdtPwd.getText().toString();
-                Log.e("입력완료"," "+mPwd);
+//                Log.e("입력완료"," "+mPwd);
             }
         });
+
         mEdtPwdCheck.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

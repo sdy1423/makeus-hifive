@@ -23,7 +23,6 @@ public class AddService {
     }
 
     public void PostAddSchedule(final JsonObject jsonObject) throws JSONException{
-
         final AddRetrofitInterface addRetrofitInterface=getRetrofit().create(AddRetrofitInterface.class);
         addRetrofitInterface.PostAddSchedule(RequestBody.create(jsonObject.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<AddResponse>() {
             @Override

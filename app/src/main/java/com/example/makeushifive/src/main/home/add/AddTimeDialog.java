@@ -24,32 +24,35 @@ import androidx.fragment.app.DialogFragment;
 import com.example.makeushifive.R;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
+
+import static com.example.makeushifive.src.ApplicationClass.DAY;
 
 public class AddTimeDialog extends Dialog {
 
-    int getYear,getMonth,getDay;
+    int startDay;
     private DatePickerDialog.OnDateSetListener startDateListener;
     private TimePickerDialog.OnTimeSetListener startTimeListener;
     private DatePickerDialog.OnDateSetListener endDateListener;
     private TimePickerDialog.OnTimeSetListener endTimeListener;
     public Calendar calendar = Calendar.getInstance();
     private Context context;
+    private Date PickedDate;
 
-    public AddTimeDialog(@NonNull Context context,DatePickerDialog.OnDateSetListener startDateListener,
+
+    public AddTimeDialog(@NonNull Context context, DatePickerDialog.OnDateSetListener startDateListener,
                          TimePickerDialog.OnTimeSetListener startTimeListener,
                          DatePickerDialog.OnDateSetListener endDateListener,
                          TimePickerDialog.OnTimeSetListener endTimeListener,
-                         int getYear,int getMonth,int getDay) {
+                         Date pickedDate) {
         super(context);
         this.context=context;
         this.startDateListener = startDateListener;
         this.startTimeListener = startTimeListener;
         this.endDateListener=endDateListener;
         this.endTimeListener=endTimeListener;
-        this.getYear=getYear;
-        this.getMonth=getMonth;
-        this.getDay=getDay;
+        this.PickedDate=pickedDate;
     }
 
     Button btnComplete;
@@ -57,6 +60,7 @@ public class AddTimeDialog extends Dialog {
     TextView mTvLeftBlur,mTvLeftBlack,mTvRightBlur,mTvRightBlack;
     LinearLayout mLlStartPick,mLlEndPick;
     ImageView mIvClose;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +70,11 @@ public class AddTimeDialog extends Dialog {
         WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
-        layoutParams.height = dpToPx(380,context);
+        layoutParams.height = dpToPx(400,context);
         layoutParams.width = dpToPx(296,context);
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
-
+        startDay= Integer.parseInt(DAY.format(PickedDate));
 
 
 
@@ -131,25 +135,33 @@ public class AddTimeDialog extends Dialog {
                 dismiss();
             }
         });
-        startDayPicker.setMinValue(1);
-        startDayPicker.setMaxValue(calendar.getMaximum(Calendar.DAY_OF_MONTH));
+
+        //시작날짜 고정
+        startDayPicker.setMinValue(startDay);
+        startDayPicker.setMaxValue(startDay);
+
         startHourPicker.setMinValue(0);
         startHourPicker.setMaxValue(23);
+
         startMinPicker.setMinValue(0);
         startMinPicker.setMaxValue(59);
 
-        endDayPicker.setMinValue(1);
+        endDayPicker.setMinValue(startDay);
         endDayPicker.setMaxValue(calendar.getMaximum(Calendar.DAY_OF_MONTH));
+
         endHourPicker.setMinValue(0);
         endHourPicker.setMaxValue(23);
+
         endMinPicker.setMinValue(0);
         endMinPicker.setMaxValue(59);
 
 
-        startDayPicker.setValue(getDay);
-        endDayPicker.setValue(getDay);
+        startDayPicker.setValue(startDay);
+        endDayPicker.setValue(startDay);
+
         startHourPicker.setValue(calendar.get(Calendar.HOUR_OF_DAY));
         endHourPicker.setValue(calendar.get(Calendar.HOUR_OF_DAY));
+
         startMinPicker.setValue(calendar.get(Calendar.MINUTE));
         endMinPicker.setValue(calendar.get(Calendar.MINUTE));
 

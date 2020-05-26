@@ -14,6 +14,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -31,6 +34,7 @@ import android.widget.TimePicker;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
+import com.example.makeushifive.src.main.MainActivity;
 import com.example.makeushifive.src.main.home.AddScheduleDialog;
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
 import com.google.gson.JsonArray;
@@ -39,36 +43,50 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 
 import java.sql.Time;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.DAY;
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.MONTH;
+import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class AddActivity extends BaseActivity implements AddActivityView {
 
-    int color=0;
+    //TODO 1번 컬러 디폴트로 설정, 타이틀만 추가해도 일정 추가 가능하도록 ㄱㄱ
+    int color=1;
     ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
     EditText mEdtLocation,mEdtTag,mEdtTitle;
     int location_height = 150,time_height=110,location_heightt=110,tag_height=110;
     LinearLayout mLlRepeatSelect,mLlRepeatSelectDay,mLlEndTime;
     TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
     mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
-            ,mTvStartTime,mTvEndTime,mTvAlarmSelected,mTvAddComplete;
+            ,mTvStartTime,mTvEndTime,mTvAlarmSelected,mTvAddCompleteRed,mTvAddCompleteBlack;
     ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,
             mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove,mIvAlarmAdd,mIvAlarmRemove,mIvTagAdd,mIvTagRemove;
     //월,화,수,목,금,토,일 클릭 여부
     boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false,AlarmFlag=false
             ,TagFlag=false;
 
-    int getYear,getMonth,getDay;
 
-    int PickedStartMonth,PickedStartDay,PickedStartHour,PickedStartMin,
-            PickedEndMonth,PickedEndDay,PickedEndHour,PickedEndMin;
+    int PickedStartMonth=-1,PickedStartDay=-1,PickedStartHour=-1,PickedStartMin=-1,
+            PickedEndMonth=-1,PickedEndDay=-1,PickedEndHour=-1,PickedEndMin=-1,PickedStartYear=-1;
 
+    FrameLayout mFlComplete;
     String FirstShowDate;
-    ArrayList<DAYS> days = new ArrayList<>();
+//    ArrayList<DAYS> days = new ArrayList<>();
+    String title="";
+    String location = "";
+    String tag="";
+    boolean titleFlag=false;
+
+    String pickedDate="";
+    Date pickedDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,106 +95,148 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         FindViewById();
         SetVisibility();
 
-        //TODO 인텐트로 day받으면 터지는거 해결ㄱㄱ
         Intent intent = getIntent();
-        String year = intent.getExtras().getString("year");
-        String month = intent.getExtras().getString("month");
-        String day = intent.getExtras().getString("day");
-        assert year != null;
-        getYear=Integer.parseInt(year);
-        assert month != null;
-        getMonth=Integer.parseInt(month);
-        assert day != null;
-        getDay=Integer.parseInt(day);
+        pickedDate = Objects.requireNonNull(intent.getExtras()).getString("date");
+        pickedDay = null;
+        try {
+            assert pickedDate != null;
+            pickedDay = DATE_FORMAT.parse(pickedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        assert pickedDay != null;
+        PickedStartMonth = Integer.parseInt(MONTH.format(pickedDay));
+        PickedStartDay = Integer.parseInt(DAY.format(pickedDay));
+        PickedStartYear = Integer.parseInt(YEAR.format(pickedDay));
+        mTvStartDate.setText(KOREAN_FORMAT.format(pickedDay));
 
 
-//        Log.e("받은것들: ",""+getYear+" "+getMonth+" "+getDay);
+        mEdtTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        //TODO mTvStartDate에 날짜 보여주기
-        FirstShowDate="";
-        String ShowMonth = String.valueOf(getMonth);
-        String ShowDay = String.valueOf(getDay);
-        FirstShowDate+=ShowMonth;
-        FirstShowDate+="월 ";
-        FirstShowDate+=ShowDay;
-        FirstShowDate+="일";
-        mTvStartDate.setText(FirstShowDate);
+            }
 
-        mTvAddComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                title = mEdtTitle.getText().toString();
+                if(title.equals("")){
+                    titleFlag=false;
+                    mTvAddCompleteBlack.setVisibility(View.VISIBLE);
+                    mTvAddCompleteRed.setVisibility(View.INVISIBLE);
+
+
+                }else{
+                    titleFlag=true;
+                    mTvAddCompleteBlack.setVisibility(View.INVISIBLE);
+                    mTvAddCompleteRed.setVisibility(View.VISIBLE);
+
+                }
+
+            }
+        });
+
+
+
+        mFlComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO 모든 정보 취합하기
-                String title = mEdtTitle.getText().toString();
-                String location = mEdtLocation.getText().toString();
-                String tag = mEdtTag.getText().toString();
+                if(titleFlag==true){
+                    location = mEdtLocation.getText().toString();
+                    tag = mEdtTag.getText().toString();
 
-                JsonObject jsonObject = new JsonObject();
-                JsonArray jsonArray = new JsonArray();
-                jsonObject.addProperty("title",title);
-                jsonObject.addProperty("location",location);
-                jsonObject.addProperty("tag",tag);
-                jsonObject.addProperty("color",color);
-                JsonObject dayInfo = new JsonObject();
-                //TODO 시간추가에서 days 넣기
-                if(PickedStartMonth==PickedEndMonth){//시작과 끝달이 같을 때
-                    //2020-05-14 , 10:00
-                   int s = PickedStartDay;
-                   int e = PickedEndDay;
-                   int sub = e-s;
-                   String tempDate = "";
-                   tempDate+= String.valueOf(getYear);
-                   tempDate+= "-";
-                   if(PickedStartMonth<10){
-                       tempDate+="0";
-                   }
-                   tempDate+=String.valueOf(PickedStartMonth);
-                   tempDate+="-";
-                   String sendDate;
-                   for(int i=s;i<=s+sub;i++){
-                       sendDate=tempDate;
-                        if(i<10){
-                            sendDate+="0";
+                    JsonObject jsonObject = new JsonObject();
+                    JsonArray jsonArray = new JsonArray();
+
+                    jsonObject.addProperty("title",title);
+                    jsonObject.addProperty("location",location);
+                    jsonObject.addProperty("tag",tag);
+                    jsonObject.addProperty("color",color);
+
+                    JsonObject dayInfo = new JsonObject();
+                    //TODO 시간추가에서 days 넣기
+                    if(PickedEndDay==-1){
+                        //TODO 종료 시간 설정 안했을 경우
+                        dayInfo.addProperty("day",pickedDate);
+                        String time="";
+                        if(PickedStartMin==-1){
+                            time = "00:00";
                         }
-                        sendDate+=String.valueOf(i);
-                        String time = "";
-                        if(i<s+sub){
-                            if(PickedStartHour<10){
-                                time+="0";
-                            }
-                            time += String.valueOf(PickedStartHour);
-                            time+=":";
-                            if(PickedStartMin<10){
-                                time+="0";
-                            }
-                            time+= String.valueOf(PickedStartMin);
-                        }else{
-                            if(PickedEndHour<10){
-                                time+="0";
-                            }
-                            time+=String.valueOf(PickedEndHour);
-                            time+=":";
-                            if(PickedEndMin<10){
-                                time+="0";
-                            }
-                            time+=String.valueOf(PickedEndMin);
-                        }
-                        dayInfo.addProperty("day",sendDate);
                         dayInfo.addProperty("time",time);
-                       jsonArray.add(dayInfo);
-                   }
-                }else{
-                    //TODO 시작월, 끝 월 다를 경우 만들기
+                        jsonArray.add(dayInfo);
+
+                    }
+
+                    else if(PickedStartMonth==PickedEndMonth){//시작과 끝달이 같을 때
+                        //2020-05-14 , 10:00
+                        int s = PickedStartDay;
+                        int e = PickedEndDay;
+                        int sub = e-s;
+                        String tempDate = "";
+                        tempDate+= String.valueOf(PickedStartYear);
+                        tempDate+= "-";
+                        if(PickedStartMonth<10){
+                            tempDate+="0";
+                        }
+                        tempDate+=String.valueOf(PickedStartMonth);
+                        tempDate+="-";
+                        String sendDate;
+                        for(int i=s;i<=s+sub;i++){
+                            sendDate=tempDate;
+                            if(i<10){
+                                sendDate+="0";
+                            }
+                            sendDate+=String.valueOf(i);
+                            String time = "";
+                            if(i<s+sub){
+                                if(PickedStartHour<10){
+                                    time+="0";
+                                }
+                                time += String.valueOf(PickedStartHour);
+                                time+=":";
+                                if(PickedStartMin<10){
+                                    time+="0";
+                                }
+                                time+= String.valueOf(PickedStartMin);
+                            }else{
+                                if(PickedEndHour<10){
+                                    time+="0";
+                                }
+                                time+=String.valueOf(PickedEndHour);
+                                time+=":";
+                                if(PickedEndMin<10){
+                                    time+="0";
+                                }
+                                time+=String.valueOf(PickedEndMin);
+                            }
+                            dayInfo.addProperty("day",sendDate);
+                            dayInfo.addProperty("time",time);
+                            jsonArray.add(dayInfo);
+                        }
+                    }else{
+                        //TODO 시작월, 끝 월 다를 경우 만들기
 
 
+                    }
+                    jsonObject.add("days",jsonArray);
+                    try {
+                        Log.e("jsonarray",""+jsonArray);
+                        Log.e("jsonObject",""+jsonObject);
+                        PostAddSchedule(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-                jsonObject.add("days",jsonArray);
-                Log.e("jsonarray",""+jsonArray);
-                Log.e("jsonObject",""+jsonObject);
-                try {
-                    PostAddSchedule(jsonObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
+
             }
         });
     }
@@ -194,7 +254,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mIvRepeatRemove.setVisibility(View.INVISIBLE);
 
         //타이틀 옆부분 칼라
-        mIvShowColor1.setVisibility(View.INVISIBLE);
+        mIvShowColor1.setVisibility(View.VISIBLE);
         mIvShowColor2.setVisibility(View.INVISIBLE);
         mIvShowColor3.setVisibility(View.INVISIBLE);
         mIvShowColor4.setVisibility(View.INVISIBLE);
@@ -236,6 +296,10 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
         mIvTagAdd.setVisibility(View.VISIBLE);
         mIvTagRemove.setVisibility(View.INVISIBLE);
+
+        mTvAddCompleteBlack.setVisibility(View.VISIBLE);
+        mTvAddCompleteRed.setVisibility(View.INVISIBLE);
+
     }
 
     private void FindViewById() {
@@ -314,9 +378,11 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mIvTagAdd=findViewById(R.id.add_iv_tag_add);
         mIvTagRemove=findViewById(R.id.add_iv_tag_remove);
         mEdtTag=findViewById(R.id.add_edt_tag);
-        mTvAddComplete=findViewById(R.id.add_tv_complete);
+        mTvAddCompleteRed=findViewById(R.id.add_tv_complete_red);
+        mTvAddCompleteBlack=findViewById(R.id.add_tv_complete_black);
 
         mEdtTitle=findViewById(R.id.add_edt_title);
+        mFlComplete = findViewById(R.id.add_fl_complete);
     }
     public void TagClick(View view){
         if(!TagFlag){
@@ -436,25 +502,14 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         //AddTimeDialog띄우기
         if(!TimeFlag){
             TimeFlag=true;
-            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startDateListener,startTimeListener,endDateListener,endTimeListener,getYear,getMonth,getDay);
+            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startDateListener,startTimeListener,endDateListener,endTimeListener,pickedDay);
             Objects.requireNonNull(addTimeDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             addTimeDialog.show();
-
-//            Display display = getWindowManager().getDefaultDisplay();
-//            Point size = new Point();
-//            display.getSize(size);
-//            Window window = addTimeDialog.getWindow();
-//            int x = (int)(size.x*0.82f);
-//            int y =(int)(size.y*0.6f);
-//            assert window != null;
-//            window.setLayout(x,y);
-
         }else{
             TimeFlag=false;
             ClosePickedTime();
         }
     }
-
 
     DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -469,7 +524,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            Log.e("starttime",""+hourOfDay+" "+minute);
+//            Log.e("starttime",""+hourOfDay+" "+minute);
             PickedStartHour = hourOfDay;
             PickedStartMin = minute;
 
@@ -478,7 +533,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            Log.e("enddate",""+year+" "+month+" "+dayOfMonth);
+//            Log.e("enddate",""+year+" "+month+" "+dayOfMonth);
             PickedEndMonth=month;
             PickedEndDay=dayOfMonth;
 
@@ -636,7 +691,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     }
 
 
-    //TODO 요일선택 만들기
     public void dayClick(View view) {
         switch (view.getId()){
             case R.id.add_fl_repeat_btn:
@@ -658,6 +712,22 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     mTvRepeatEverdayBlack.setVisibility(View.INVISIBLE);
                     mTvRepeatEverdayBlur.setVisibility(View.VISIBLE);
                 }
+
+                //매주 닫기
+                if(EveryWeekFlag){
+                    EveryWeekFlag=false;
+                    CloseSelectMonToSun();
+                    mTvRepeatEveryWeekBlack.setVisibility(View.INVISIBLE);
+                    mTvRepeatEveryWeekBlur.setVisibility(View.VISIBLE);
+                }
+                //매월 닫기
+                if(EveryMonthFlag){
+                    EveryMonthFlag=false;
+                    mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
+                    mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
+                }
+
+
                 break;
             case R.id.add_fl_repeat_every_week:
                 //클릭하면 매주 일정반복
@@ -672,6 +742,20 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     mTvRepeatEveryWeekBlack.setVisibility(View.INVISIBLE);
                     mTvRepeatEveryWeekBlur.setVisibility(View.VISIBLE);
                 }
+
+                if(EveryDayFlag){
+                    EveryDayFlag=false;
+                    mTvRepeatEverdayBlack.setVisibility(View.INVISIBLE);
+                    mTvRepeatEverdayBlur.setVisibility(View.VISIBLE);
+                }
+                if(EveryMonthFlag){
+                    EveryMonthFlag=false;
+                    mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
+                    mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
+                }
+
+
+
                 break;
             case R.id.add_fl_repeat_every_month:
                 //매달 일정반복복
@@ -684,7 +768,23 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
                     mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
                 }
-               break;
+
+                if(EveryDayFlag){
+                    EveryDayFlag=false;
+                    mTvRepeatEverdayBlack.setVisibility(View.INVISIBLE);
+                    mTvRepeatEverdayBlur.setVisibility(View.VISIBLE);
+                }
+                if(EveryWeekFlag){
+                    EveryWeekFlag=false;
+                    CloseSelectMonToSun();
+                    mTvRepeatEveryWeekBlack.setVisibility(View.INVISIBLE);
+                    mTvRepeatEveryWeekBlur.setVisibility(View.VISIBLE);
+                }
+
+
+
+
+                break;
             case R.id.add_fl_repeat_select_day_mon:
                 if(!DayFlag[0]){
                     mTvMonBlack.setVisibility(View.VISIBLE);
@@ -939,8 +1039,11 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
     @Override
     public void postAddSuccess() {
+
         showCustomToast("일정이 등록되었습니다.");
-        onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        AddActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
     }
 
     @Override

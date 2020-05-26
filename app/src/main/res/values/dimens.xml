@@ -9,4 +9,7 @@
     <dimen name="time_pick_dialog_width">100dp</dimen>
     <dimen name="time_pick_dialog_height">340dp</dimen>
 
+    <dimen name="year_month_pick_dialog_width">296dp</dimen>
+    <dimen name="year_month_pick_dialog_height">320dp</dimen>
+
 </resources>
