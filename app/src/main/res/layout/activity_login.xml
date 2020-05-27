@@ -63,6 +63,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:textCursorDrawable="@drawable/cursor_color"
                 android:id="@+id/login_edt_email"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
@@ -78,6 +79,7 @@
                 android:textSize="@dimen/user_info_edt_size" />
 
             <EditText
+                android:textCursorDrawable="@drawable/cursor_color"
                 android:id="@+id/login_edt_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"

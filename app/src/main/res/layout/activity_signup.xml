@@ -51,6 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:id="@+id/sign_up_edt_email"
                     android:hint="@string/sign_up_edt_e_mail"
                     android:layout_width="match_parent"
@@ -71,6 +72,7 @@
                     android:textSize="12dp"
                     android:fontFamily="@font/notosanscjkr_regular"/>
                 <EditText
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:id="@+id/sign_up_edt_user_name"
                     android:hint="@string/sign_up_edt_username"
                     android:alpha="1"
@@ -94,6 +96,7 @@
 
 
                 <EditText
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:id="@+id/sign_up_edt_pwd"
                     android:hint="@string/sign_up_edt_pwd"
                     android:alpha="1"
@@ -107,6 +110,7 @@
                     android:layout_marginTop="21dp"
                     android:background="@drawable/login_signup_edt_border"/>
                 <EditText
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:id="@+id/sign_up_edt_pwd_check"
                     android:hint="@string/sign_up_edt_pwd_check"
                     android:layout_width="match_parent"

@@ -47,15 +47,10 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
         mIvProfileImg = (rootView).findViewById(R.id.setting_iv_profile_img);
         mTvUserName = (rootView).findViewById(R.id.setting_tv_username);
 
-        //TODO API로 엮어서 프로필 이미지 ㄱㄱ
         mIvProfileImg.setBackground(new ShapeDrawable(new OvalShape()));
         mIvProfileImg.setClipToOutline(true);
 
-        //TODO 유저 상세 조회
-
         UserNo=sSharedPreferences.getInt("userNo",0);
-
-
 
         SettingService settingService = new SettingService(this);
         settingService.getUserInfoDetail(UserNo);
@@ -68,6 +63,7 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),ChangeActivity.class);
                 intent.putExtra("email",Email);
+                Log.e("이멜",Email);
                 intent.putExtra("profileUrl",ProfileUrl);
                 startActivity(intent);
             }
@@ -88,9 +84,9 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
                 .into(mIvProfileImg);
         mTvUserName.setText(NickName);
 
-        Log.e("ProfileUrl",""+ProfileUrl);
-        Log.e("NickName",""+NickName);
-        Log.e("Email",""+Email);
+//        Log.e("ProfileUrl",""+ProfileUrl);
+//        Log.e("NickName",""+NickName);
+//        Log.e("Email",""+Email);
 
 
     }

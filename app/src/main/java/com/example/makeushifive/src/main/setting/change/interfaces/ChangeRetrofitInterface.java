@@ -12,19 +12,14 @@ import retrofit2.http.POST;
 
 public interface ChangeRetrofitInterface {
 
-    @FormUrlEncoded
-    @PATCH("/posts/1")
+    @PATCH("/user")
     Call<ChangeResponse>
     PatchChangeInfo(
-            @Field("email") String email,
-            @Field("pw") String pw,
-            @Field("profileUrl") String profileUrl,
-            @Field("nickname") String nickname
-            );
+            @Body RequestBody params
+    );
 
     @POST("/usertest")
     Call<ChangeResponse> PostOverlap(
             @Body RequestBody params
     );
-
 }

@@ -1,5 +1,7 @@
 package com.example.makeushifive.src.main.setting.change;
 
+import android.util.Log;
+
 import com.example.makeushifive.src.main.setting.change.interfaces.ChangeActivityView;
 import com.example.makeushifive.src.main.setting.change.interfaces.ChangeRetrofitInterface;
 import com.example.makeushifive.src.main.setting.change.models.ChangeResponse;
@@ -24,17 +26,25 @@ public class ChangeService {
     }
 
     //유저 정보 수정 API
-    public void patchUserInfoChange(String email, String pw, String profileUrl, String nickname) {
+    public void patchUserInfoChange(String email, String pw, String profileUrl, String nickname) throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("email", email);
+        params.put("pw", pw);
+        params.put("profileUrl", profileUrl);
+        params.put("nickname", nickname);
+
+
         ChangeRetrofitInterface changeRetrofitInterface = getRetrofit().create(ChangeRetrofitInterface.class);
-        changeRetrofitInterface.PatchChangeInfo(email, pw, profileUrl, nickname).enqueue(new Callback<ChangeResponse>() {
+        changeRetrofitInterface.PatchChangeInfo(RequestBody.create(params.toString(),MEDIA_TYPE_JSON)).
+                enqueue(new Callback<ChangeResponse>() {
             @Override
             public void onResponse(Call<ChangeResponse> call, Response<ChangeResponse> response) {
-                int code = response.body().getCode();
-                if (code == 100) {
-                    changeActivityView.patchUserInfoChangeSuccess(100);
-                } else if (code == 200 || code == 201 || code == 202) {
+                int code =0;
+                if(response.body() != null){
+                    code = response.body().getCode();
                     changeActivityView.patchUserInfoChangeSuccess(code);
-                } else {
+                }
+                else {
                     changeActivityView.patchUserInfoChangeFail();
                 }
             }

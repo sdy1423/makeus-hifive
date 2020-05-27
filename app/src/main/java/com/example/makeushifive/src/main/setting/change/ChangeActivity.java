@@ -1,10 +1,15 @@
 package com.example.makeushifive.src.main.setting.change;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,16 +22,20 @@ import com.bumptech.glide.Glide;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.setting.change.interfaces.ChangeActivityView;
+import com.example.makeushifive.src.splash.SplashActivity;
 
 import org.json.JSONException;
 
 import java.util.Objects;
 
+import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
+import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
+
 public class ChangeActivity extends BaseActivity implements ChangeActivityView {
 
     String ProfileUrl,Email,mNewUserName,mNewPwd;
     ImageView mIvProfile;
-    TextView mTvEmail,mTvSave,mTvUserNameCheck,mTvPwdCheck;
+    TextView mTvEmail,mTvSave,mTvUserNameCheck,mTvPwdCheck,mTvChangeImg;
     EditText mEdtUserName,mEdtPwd,mEdtPwdAgain;
     boolean UserNameFlag=false,PwdFlag=false;
     Drawable img1,img2;
@@ -45,6 +54,13 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         mTvUserNameCheck.setVisibility(View.INVISIBLE);
         mTvPwdCheck=findViewById(R.id.change_tv_pwd_check_message);
         mTvPwdCheck.setVisibility(View.INVISIBLE);
+        mTvChangeImg=findViewById(R.id.change_tv_change_profile_img);
+
+        //비밀번호 찾기 밑줄
+        SpannableString content = new SpannableString(mTvChangeImg.getText().toString());
+        content.setSpan(new UnderlineSpan(),0,content.length(),0);
+        mTvChangeImg.setText(content);
+
 
         img1 = getApplicationContext().getResources().getDrawable(R.drawable.ic_check_circle_outline_24px);
         img2 = getApplicationContext().getResources().getDrawable(R.drawable.ic_cancel_24px);
@@ -55,13 +71,19 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         Intent intent=getIntent();
         ProfileUrl= Objects.requireNonNull(intent.getExtras()).getString("profileUrl");
         Email=intent.getExtras().getString("email");
+        mTvEmail.setText(Email);
 
         //프사
         Glide.with(this)
                 .load(ProfileUrl)
                 .centerCrop()
                 .into(mIvProfile);
-        mTvEmail.setText(Email);
+
+        //rounded imageview
+        mIvProfile.setBackground(new ShapeDrawable(new OvalShape()));
+        mIvProfile.setClipToOutline(true);
+
+
 
         //TODO 사용가능한 유저네임인지, 패스워드 체크 맞는지
         mEdtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -127,8 +149,12 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         mTvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //유저네임 맞는지, 비밀번호 맞는지
-                ChangeUserInfo();
+                //TODO 유저네임 맞는지, 비밀번호 맞는지
+                try {
+                    ChangeUserInfo();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -162,12 +188,10 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         mEdtUserName.setCompoundDrawables(null,null,img2,null);
     }
 
-    public void ChangeUserInfo(){
+    public void ChangeUserInfo() throws JSONException {
         //TODO FLAG 조건문 안에 넣기
         //회원정보 수정 API
-        if(PwdFlag==true && UserNameFlag==true){
-
-            //TODO 이메일은 아직 Null이기 때문에 보내면 안된다.
+        if(PwdFlag && UserNameFlag){
             ChangeService changeService = new ChangeService(this);
             changeService.patchUserInfoChange(Email,mNewPwd,ProfileUrl,mNewUserName);
         }
@@ -175,13 +199,29 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
 
     @Override
     public void patchUserInfoChangeSuccess(int code) {
-        //회원 정보 수정 성공(통신 성공)
-
+        if(code==100 || code==201){
+            //회원 정보 수정 성공(통신 성공)
+            //todo sharedpreference에 있는 내용 지운다.
+            SharedPreferences.Editor editor = sSharedPreferences.edit();
+            editor.remove(X_ACCESS_TOKEN);
+            editor.remove("userNo");
+            editor.apply();
+            Intent intent = new Intent(this, SplashActivity.class);
+            startActivity(intent);
+        }else if(code==200){
+            //todo 유효하지 않은 토큰입니다.
+            showCustomToast("미구현 기능입니다.");
+        }
+        else if(code==202){
+            //todo 이미 등록된 유저네임
+            ShowImpossibleUserName();
+        }
     }
 
     @Override
     public void patchUserInfoChangeFail() {
         //회원 정보 수정
+        showCustomToast("다시 입력해 주세요");
     }
 
     public void PostOverLapUserName(String username) throws JSONException {

@@ -13,6 +13,7 @@
         android:paddingRight="16dp"
         android:layout_height="56.5dp">
         <EditText
+            android:textCursorDrawable="@drawable/cursor_color"
             android:drawablePadding="8dp"
             android:inputType="text"
             app:layout_constraintLeft_toLeftOf="parent"
