@@ -15,6 +15,10 @@ public interface AddRetrofitInterface {
             @Body RequestBody params
     );
 
+    @POST("/taskrepeat")
+    Call<AddResponse> PostAddTaskRepeat(
+            @Body RequestBody params
+    );
 
 
 }

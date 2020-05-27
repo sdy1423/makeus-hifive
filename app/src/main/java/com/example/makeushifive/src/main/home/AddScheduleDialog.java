@@ -96,9 +96,6 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
 
                 Intent intent = new Intent(activity, AddActivity.class);
                 intent.putExtra("date",getScheduleFormat);
-//                intent.putExtra("year", year);
-//                intent.putExtra("month",month);
-//                intent.putExtra("day",day);
                 startActivity(intent);
 
                 DialogFragment dialogFragment = (DialogFragment) fragment;
@@ -121,6 +118,7 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
 
         String title,location,time;
         int color;
+
         try {
             if(!result.isEmpty()){
                 for(int i=0;i<result.size();i++){
@@ -131,6 +129,9 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
                     PickedDayTasks task = new PickedDayTasks(title,location,color,time);
                     tasks.add(task);
                 }
+                recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+                AddScheduleRecyclerviewAdapter addScheduleRecyclerviewAdapter = new AddScheduleRecyclerviewAdapter(tasks);
+                recyclerView.setAdapter(addScheduleRecyclerviewAdapter);
             }
         } catch (Exception e) {
             e.printStackTrace();

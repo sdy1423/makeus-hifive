@@ -7,7 +7,9 @@ public interface LoginActivityView {
     void LogInSuccess(LoginResponse.Result result);
     void LoginFail();
 
-    void FindPwdSuccess();
-    void FindPwdFail();
+    void postOverlapSuccess();
+    void possOverlapFail();
+
+
 }
 

@@ -2,6 +2,8 @@ package com.example.makeushifive.src.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -35,8 +37,9 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     Button mBtnLogIn,mBtnSignUp;
     TextView mTvFeedBack,mTvFindPwd;
     int mUserNo;
-    String mJwtToken;
+    String mJwtToken,mFindEmail;
     private FindPwdDialog mFindPwdDialog;
+    boolean FindEmailFlag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         mBtnSignUp=findViewById(R.id.login_btn_sign_up);
         mTvFeedBack=findViewById(R.id.login_tv_log_in_feedback);
         mTvFindPwd=findViewById(R.id.login_tv_find_pwd);
+
 
         //비밀번호 찾기 밑줄
         SpannableString content = new SpannableString(mTvFindPwd.getText().toString());
@@ -93,21 +97,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
             }
         });
 
-
-
     }
     public void ShowDialogFindPwd(){
-        mFindPwdDialog = new FindPwdDialog(this,transferListener,cancelListener);
-        WindowManager.LayoutParams layoutParams =   Objects.requireNonNull(mFindPwdDialog.getWindow()).getAttributes();
-//        Window window = mFindPwdDialog.getWindow();
-//        assert window != null;
-//        window.setBackgroundDrawable(R.drawable.login_custom_dialog_border); //배경
-
-//        layoutParams.screenBrightness= WindowManager.LayoutParams.DIM_AMOUNT_CHANGED;
-//        layoutParams.width= WindowManager.LayoutParams.WRAP_CONTENT; //폭
-//        layoutParams.height=WindowManager.LayoutParams.WRAP_CONTENT; //높이
-        layoutParams.flags= WindowManager.LayoutParams.FLAG_DIM_BEHIND; //배경 흐리게
-
+        mFindPwdDialog = new FindPwdDialog(this);
+        Objects.requireNonNull(mFindPwdDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mFindPwdDialog.show();
     }
 
@@ -146,6 +139,17 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
 
     }
 
+    @Override
+    public void postOverlapSuccess() {
+        //안쓴다.
+    }
+
+    @Override
+    public void possOverlapFail() {
+        //안쓴다.
+
+    }
+
 
     public void ShowLoginFail(){
         mTvFeedBack.setText("이메일 또는 비밀번호가 틀렸습니다.");
@@ -161,26 +165,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     private View.OnClickListener transferListener = new View.OnClickListener() {
         public void onClick(View v) {
             //전송버튼누를때
-            EditText edtEmail;
-            edtEmail=findViewById(R.id.login_custom_dialog_edt_email);
-            String UserEmail = edtEmail.getText().toString();
-
-            if(UserEmail.equals("")){
-                ShowFindPwdFail();
+            if(FindEmailFlag){
+                Log.e("보낼 이메일:",""+mFindEmail);
+                mFindPwdDialog.dismiss();
             }
-            else{
-                //이메일 패턴이 아닐 경우
-                if(!Patterns.EMAIL_ADDRESS.matcher(UserEmail).matches()){
-                    ShowFindPwdFail();
-                }else{
-                    //todo API 받아오기
-
-                }
-            }
-
-
-
-            mFindPwdDialog.dismiss();
         }
     };
 
@@ -188,24 +176,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         mTvFeedBack.setText("해당 이메일로 가입된 계정이 없습니다.");
     }
 
-    private View.OnClickListener cancelListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            //취소버튼
-            mFindPwdDialog.dismiss();
-        }
-    };
-
-    @Override
-    public void FindPwdSuccess() {
-        //성공할경우
-        //TODO 12번 1초정도 띄우고 사라지게
-    }
-
-    @Override
-    public void FindPwdFail() {
-        //실패할경우
-        ShowFindPwdFail();
-    }
 
 }
 

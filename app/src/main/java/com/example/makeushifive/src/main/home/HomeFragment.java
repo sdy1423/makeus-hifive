@@ -115,16 +115,15 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
-                //TODO DATE_FORMAT으로 보내고 필요할때 바꾸자.
 
-                //오늘날짜
-                String pickedDate = DAY.format(eventDay.getCalendar().getTime()); //dialog에 표시할 날짜 형식
-                int pickedNum = Integer.parseInt(pickedDate);
+
+//                String pickedDate = DAY.format(eventDay.getCalendar().getTime()); //dialog에 표시할 날짜 형식
+//                int pickedNum = Integer.parseInt(pickedDate);
 //                Log.e("picked",""+pickedNum);
-                String today = DAY.format(Calendar.getInstance().getTime());
-                int todayNum = Integer.parseInt(today);
+//                String today = DAY.format(Calendar.getInstance().getTime());
+//                int todayNum = Integer.parseInt(today);
 //                Log.e("today",""+todayNum);
-                if(todayNum<=pickedNum){
+//                if(todayNum<=pickedNum){
 
                     //TODO dialog내부 recyclerview에 해당 날짜 일정 쏴주기
                     addScheduleDialog = new AddScheduleDialog(getActivity());
@@ -133,7 +132,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                     bundle.putSerializable("date",eventDay.getCalendar().getTime());
                     addScheduleDialog.setArguments(bundle);
                     addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
-                }
+//                }
             }
         });
 
@@ -171,6 +170,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
             //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
             taskNo=result.get(i).getTaskNo();
+            title=result.get(i).getTitle();
             title=result.get(i).getTitle();
             color=result.get(i).getCount();
             count=result.get(i).getCount();

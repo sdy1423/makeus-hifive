@@ -1,62 +1,50 @@
 package com.example.makeushifive.src.main.home.add;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.MainActivity;
-import com.example.makeushifive.src.main.home.AddScheduleDialog;
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
+import com.example.makeushifive.src.main.home.add.models.AddResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.sql.Time;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DAY;
+import static com.example.makeushifive.src.ApplicationClass.DAYOFWEEK;
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.MONTH;
 import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class AddActivity extends BaseActivity implements AddActivityView {
 
+    int speed = 500;
     //TODO 1번 컬러 디폴트로 설정, 타이틀만 추가해도 일정 추가 가능하도록 ㄱㄱ
     int color=1;
     ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
@@ -147,8 +135,8 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mFlComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 모든 정보 취합하기
-                if(titleFlag==true){
+                if(titleFlag){
+                    //TODO 일정등록
                     location = mEdtLocation.getText().toString();
                     tag = mEdtTag.getText().toString();
 
@@ -233,10 +221,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
-
-
             }
         });
     }
@@ -301,7 +286,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mTvAddCompleteRed.setVisibility(View.INVISIBLE);
 
     }
-
     private void FindViewById() {
         //장소선택
         mEdtLocation = findViewById(R.id.add_edt_location);
@@ -327,6 +311,9 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mIvRepeatRemove=findViewById(R.id.add_iv_repeat_remove);
 
         //요일 버튼
+        mTvSunBlack=findViewById(R.id.add_tv_repeat_select_day_sun_black);
+        mTvSunBlur=findViewById(R.id.add_tv_repeat_select_day_sun_blur);
+
         mTvMonBlack=findViewById(R.id.add_tv_repeat_select_day_mon_black);
         mTvMonBlur=findViewById(R.id.add_tv_repeat_select_day_mon_blur);
 
@@ -345,8 +332,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mTvSatBlack=findViewById(R.id.add_tv_repeat_select_day_sat_black);
         mTvSatBlur=findViewById(R.id.add_tv_repeat_select_day_sat_blur);
 
-        mTvSunBlack=findViewById(R.id.add_tv_repeat_select_day_sun_black);
-        mTvSunBlur=findViewById(R.id.add_tv_repeat_select_day_sun_blur);
 
 
         int showColor[] = {R.id.add_iv_show_color1, R.id.add_iv_show_color2, R.id.add_iv_show_color3,
@@ -384,6 +369,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mEdtTitle=findViewById(R.id.add_edt_title);
         mFlComplete = findViewById(R.id.add_fl_complete);
     }
+
     public void TagClick(View view){
         if(!TagFlag){
             OpenTag();
@@ -395,7 +381,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     }
     public void OpenTag(){
         mTagAni=ValueAnimator.ofArgb(0,tag_height);
-        mTagAni.setDuration(1000);
+        mTagAni.setDuration(speed);
         mTagAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -411,7 +397,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     }
     public void CloseTag(){
         mTagAni=ValueAnimator.ofArgb(tag_height,0);
-        mTagAni.setDuration(1000);
+        mTagAni.setDuration(speed);
         mTagAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -432,7 +418,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                 @Override
                 public void customDialogEvent(int valueYouWantToSendBackToTheActivity) {
                     mAlarmAni=ValueAnimator.ofArgb(0,location_height);
-                    mAlarmAni.setDuration(1000);
+                    mAlarmAni.setDuration(speed);
                     mAlarmAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
@@ -452,18 +438,10 @@ public class AddActivity extends BaseActivity implements AddActivityView {
             Objects.requireNonNull(addAlarmDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             addAlarmDialog.show();
 
-//            Display display = getWindowManager().getDefaultDisplay();
-//            Point size = new Point();
-//            display.getSize(size);
-//            Window window = addAlarmDialog.getWindow();
-//            int x = (int)(size.x*0.61f);
-//            int y =(int)(size.y*0.49f);
-//            assert window != null;
-//            window.setLayout(x,y);
         }else{
             AlarmFlag=false;
             mAlarmAni=ValueAnimator.ofArgb(location_height,0);
-            mAlarmAni.setDuration(1000);
+            mAlarmAni.setDuration(speed);
             mAlarmAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -553,7 +531,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         //TODO 1. 애니메이션으로 도착시간 보여주는 부분 내려오게 하기
 
         mTimeAni = ValueAnimator.ofArgb(0,time_height);
-        mTimeAni.setDuration(1000);
+        mTimeAni.setDuration(speed);
         mTimeAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -609,12 +587,10 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mTvEndDate.setText(ShowEndDate);
         mTvEndTime.setText(ShowEndTime);
 
-
-
     }
     public void ClosePickedTime(){
         mTimeAni = ValueAnimator.ofArgb(time_height,0);
-        mTimeAni.setDuration(1000);
+        mTimeAni.setDuration(speed);
         mTimeAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -655,7 +631,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     //장소선택 오픈
     public void openLocation(){
         mlocationAni = ValueAnimator.ofArgb(0,location_heightt);
-        mlocationAni.setDuration(1000);
+        mlocationAni.setDuration(speed);
         mlocationAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -673,7 +649,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     //장소선택 클로즈
     public void closeLocation(){
         mlocationAni = ValueAnimator.ofArgb(location_heightt,0);
-        mlocationAni.setDuration(1000);
+        mlocationAni.setDuration(speed);
         mlocationAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -785,80 +761,80 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
 
                 break;
-            case R.id.add_fl_repeat_select_day_mon:
+            case R.id.add_fl_repeat_select_day_sun:
                 if(!DayFlag[0]){
-                    mTvMonBlack.setVisibility(View.VISIBLE);
-                    mTvMonBlur.setVisibility(View.INVISIBLE);
+                    mTvSunBlack.setVisibility(View.VISIBLE);
+                    mTvSunBlack.setVisibility(View.INVISIBLE);
                     DayFlag[0]=true;
                 }else{
-                    mTvMonBlack.setVisibility(View.INVISIBLE);
-                    mTvMonBlur.setVisibility(View.VISIBLE);
+                    mTvSunBlack.setVisibility(View.INVISIBLE);
+                    mTvSunBlack.setVisibility(View.VISIBLE);
                     DayFlag[0]=false;
                 }
                 break;
-            case R.id.add_fl_repeat_select_day_tue:
+            case R.id.add_fl_repeat_select_day_mon:
                 if(!DayFlag[1]){
-                    mTvTueBlack.setVisibility(View.VISIBLE);
-                    mTvTueBlur.setVisibility(View.INVISIBLE);
+                    mTvMonBlack.setVisibility(View.VISIBLE);
+                    mTvMonBlur.setVisibility(View.INVISIBLE);
                     DayFlag[1]=true;
                 }else{
-                    mTvTueBlack.setVisibility(View.INVISIBLE);
-                    mTvTueBlur.setVisibility(View.VISIBLE);
+                    mTvMonBlack.setVisibility(View.INVISIBLE);
+                    mTvMonBlur.setVisibility(View.VISIBLE);
                     DayFlag[1]=false;
                 }
                 break;
-            case R.id.add_fl_repeat_select_day_wed:
+            case R.id.add_fl_repeat_select_day_tue:
                 if(!DayFlag[2]){
-                    mTvWedBlack.setVisibility(View.VISIBLE);
-                    mTvWedBlur.setVisibility(View.INVISIBLE);
+                    mTvTueBlack.setVisibility(View.VISIBLE);
+                    mTvTueBlur.setVisibility(View.INVISIBLE);
                     DayFlag[2]=true;
                 }else{
-                    mTvWedBlack.setVisibility(View.INVISIBLE);
-                    mTvWedBlur.setVisibility(View.VISIBLE);
+                    mTvTueBlack.setVisibility(View.INVISIBLE);
+                    mTvTueBlur.setVisibility(View.VISIBLE);
                     DayFlag[2]=false;
                 }
                 break;
-            case R.id.add_fl_repeat_select_day_thu:
+            case R.id.add_fl_repeat_select_day_wed:
                 if(!DayFlag[3]){
-                    mTvThuBlack.setVisibility(View.VISIBLE);
-                    mTvThuBlur.setVisibility(View.INVISIBLE);
+                    mTvWedBlack.setVisibility(View.VISIBLE);
+                    mTvWedBlur.setVisibility(View.INVISIBLE);
                     DayFlag[3]=true;
                 }else{
-                    mTvThuBlack.setVisibility(View.INVISIBLE);
-                    mTvThuBlur.setVisibility(View.VISIBLE);
+                    mTvWedBlack.setVisibility(View.INVISIBLE);
+                    mTvWedBlur.setVisibility(View.VISIBLE);
                     DayFlag[3]=false;
                 }
                 break;
-            case R.id.add_fl_repeat_select_day_fri:
+            case R.id.add_fl_repeat_select_day_thu:
                 if(!DayFlag[4]){
-                    mTvFriBlack.setVisibility(View.VISIBLE);
-                    mTvFriBlur.setVisibility(View.INVISIBLE);
+                    mTvThuBlack.setVisibility(View.VISIBLE);
+                    mTvThuBlur.setVisibility(View.INVISIBLE);
                     DayFlag[4]=true;
                 }else{
-                    mTvFriBlack.setVisibility(View.INVISIBLE);
-                    mTvFriBlur.setVisibility(View.VISIBLE);
+                    mTvThuBlack.setVisibility(View.INVISIBLE);
+                    mTvThuBlur.setVisibility(View.VISIBLE);
                     DayFlag[4]=false;
                 }
                 break;
-            case R.id.add_fl_repeat_select_day_sat:
+            case R.id.add_fl_repeat_select_day_fri:
                 if(!DayFlag[5]){
-                    mTvSatBlack.setVisibility(View.VISIBLE);
-                    mTvSatBlur.setVisibility(View.INVISIBLE);
+                    mTvFriBlack.setVisibility(View.VISIBLE);
+                    mTvFriBlur.setVisibility(View.INVISIBLE);
                     DayFlag[5]=true;
                 }else {
-                    mTvSatBlack.setVisibility(View.INVISIBLE);
-                    mTvSatBlur.setVisibility(View.VISIBLE);
+                    mTvFriBlack.setVisibility(View.INVISIBLE);
+                    mTvFriBlur.setVisibility(View.VISIBLE);
                     DayFlag[5] = false;
                     break;
                 }
-            case R.id.add_fl_repeat_select_day_sun:
+            case R.id.add_fl_repeat_select_day_sat:
                 if(!DayFlag[6]){
-                    mTvSunBlack.setVisibility(View.VISIBLE);
-                    mTvSunBlur.setVisibility(View.INVISIBLE);
+                    mTvSatBlack.setVisibility(View.VISIBLE);
+                    mTvSatBlur.setVisibility(View.INVISIBLE);
                     DayFlag[6]=true;
                 }else {
-                    mTvSunBlack.setVisibility(View.INVISIBLE);
-                    mTvSunBlur.setVisibility(View.VISIBLE);
+                    mTvSatBlack.setVisibility(View.INVISIBLE);
+                    mTvSatBlur.setVisibility(View.VISIBLE);
                     DayFlag[6] = false;
                     break;
                 }
@@ -869,7 +845,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     //요일선택창 오픈
     private void OpenSelectMonToSun() {
         SelectMonToSunAni = ValueAnimator.ofArgb(0,location_height);
-        SelectMonToSunAni.setDuration(1000);
+        SelectMonToSunAni.setDuration(speed);
         SelectMonToSunAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -886,7 +862,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     //요일 선택 창 클로즈
     public void CloseSelectMonToSun(){
         SelectMonToSunAni = ValueAnimator.ofArgb(location_height,0);
-        SelectMonToSunAni.setDuration(1000);
+        SelectMonToSunAni.setDuration(speed);
         SelectMonToSunAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -906,7 +882,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
         SelectDayWeekMonthFlag=true;
         SelectDayWeekMonthAni = ValueAnimator.ofArgb(0,location_height);
-        SelectDayWeekMonthAni.setDuration(1000);
+        SelectDayWeekMonthAni.setDuration(speed);
         SelectDayWeekMonthAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -929,7 +905,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         mIvRepeatRemove.setVisibility(View.INVISIBLE);
         SelectDayWeekMonthFlag=false;
         SelectDayWeekMonthAni = ValueAnimator.ofArgb(location_height,0);
-        SelectDayWeekMonthAni.setDuration(1000);
+        SelectDayWeekMonthAni.setDuration(speed);
         SelectDayWeekMonthAni.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -1038,16 +1014,93 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     }
 
     @Override
-    public void postAddSuccess() {
+    public void postAddSuccess(AddResponse.Result result) throws JSONException {
+        //TODO 일정등록 성공했으니까 일정 반복 시도 ㄱㄱㄱ 일정반복도 성공하면 뒤로 넘어간다.
 
-        showCustomToast("일정이 등록되었습니다.");
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        AddActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+        if(!EveryDayFlag && !EveryWeekFlag && !EveryMonthFlag){
+            // TODO 그냥 뒤로 가기! 반복할 일정이 없다.
+            showCustomToast("일정이 등록되었습니다.");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            AddActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+        }else{
+            //TODO 반복 존재
+             int taskNo = result.getTaskNo();
+            JsonObject jsonObject = new JsonObject(); //Post 할 jsonobject
+            jsonObject.addProperty("taskNo",taskNo);
+            JsonArray jsonArray = new JsonArray(); //배열
+            JsonObject object = new JsonObject(); //배열에 넣을 것
+
+            if(EveryDayFlag){
+                //TODO 매일반복
+                object.addProperty("repeatweek",1);
+                object.addProperty("repeatweek",2);
+                object.addProperty("repeatweek",3);
+                object.addProperty("repeatweek",4);
+                object.addProperty("repeatweek",5);
+                object.addProperty("repeatweek",6);
+                object.addProperty("repeatweek",7);
+
+            }else if(EveryWeekFlag) {
+                //TODO 매주반복
+                for(int i=0;i<7;i++){
+                    if(DayFlag[i]){
+                        object.addProperty("repeatweek",i+1);
+                    }
+                }
+            }else if(EveryMonthFlag) {
+                //TODO 매월반복
+                String DayOfWeek= DAYOFWEEK.format(pickedDay);
+                switch (DayOfWeek){
+                    case "일":
+                        object.addProperty("repeatweek",1);
+                        break;
+                    case "월":
+                        object.addProperty("repeatweek",2);
+                        break;
+                    case "화":
+                        object.addProperty("repeatweek",3);
+                        break;
+                    case "수":
+                        object.addProperty("repeatweek",4);
+                        break;
+                    case "목":
+                        object.addProperty("repeatweek",5);
+                        break;
+                    case "금":
+                        object.addProperty("repeatweek",6);
+                        break;
+                    case "토":
+                        object.addProperty("repeatweek",7);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            jsonArray.add(object);
+            jsonObject.add("repeatweek",jsonArray);
+            AddService addService = new AddService(this);
+            addService.PostAddTaskRepeat(jsonObject);
+        }
     }
 
     @Override
     public void postAddFail() {
+
+    }
+
+    @Override
+    public void postAddTaskRepeatSuccess() {
+            //TODO 일정반복 등록 성공
+            showCustomToast("일정이 등록되었습니다.");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            AddActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+    }
+
+    @Override
+    public void postAddTaskRepeatFail() {
+        //TODO 일정반복 등록 성공
 
     }
 }

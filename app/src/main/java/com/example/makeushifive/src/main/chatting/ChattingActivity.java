@@ -32,21 +32,30 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
     DrawerLayout drawerLayout;
     int taskNo=0,color=0;
     String day,location,time,title;
-    TextView mTvLocation,mTvDay,mTvTime,mTvTitle;
+    TextView mTvLocation,mTvDay,mTvTime,mTvTitle,mTvShareFriend;
     ImageView[] imageView=new ImageView[8];
     ImageView mIvColor1,mIvColor2,mIvColor3,mIvColor4,mIvColor5,mIvColor6,mIvColor7,mIvColor8;
     int Colors[] = {R.id.chatting_iv_one,R.id.chatting_iv_two,R.id.chatting_iv_three,R.id.chatting_iv_four,R.id.chatting_iv_five,R.id.chatting_iv_six,R.id.chatting_iv_seven,R.id.chatting_iv_eight};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
+
         drawerLayout=findViewById(R.id.chatting_drawer);
-        if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        }else{
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        }
+
+        //드로어 고정시키기
+//        if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
+//            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+//        }else{
+//            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+//        }
+
+        mTvShareFriend = findViewById(R.id.chatting_drawer_tv_share_schedule);
+        //TODO 클릭하면 일정공유
+
+
 
         Intent intent = getIntent();
         taskNo = Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
@@ -94,6 +103,8 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         mTvTime.setText(time);
         mTvTitle.setText(title);
 
+
+        //TODO Result사이즈에 따라 시작일 끝일이 있을수도, 없을수도
 
 
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MakeUsHiFive</string>
+    <string name="app_name">timeshare</string>
 
     <!--BaseActivity-->
     <string name="loading">로딩중입니다</string>

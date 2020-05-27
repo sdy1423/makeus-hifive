@@ -5,6 +5,7 @@ import com.example.makeushifive.src.main.home.add.models.AddResponse;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -29,7 +30,11 @@ public class AddService {
             public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
                 assert response.body() != null;
                 if(response.body().getCode()==100){
-                    addActivityView.postAddSuccess();
+                    try {
+                        addActivityView.postAddSuccess(response.body().getResult());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }else{
                     addActivityView.postAddFail();
                 }
@@ -38,6 +43,27 @@ public class AddService {
             @Override
             public void onFailure(Call<AddResponse> call, Throwable t) {
                 addActivityView.postAddFail();
+            }
+        });
+    }
+
+    public void PostAddTaskRepeat(final JsonObject jsonObject) throws  JSONException{
+        final AddRetrofitInterface addRetrofitInterface=getRetrofit().create(AddRetrofitInterface.class);
+        addRetrofitInterface.PostAddTaskRepeat(RequestBody.create(jsonObject.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<AddResponse>() {
+            @Override
+            public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
+                assert response.body() != null;
+                if(response.body().getCode()==100){
+                    addActivityView.postAddTaskRepeatSuccess();
+                }else{
+                    addActivityView.postAddTaskRepeatFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddResponse> call, Throwable t) {
+                addActivityView.postAddTaskRepeatFail();
+
             }
         });
     }

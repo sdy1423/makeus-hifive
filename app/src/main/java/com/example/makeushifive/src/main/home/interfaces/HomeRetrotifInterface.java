@@ -14,11 +14,6 @@ public interface HomeRetrotifInterface {
     @GET("/task")
     Call<HomeResponse> getSchedule();
 
-//    @GET("/task?day={date}")
-//    Call<HomeTodayResponse> getTodaySchedule(
-//            @Path("date") String date
-//    );
-//
     @GET("/task")
     Call<HomeTodayResponse> getTodaySchedule(@Query("day") String date);
 

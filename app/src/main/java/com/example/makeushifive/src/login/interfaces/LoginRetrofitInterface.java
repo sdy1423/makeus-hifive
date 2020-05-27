@@ -1,6 +1,7 @@
 package com.example.makeushifive.src.login.interfaces;
 
 import com.example.makeushifive.src.login.models.LoginResponse;
+import com.example.makeushifive.src.signup.models.OverlapResponse;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -13,4 +14,10 @@ public interface LoginRetrofitInterface {
     Call<LoginResponse> PostLogIn(
             @Body RequestBody params
             );
+
+    @POST("/usertest")
+    Call<LoginResponse> PostOverlap(
+            @Body RequestBody params
+    );
+
 }

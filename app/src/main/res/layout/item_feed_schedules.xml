@@ -5,9 +5,11 @@
     android:layout_height="98dp"
     android:orientation="vertical">
     <LinearLayout
+        android:background="@drawable/feed_item_border"
         android:id="@+id/feed_ll_schedules"
         android:layout_width="match_parent"
         android:layout_height="86dp"
+        android:elevation="10dp"
         android:orientation="horizontal">
         <FrameLayout
             android:layout_width="12dp"

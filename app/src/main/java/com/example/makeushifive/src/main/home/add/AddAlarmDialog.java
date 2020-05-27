@@ -144,7 +144,9 @@ public class AddAlarmDialog extends Dialog {
         mBtnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCustomDialogEventListener.customDialogEvent(Picked);
+                if(Picked != 0){
+                    onCustomDialogEventListener.customDialogEvent(Picked);
+                }
                 dismiss();
             }
         });

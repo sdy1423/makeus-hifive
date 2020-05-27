@@ -597,7 +597,7 @@
                         android:textColor="#707070"
                         android:textSize="14dp"
                         android:textAlignment="center"
-                        android:text="월"
+                        android:text="화"
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
@@ -860,29 +860,19 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <EditText
+                android:inputType="text"
                 android:id="@+id/add_edt_tag"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginLeft="42dp"
                 android:fontFamily="@font/notosanscjkr_regular"
                 android:hint="태그입력"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/background_transparent"
                 android:textColorHint="#66000000"
                 android:textSize="14dp" />
 
 
-            <!--        <Button-->
-            <!--            android:id="@+id/add_btn_delete"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="44dp"-->
-            <!--            android:layout_marginLeft="28dp"-->
-            <!--            android:layout_marginTop="39.5dp"-->
-            <!--            android:layout_marginRight="28dp"-->
-            <!--            android:layout_marginBottom="11dp"-->
-            <!--            android:background="@drawable/add_btn_delete_border"-->
-            <!--            android:fontFamily="@font/notosanscjkr_regular"-->
-            <!--            android:text="삭제"-->
-            <!--            android:textSize="16dp" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
