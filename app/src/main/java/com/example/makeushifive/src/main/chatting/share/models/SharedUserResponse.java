@@ -1,33 +1,38 @@
-package com.example.makeushifive.src.login.models;
+package com.example.makeushifive.src.main.chatting.share.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import retrofit2.http.PUT;
+import java.util.ArrayList;
 
-public class LoginResponse {
+public class SharedUserResponse {
 
     @SerializedName("result")
-    public Result result;
-    public Result getResult(){
-        return result;
-    }
+    public ArrayList<Result> result;
     public class Result{
-        @SerializedName("jwt")
-        public String jwt;
-        public String getJwt(){return jwt;}
-        @SerializedName("userNo")
-        public int userNo;
-        public int getUserNo(){return userNo;}
+
+        @SerializedName("shareduserNo")
+        public int shareduserNo;
+
         @SerializedName("profileUrl")
         public String profileUrl;
+
+        @SerializedName("nickname")
+        public String nickname;
+
+        public int getShareduserNo() {
+            return shareduserNo;
+        }
+
         public String getProfileUrl() {
             return profileUrl;
         }
-        @SerializedName("nickname")
-        public String nickname;
+
         public String getNickname() {
             return nickname;
         }
+    }
+    public ArrayList<Result> getResult(){
+        return result;
     }
 
     @SerializedName("isSuccess")

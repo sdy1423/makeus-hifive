@@ -3,6 +3,7 @@ package com.example.makeushifive.src.main.home.search;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +155,8 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
                     Intent intent = new Intent(context, ChattingActivity.class);
                     intent.putExtra("taskNo",TaskNo);
                     intent.putExtra("color",Color);
+                    Log.e("보내는taskNo",""+TaskNo);
+                    Log.e("보내는color",""+Color);
                     context.startActivity(intent);
                     break;
                 default:

@@ -64,12 +64,12 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
             count=result.get(i).getCount();
 
             TASK task = new TASK(taskNo, title, color, day, week, count);
-            Log.e("taskNo", "" + taskNo);
-            Log.e("title", "" + title);
-            Log.e("color", "" + color);
-            Log.e("day", "" + day);
-            Log.e("week", "" + week);
-            Log.e("count", "" + count);
+//            Log.e("taskNo", "" + taskNo);
+//            Log.e("title", "" + title);
+//            Log.e("color", "" + color);
+//            Log.e("day", "" + day);
+//            Log.e("week", "" + week);
+//            Log.e("count", "" + count);
 
             tasks.add(task);
         }

@@ -16,10 +16,11 @@
             <com.applandeo.materialcalendarview.CalendarView
                 android:id="@+id/home_calendarView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:selectionColor="#F4F4F4"
                 app:swipeEnabled="false"
-                app:headerColor="#000000"
+
+                app:selectedDayBackgroundColor="#EDEDED"
                 app:headerLabelColor="#000000"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +84,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="81dp"
+            android:layout_height="100dp"
             android:orientation="vertical">
             <TextView
                 android:layout_marginTop="10dp"
@@ -98,87 +99,13 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:visibility="invisible"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/home_today_schedule_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/home_cl_today_schedule">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:id="@+id/home_ll_today_schedule1"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/home_view_divider"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="안녕하세요"
-                            android:id="@+id/home_tv_today_schedule1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <LinearLayout
-                            android:id="@+id/home_ll_schedule_detail1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/home_tv_schedule_detail_time1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <TextView
-                                android:id="@+id/home_tv_schedule_detail_location1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <View
-                        android:id="@+id/home_view_divider"
-                        android:layout_width="1dp"
-                        android:layout_height="19dp"
-                        android:background="#000000"
-                        app:layout_constraintLeft_toRightOf="@id/home_ll_today_schedule1"
-                        app:layout_constraintRight_toLeftOf="@id/home_ll_today_schedule2"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-
-                        android:alpha="0.1"/>
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        app:layout_constraintLeft_toRightOf="@id/home_view_divider"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:id="@+id/home_ll_today_schedule2"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:text="안녕하세요"
-                            android:id="@+id/home_tv_today_schedule2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <LinearLayout
-                            android:id="@+id/home_ll_schedule_detail2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:id="@+id/home_tv_schedule_detail_time2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <TextView
-                                android:id="@+id/home_tv_schedule_detail_location2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/home_tv_no_schedule"
+                    android:id="@+id/home_today_schedule_tv_no"
                     android:textSize="12dp"
                     android:gravity="center_vertical|center_horizontal"
                     android:fontFamily="@font/notosanscjkr_regular"

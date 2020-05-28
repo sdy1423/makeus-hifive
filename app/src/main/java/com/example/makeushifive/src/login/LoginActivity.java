@@ -123,9 +123,15 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         SharedPreferences.Editor editor = sSharedPreferences.edit();
         editor.putString(X_ACCESS_TOKEN, mJwtToken);
         editor.putInt("userNo",mUserNo);
+        editor.putString("profileUrl",result.getProfileUrl());
+        editor.putString("nickname",result.getNickname());
+
         editor.apply();
 
         Log.e("jwt",""+mJwtToken);
+        Log.e("userNo",""+mUserNo);
+        Log.e("nickname",""+result.getNickname());
+
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거

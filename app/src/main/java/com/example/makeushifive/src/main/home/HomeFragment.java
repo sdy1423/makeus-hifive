@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.applandeo.materialcalendarview.CalendarUtils;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
@@ -58,6 +62,9 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     int taskNo,color,count,week;
     String title;
     Date day;
+
+    RecyclerView TodayRecyclerView;
+    TextView mTvTodayNoSchedule;
 
 
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
@@ -104,12 +111,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         });
         mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
 
+        TodayRecyclerView=rootView.findViewById(R.id.home_today_schedule_recycler);
+        mTvTodayNoSchedule=rootView.findViewById(R.id.home_today_schedule_tv_no);
+        mTvTodayNoSchedule.setVisibility(View.VISIBLE);
+        TodayRecyclerView.setVisibility(View.INVISIBLE);
+
 
         calendarView = rootView.findViewById(R.id.home_calendarView);
-
-        //        //상단에 년월 표시 안보이게
-//        calendarView.setHeaderVisibility(View.INVISIBLE);
-
 
 
         calendarView.setOnDayClickListener(new OnDayClickListener() {
@@ -165,21 +173,27 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     @Override
     public void getScheduleSuccess(ArrayList<HomeResponse.Result> result) throws ParseException {
 
-        for(int i=0;i<result.size();i++){
-            //TODO 달력에 쏴준다.
-            //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
-            //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
-            taskNo=result.get(i).getTaskNo();
-            title=result.get(i).getTitle();
-            title=result.get(i).getTitle();
-            color=result.get(i).getCount();
-            count=result.get(i).getCount();
-            day = DATE_FORMAT.parse(result.get(i).getDay());
+        try {
+            for(int i=0;i<result.size();i++){
+                //TODO 달력에 쏴준다.
+                //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
+                //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
+                taskNo=result.get(i).getTaskNo();
+                title=result.get(i).getTitle();
+                title=result.get(i).getTitle();
+                color=result.get(i).getCount();
+                count=result.get(i).getCount();
+                day = DATE_FORMAT.parse(result.get(i).getDay());
 
-            CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
-            calendarItems.add(calendarItem);
+                CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
+                calendarItems.add(calendarItem);
             }
             ShowScheduleInfo();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void ShowScheduleInfo() {
@@ -189,19 +203,25 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         int year_int,month_int,day_int;
         String year_st,month_st,day_st;
         for(int i=0;i<calendarItems.size();i++){
+
             month_st = MONTH.format(calendarItems.get(i).getDay());
             if(month_st.equals(ThisMonth)){//이번달이면
+
                 year_st=YEAR.format(calendarItems.get(i).getDay());
                 year_int=Integer.parseInt(year_st);
                 month_int=Integer.parseInt(month_st);
                 day_st=DAY.format(calendarItems.get(i).getDay());
                 day_int=Integer.parseInt(day_st);
+
                 calendar=Calendar.getInstance();
 
                 calendar.set(year_int,month_int-1,day_int);
-                events.add(new EventDay(calendar, R.drawable.ic_hifive_icon));
+//                events.add(new EventDay(calendar, R.drawable.ic_hifive_icon));
 //                TextDrawable textDrawable = new TextDrawable("song");
 //                    events.add(new EventDay(calendar,textDrawable));
+                Drawable text = CalendarUtils.getDrawableText(Objects.requireNonNull(getContext()), calendarItems.get(i).getTitle(), null, R.color.one, 7);
+                events.add(new EventDay(calendar,text));
+
                 calendarView.setEvents(events);
             }else{
                 continue;
@@ -221,14 +241,47 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         //TODO 오늘에 일정에도 보여주고 dialog로도 보내야 한다.
 
         //TODO result.size =0 오늘의 일정이 없다. !=0 오늘 일정 있다.
-        if(result.size()==0){
-            //TODO 오늘일정 존재
+        try {
+            int color=0;
+            String location,time,title;
 
-        }else if(result.size()==1){
-            //TODO 1개
+            ArrayList<PickedDayTasks> tasks = new ArrayList<>();
+            for(int i=0;i<result.size();i++){
+                color = result.get(i).getColor();
+                location = result.get(i).getLocation();
+                time=result.get(i).getTime();
+                title = result.get(i).getTitle();
+                PickedDayTasks pickedDayTasks = new PickedDayTasks(title,location,color,time);
+                tasks.add(pickedDayTasks);
+            }
 
-        }else if(result.size()==2){
-            //TODO 2개
+            if(result.isEmpty()){
+                TodayRecyclerView.setVisibility(View.INVISIBLE);
+                mTvTodayNoSchedule.setVisibility(View.VISIBLE);
+            }else{
+                //TODO 오늘의 일정에 뿌리기기
+                mTvTodayNoSchedule.setVisibility(View.INVISIBLE);
+                TodayRecyclerView.setVisibility(View.VISIBLE);
+
+                //가로 리사이클러
+                TodayRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                TodayRecyclerAdapter todayRecyclerAdapter = new TodayRecyclerAdapter(tasks);
+                TodayRecyclerView.setAdapter(todayRecyclerAdapter);
+
+                TodayRecyclerView.setVisibility(View.VISIBLE);
+                mTvTodayNoSchedule.setVisibility(View.INVISIBLE);
+
+            }
+
+
+
+
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            //TODO 오늘의 일정 없음 보여주기
+            mTvTodayNoSchedule.setVisibility(View.VISIBLE);
+            TodayRecyclerView.setVisibility(View.INVISIBLE);
 
         }
 

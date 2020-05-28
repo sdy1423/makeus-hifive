@@ -1,13 +1,17 @@
 package com.example.makeushifive.src.main.chatting;
 
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,17 +19,32 @@ import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.chatting.interfaces.ChattingActivityView;
 import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
+import com.example.makeushifive.src.main.chatting.share.ShareActivity;
 import com.example.makeushifive.src.main.setting.change.ChangeService;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 import static com.example.makeushifive.src.ApplicationClass.Chatting;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
+import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class ChattingActivity extends BaseActivity implements ChattingActivityView {
 
@@ -34,14 +53,25 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
     String day,location,time,title;
     TextView mTvLocation,mTvDay,mTvTime,mTvTitle,mTvShareFriend;
     ImageView[] imageView=new ImageView[8];
-    ImageView mIvColor1,mIvColor2,mIvColor3,mIvColor4,mIvColor5,mIvColor6,mIvColor7,mIvColor8;
+    ImageView mIvColor1,mIvColor2,mIvColor3,mIvColor4,mIvColor5,mIvColor6,mIvColor7,mIvColor8,mIvShare,mIvChange;
     int Colors[] = {R.id.chatting_iv_one,R.id.chatting_iv_two,R.id.chatting_iv_three,R.id.chatting_iv_four,R.id.chatting_iv_five,R.id.chatting_iv_six,R.id.chatting_iv_seven,R.id.chatting_iv_eight};
 
+
+    //채팅 시도
+    Socket mSocket;
+    String userName,roomName;
+    EditText mEdtMessage;
+    ArrayList<Message> chatList = new ArrayList<>();
+    ChattingAdapter chattingAdapter;
+    ImageView mIvSend;
+    RecyclerView chatRecyclerView;
+    String MyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
+
 
         drawerLayout=findViewById(R.id.chatting_drawer);
 
@@ -53,6 +83,12 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 //        }
 
         mTvShareFriend = findViewById(R.id.chatting_drawer_tv_share_schedule);
+        mTvShareFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareSchedule();
+            }
+        });
         //TODO 클릭하면 일정공유
 
 
@@ -60,6 +96,10 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         Intent intent = getIntent();
         taskNo = Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
         color = intent.getExtras().getInt("color");
+
+//        Log.e("받는taskNo",""+taskNo);
+//        Log.e("받는color",""+color);
+
         ChattingService chattingService = new ChattingService(this);
         chattingService.getDetailSchedule(taskNo);
 
@@ -78,11 +118,206 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
             }
         }
 
+        mIvShare = findViewById(R.id.chatting_iv_share);
+        mIvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareSchedule();
+            }
+        });
 
 
+        //채팅!
+        mEdtMessage=findViewById(R.id.chatting_edt_message);
+        mIvSend = findViewById(R.id.chatting_iv_send);
+
+        mIvSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
+
+        //leave는 일단 안만듬
+
+        //받아올것
+//        userName = "deokyong";
+//        roomName = "소퀘";
+
+        //set chatting room adapter
+        chatRecyclerView=findViewById(R.id.chatting_recycler);
+        chattingAdapter = new ChattingAdapter(this,chatList);
+        chatRecyclerView.setAdapter(chattingAdapter);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        chatRecyclerView.setLayoutManager(linearLayoutManager);
+
+        try {
+            mSocket = IO.socket("http://15.165.78.22:8080");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        mSocket.connect();
+
+        mSocket.on(Socket.EVENT_CONNECT,onConnect);//리스너임
+//////////////////////////////////////////////////////////////////
+
+        //TODO 새로운 유저입장
+        mSocket.on("newUserToChatRoom",onNewUser);
+
+        //TODO 채팅 업데이트
+        mSocket.on("rMsg",onUpdateChat);
+
+        //TODO 유저 떠남
+        mSocket.on("userLeftChatRoom",onUserLeft);
+
+
+        MyName = sSharedPreferences.getString("nickname",null);
+
+    }
+
+    private void ShareSchedule() {
+        Intent intent1 = new Intent(getApplicationContext(), ShareActivity.class);
+        intent1.putExtra("taskNo",taskNo);
+        startActivity(intent1);
+        //일정 추가 ㄱㄱ
+        //taskNo보낸다.
+    }
+
+
+    private void addItemToRecyclerView(Message message){
+        //Since this function is inside of the listener,
+        // You need to do it on UIThread!
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatList.add(message);
+                chattingAdapter.notifyItemInserted(chatList.size());
+                mEdtMessage.setText("");
+                chatRecyclerView.scrollToPosition(chatList.size()-1);//move focus on last message
+            }
+        });
 
 
     }
+
+
+    private void sendMessage() {
+        String content = mEdtMessage.getText().toString();
+        String profileUrl = sSharedPreferences.getString("profileUrl",null);
+        int num  = sSharedPreferences.getInt("userNo", 0);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("taskNo",taskNo);
+        jsonObject.addProperty("name",num);
+        jsonObject.addProperty("msg",content);
+        jsonObject.addProperty("room",taskNo);
+        jsonObject.addProperty("profileUrl",profileUrl);
+        Log.e("sMsg",""+jsonObject);
+        mSocket.emit("sMsg",jsonObject);
+
+
+
+//        SendMessage sendMessage = new SendMessage(taskNo,num,content,taskNo);
+//        mSocket.emit("sMsg",sendMessage);
+//        Log.e("userNo",""+num);
+//        Log.e("taskNo",""+taskNo);
+//        Log.e("content",""+content);
+//        Log.e("sendMessage",""+sendMessage);
+        //taskNo:taskno ,name: userno, ,msg message , room taskNo
+    }
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+//            val data = initialData(userName, roomName)
+//            val jsonData = gson.toJson(data)
+//            mSocket.emit("subscribe", jsonData)
+
+        }
+    };
+    private Emitter.Listener onNewUser = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            //TODO 새로운 유저 입장
+
+//            val name = it[0] as String //This pass the userName!
+//            val chat = Message(name, "", roomName, MessageType.USER_JOIN.index)
+//            addItemToRecyclerView(chat)
+//            Log.d(TAG, "on New User triggered.")
+
+        }
+    };
+    private Emitter.Listener onUpdateChat = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            //TODO 채팅 업데이트
+
+            Log.e("서버로부터 받은 메세지",""+ Arrays.toString(args));
+
+
+            String getMessage = Arrays.toString(args);
+            int taskNo = 0,roomNo = 0;
+            String userName = null,message = null,profileUrl = null;
+
+            Log.e("getMessage",""+getMessage);
+
+            try {
+                JSONArray jsonArray = new JSONArray(getMessage);
+                for(int i=0;i<jsonArray.length();i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    taskNo = jsonObject.getInt("taskNo");
+                    userName = jsonObject.getString("name");
+                    message = jsonObject.getString("msg");
+                    roomNo = jsonObject.getInt("room");
+                    profileUrl = jsonObject.getString("profileUrl");
+
+//                    Log.e("userName",""+userName);
+//                    Log.e("taskNo",""+taskNo);
+//                    Log.e("roomNo",""+roomNo);
+//                    Log.e("message",""+message);
+//                    Log.e("profileUrl",""+profileUrl);
+
+                    Message message1;
+                    if(userName==MyName){
+                        message1 = new Message(userName,message,message,0,profileUrl);
+                    }else{
+                        message1 = new Message(userName,message,message,1,profileUrl);
+                    }
+                    addItemToRecyclerView(message1);
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+//
+//
+
+
+//            val chat: Message = gson.fromJson(it[0].toString(), Message::class.java)
+//            chat.viewType = MessageType.CHAT_PARTNER.index
+//            addItemToRecyclerView(chat)
+
+
+        }
+    };
+    private Emitter.Listener onUserLeft = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            //TODO 유저가 떠남
+//            val name = it[0] as String //This pass the userName!
+//            val chat = Message(name, "", roomName, MessageType.USER_JOIN.index)
+//            addItemToRecyclerView(chat)
+//            Log.d(TAG, "on New User triggered.")
+
+
+        }
+    };
+
 
 
     @Override
@@ -113,6 +348,19 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
     @Override
     public void getScheduleDetailFail() {
+
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //TODO 채팅방 떠날때
+//        initalData initalData = new initalData(userName,roomName);
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.add("unsubscribe",jsonObject);
+//        mSocket.disconnect();
 
     }
 }

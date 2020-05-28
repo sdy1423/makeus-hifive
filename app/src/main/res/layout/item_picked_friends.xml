@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="74dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/picked_fl"
+        android:layout_width="40dp"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/picked_iv_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:visibility="invisible"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_remove_circle_24px"
+            android:layout_width="18dp"
+            android:layout_height="18dp"/>
+
+    </FrameLayout>
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/notosanscjkr_regular"
+        android:textColor="#000000"
+        android:textSize="12dp"
+        android:id="@+id/picked_tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

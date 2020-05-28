@@ -59,8 +59,8 @@
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
-                android:gravity="center"
                 android:id="@+id/change_tv_change_profile_img"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="프로필 이미지 변경"
@@ -201,6 +201,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:stateListAnimator="@null"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="63dp"
