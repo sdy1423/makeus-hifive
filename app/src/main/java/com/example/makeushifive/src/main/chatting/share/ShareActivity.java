@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -34,7 +35,7 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
     ArrayList<SharedUser> users = new ArrayList<>(); //세로 리사이클러 아이템들
     ArrayList<SharedUser> shareUsersCandi = new ArrayList<>(); //가로 리사이클러 아이템들
 
-    ImageView mIvShare;
+    ImageView mIvClose;
     FrameLayout mFlShare;
     TextView mTvShareBlack,mTvShareRed,mTvPlusFriend;
     boolean ShareFlag=false; //TODO 한명이라도 추가되면 true로 바뀐다.
@@ -61,8 +62,12 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         mTvShareBlack.setVisibility(View.VISIBLE);
         mTvShareRed.setVisibility(View.INVISIBLE);
         mEdtSearch = findViewById(R.id.share_edt_search);
-        mIvShare = findViewById(R.id.share_iv_close);
-        mIvShare.setOnClickListener(new View.OnClickListener() {
+        mIvClose = findViewById(R.id.share_iv_close);
+
+        mRecyclerShared.setLayoutManager(new LinearLayoutManager(this));
+
+
+        mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -150,8 +155,26 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
                 userNo = result.get(i).getUserNo();
                 profileUrl = result.get(i).getProfileUrl();
                 nickname =result.get(i).getNickname();
-                SharedUser sharedUser= new SharedUser(userNo,profileUrl,nickname);
-                users.add(sharedUser);
+                SharedUser sharedUser = null;
+                //shareUsersCandi
+                if(!shareUsersCandi.isEmpty()){
+                    boolean sign = false;
+                    for(int j=0;j<shareUsersCandi.size();j++){
+                        if(userNo==shareUsersCandi.get(j).getSharedUserNo()){
+                            sharedUser= new SharedUser(userNo,profileUrl,nickname,true);
+                            sign=true;
+                            break;
+                        }
+                    }
+                    if(!sign){
+                        sharedUser= new SharedUser(userNo,profileUrl,nickname,false);
+                    }
+                    users.add(sharedUser);
+
+                }else{
+                    sharedUser= new SharedUser(userNo,profileUrl,nickname,false);
+                    users.add(sharedUser);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,7 +200,7 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
                 shareduserNo = result.get(i).getShareduserNo();
                 profileUrl = result.get(i).getProfileUrl();
                 nickname =result.get(i).getNickname();
-                SharedUser sharedUser= new SharedUser(shareduserNo,profileUrl,nickname);
+                SharedUser sharedUser= new SharedUser(shareduserNo,profileUrl,nickname,false);
                 users.add(sharedUser);
             }
         } catch (Exception e) {
@@ -209,27 +232,34 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         showCustomToast("일정 공유에 실패 했습니다.");
 
     }
-
     public void showFriendsList(){
-        mRecyclerShared.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RecentSharedRecyclerAdapter(users,this);
         mRecyclerShared.setAdapter(adapter);
         adapter.setOnItemClickListener(
                 new RecentSharedRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int pos,boolean flag) {
-                        //TODO 아이템 클릭 이벤트를 여기서 처리 ㄱㄱ
-                        //TODO 추가 ㄱㄱㄱ
-                        //TODO 가로 리사이클러에 보여줄 것들
-
                         //true면 추가, false면 삭제
-
                         if(flag){
                             //TODO 추가
+                            Log.e("변경전",""+users.get(pos).isPicked());
+                            users.get(pos).picked=true;
+                            Log.e("변경후",""+users.get(pos).isPicked());
                             shareUsersCandi.add(users.get(pos));
                         }else{
                             //TODO 삭제
-                            shareUsersCandi.remove(users.get(pos));
+                            Log.e("변경전",""+users.get(pos).isPicked());
+                            users.get(pos).picked=false;
+                            Log.e("변경후",""+users.get(pos).isPicked());
+                            if(!shareUsersCandi.isEmpty()){
+                                int what = 0;
+                                for(int i=0;i<shareUsersCandi.size();i++){
+                                    if(shareUsersCandi.get(i).getSharedUserNo()==users.get(pos).getSharedUserNo()){
+                                        what=i;
+                                    }
+                                }
+                                shareUsersCandi.remove(what);
+                            }
                         }
                         showPickedFriendsList();
                     }
@@ -241,11 +271,18 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         mRecyclerPicked.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
         pickedRecyclerAdapter = new PickedRecyclerAdapter(shareUsersCandi,getApplicationContext());
         mRecyclerPicked.setAdapter(pickedRecyclerAdapter);
-
         pickedRecyclerAdapter.setOnItemClickListener(new PickedRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int pos,String deletedName) {
+            public void onItemClick(View v, int pos, int userNo) {
 
+                if(!users.isEmpty()){
+                    for(int i=0;i<users.size();i++){
+                        if(users.get(i).getSharedUserNo()==userNo){
+                            users.get(i).picked=false;
+                        }
+                    }
+                    showFriendsList();
+                }
             }
         });
     }

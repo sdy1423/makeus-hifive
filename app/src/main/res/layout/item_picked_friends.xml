@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <ImageView
-            android:visibility="invisible"
             android:layout_gravity="end"
             android:src="@drawable/ic_remove_circle_24px"
             android:layout_width="18dp"

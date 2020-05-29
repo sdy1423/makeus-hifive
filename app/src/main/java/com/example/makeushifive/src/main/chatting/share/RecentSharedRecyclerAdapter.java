@@ -52,20 +52,28 @@ public class RecentSharedRecyclerAdapter extends RecyclerView.Adapter<RecentShar
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.mTvUserName.setText(sharedUsers.get(position).getNickname());
-
         //프사
         Glide.with(context)
                 .load(sharedUsers.get(position).getProfileUrl())
                 .centerCrop()
                 .into(holder.mIvProfile);
-
         //rounded imageview
         holder.mIvProfile.setBackground(new ShapeDrawable(new OvalShape()));
         holder.mIvProfile.setClipToOutline(true);
 
+
         //todo 클릭하면 done 등장, 글자 색상 변경, 완료 색갈 변경 하도록
 
+        holder.mTvUserName.setText(sharedUsers.get(position).getNickname());
+        if(sharedUsers.get(position).isPicked()){
+            //TODO 빨갛게
+            holder.mIvDone.setVisibility(View.VISIBLE);
+            holder.mTvUserName.setTextColor(Color.parseColor("#ff7979"));
+        }else{
+            holder.mIvDone.setVisibility(View.INVISIBLE);
+            holder.mTvUserName.setTextColor(Color.parseColor("#000000"));
+
+        }
     }
 
 
@@ -77,14 +85,12 @@ public class RecentSharedRecyclerAdapter extends RecyclerView.Adapter<RecentShar
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView mIvProfile,mIvDone;
         TextView mTvUserName;
-        boolean flag = false;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mIvDone = itemView.findViewById(R.id.recent_shared_iv_done);
             mIvProfile = itemView.findViewById(R.id.recent_shared_iv_profile);
             mTvUserName = itemView.findViewById(R.id.recent_shared_tv_username);
-            mIvDone.setVisibility(View.INVISIBLE);
 
             //TODO 리사이클러뷰 외부에서 아이템 클릭 이벤트 처리하는 중
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,16 +98,13 @@ public class RecentSharedRecyclerAdapter extends RecyclerView.Adapter<RecentShar
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if(pos!=RecyclerView.NO_POSITION){
-//                        if(mListener!=null){
-//                            mListener.onItemClick(v,pos);
-//                        }
-                        if(!flag){
-                            flag=true;
+                        if(!sharedUsers.get(pos).isPicked()){
+                            sharedUsers.get(pos).picked=true;
                             mIvDone.setVisibility(View.VISIBLE);
                             mTvUserName.setTextColor(Color.parseColor("#ff7979"));
                             mListener.onItemClick(v,pos,true);
                         }else{
-                            flag=false;
+                            sharedUsers.get(pos).picked=false;
                             mIvDone.setVisibility(View.INVISIBLE);
                             mTvUserName.setTextColor(Color.parseColor("#000000"));
                             mListener.onItemClick(v,pos,false);

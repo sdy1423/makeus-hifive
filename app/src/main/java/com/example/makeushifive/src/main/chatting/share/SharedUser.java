@@ -4,11 +4,21 @@ public class SharedUser {
     int sharedUserNo;
     String profileUrl;
     String nickname;
+    boolean picked;
 
-    public SharedUser(int sharedUserNo, String profileUrl, String nickname) {
+    public SharedUser(int sharedUserNo, String profileUrl, String nickname,Boolean picked) {
         this.sharedUserNo = sharedUserNo;
         this.profileUrl = profileUrl;
         this.nickname = nickname;
+        this.picked = picked;
+    }
+
+    public void setPicked(boolean picked) {
+        this.picked = picked;
+    }
+
+    public boolean isPicked() {
+        return picked;
     }
 
     public void setSharedUserNo(int sharedUserNo) {

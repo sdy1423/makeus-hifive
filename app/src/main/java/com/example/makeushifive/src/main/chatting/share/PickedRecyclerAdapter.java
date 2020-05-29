@@ -23,7 +23,7 @@ public class PickedRecyclerAdapter extends RecyclerView.Adapter<PickedRecyclerAd
     Context context;
 
     public interface OnItemClickListener{
-        void onItemClick(View v, int pos,String deletedName);
+        void onItemClick(View v, int pos,int userNo);
     }
     private OnItemClickListener mListener = null;
 
@@ -45,7 +45,6 @@ public class PickedRecyclerAdapter extends RecyclerView.Adapter<PickedRecyclerAd
 
     @Override
     public void onBindViewHolder(@NonNull PickedRecyclerAdapter.ViewHolder holder, int position) {
-
         holder.mTvUserName.setText(sharedUsers.get(position).getNickname());
         //프사
         Glide.with(context)
@@ -75,10 +74,16 @@ public class PickedRecyclerAdapter extends RecyclerView.Adapter<PickedRecyclerAd
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
-                        mListener.onItemClick(v, pos,sharedUsers.get(pos).getNickname());
-//                        sharedUsers.remove(pos);
-                        //TODO 세로 리사이클러뷰의 색상을 어떻게 바꿔야 할지 모르겠다 일단 보류!
-                        notifyItemChanged(pos);
+
+                        int UserNo = sharedUsers.get(pos).getSharedUserNo();
+
+                        mListener.onItemClick(v, pos,UserNo);
+
+                        sharedUsers.remove(pos);
+                        notifyItemRemoved(getAdapterPosition());
+                        notifyItemRangeChanged(getAdapterPosition(), sharedUsers.size());
+
+//                        notifyItemChanged(pos);
                     }
                 }
             });

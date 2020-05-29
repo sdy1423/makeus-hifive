@@ -2,10 +2,13 @@ package com.example.makeushifive.src.main.setting.change;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -40,6 +43,37 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
     EditText mEdtUserName, mEdtPwd, mEdtPwdAgain;
     boolean UserNameFlag = false, PwdFlag = false;
     Drawable img1, img2;
+    private final int GET_GALLERY_IMAGE = 200;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri selectedImageUri = data.getData();
+            mIvProfile.setImageURI(selectedImageUri);
+//            ProfileUrl=selectedImageUri.toString();
+            Log.e("바뀐 프로필 URI",""+selectedImageUri);
+            ProfileUrl = getRealPathFromURI(selectedImageUri);
+            Log.e("바뀐 프로필 URL",""+ProfileUrl);
+        }
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +100,10 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
             @Override
             public void onClick(View v) {
                 //TODO 프로필 사진 변경 dialog ㄱㄱ
+
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
 
@@ -111,6 +149,7 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
                 }
             }
         });
+
 
         //비밀번호 입력
         mEdtPwd.addTextChangedListener(new TextWatcher() {

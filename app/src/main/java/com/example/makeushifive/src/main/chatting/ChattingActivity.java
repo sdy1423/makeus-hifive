@@ -278,12 +278,16 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 //                    Log.e("profileUrl",""+profileUrl);
 
                     Message message1;
-                    if(userName==MyName){
+                    if(userName.equals(MyName)){
+                        Log.e("나","");
                         message1 = new Message(userName,message,message,0,profileUrl);
+                       addItemToRecyclerView(message1);
                     }else{
+                        Log.e("너","");
                         message1 = new Message(userName,message,message,1,profileUrl);
+                        addItemToRecyclerView(message1);
+
                     }
-                    addItemToRecyclerView(message1);
 
                 }
 
