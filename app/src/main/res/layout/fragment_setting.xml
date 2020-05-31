@@ -145,12 +145,14 @@
         android:layout_marginLeft="16dp"/>
 
     <Button
+        android:id="@+id/setting_btn_logout"
         android:text="로그아웃"
         android:textSize="16dp"
         android:layout_marginTop="218dp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
         android:textColor="#000000"
+        android:stateListAnimator="@null"
         android:background="@drawable/setting_logout_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

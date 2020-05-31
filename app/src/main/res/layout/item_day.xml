@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/item_layout"
-    android:orientation="vertical">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#f2f1f1" />
+    android:orientation="vertical"
+    android:background="@drawable/calendar_tile_border"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
 
     <TextView
         android:id="@+id/item_day"
+        android:textSize="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tool:text="00" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tile_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

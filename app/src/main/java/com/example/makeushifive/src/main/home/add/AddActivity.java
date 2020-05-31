@@ -25,6 +25,8 @@ import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.MainActivity;
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
 import com.example.makeushifive.src.main.home.add.models.AddResponse;
+import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
+import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -44,20 +46,46 @@ import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class AddActivity extends BaseActivity implements AddActivityView {
 
+    //TIME/////////////////////////////////
+    ValueAnimator mTimeAni;
+    ImageView mIvTimeRemove,mIvTimeAdd;
+    ///////////////////////////////////////
+
+    //LOCATION/////////////////////////////////
+    ValueAnimator mlocationAni;
+    ImageView mIvLocationRemove,mIvLocationAdd;
+    ///////////////////////////////////////
+
+    //REPEAT/////////////////////////////////
+    ValueAnimator SelectDayWeekMonthAni,SelectMonToSunAni;
+    ImageView mIvRepeatAdd,mIvRepeatRemove;
+    ///////////////////////////////////////
+
+    //ALARM/////////////////////////////////
+    ValueAnimator mAlarmAni;
+    ImageView mIvAlarmRemove,mIvAlarmAdd;
+    ///////////////////////////////////////
+
+    //TAG/////////////////////////////////
+    EditText mEdtLocation,mEdtTag;
+    ImageView mIvTagAdd,mIvTagRemove;
+    ValueAnimator mTagAni;
+    ///////////////////////////////////////
+    TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
+            mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
+            ,mTvStartTime,mTvEndTime,mTvAlarmSelected,mTvAddCompleteRed,mTvAddCompleteBlack;
+
     int speed = 500;
     //TODO 1번 컬러 디폴트로 설정, 타이틀만 추가해도 일정 추가 가능하도록 ㄱㄱ
     int color=1;
-    ValueAnimator mlocationAni,SelectDayWeekMonthAni,SelectMonToSunAni,mTimeAni,mAlarmAni,mTagAni;
-    EditText mEdtLocation,mEdtTag,mEdtTitle;
+    EditText mEdtTitle;
     int location_height = 150,time_height=110,location_heightt=110,tag_height=110;
     LinearLayout mLlRepeatSelect,mLlRepeatSelectDay,mLlEndTime;
-    TextView mTvRepeatEverdayBlur,mTvRepeatEverdayBlack,mTvRepeatEverMonthBlur,mTvRepeatEverMonthBlack,mTvRepeatEveryWeekBlack,mTvRepeatEveryWeekBlur,
-    mTvMonBlack,mTvMonBlur,mTvTueBlack,mTvTueBlur,mTvWedBlack,mTvWedBlur,mTvThuBlack,mTvThuBlur,mTvFriBlack,mTvFriBlur,mTvSatBlack,mTvSatBlur,mTvSunBlack,mTvSunBlur,mTvStartDate,mTvEndDate
-            ,mTvStartTime,mTvEndTime,mTvAlarmSelected,mTvAddCompleteRed,mTvAddCompleteBlack;
-    ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,
-            mIvShowColor8,mIvLocationAdd,mIvLocationRemove,mIvRepeatAdd,mIvRepeatRemove,mIvTimeAdd,mIvTimeRemove,mIvAlarmAdd,mIvAlarmRemove,mIvTagAdd,mIvTagRemove;
+    ImageView mIvShowColor1,mIvShowColor2,mIvShowColor3,mIvShowColor4,mIvShowColor5,mIvShowColor6,mIvShowColor7,mIvShowColor8;
+
+
     //월,화,수,목,금,토,일 클릭 여부
-    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,EveryMonthFlag=false,TimeFlag=false,AlarmFlag=false
+    boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,TimeFlag=false,AlarmFlag=false
             ,TagFlag=false;
 
 
@@ -66,19 +94,25 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
     FrameLayout mFlComplete;
     String FirstShowDate;
-//    ArrayList<DAYS> days = new ArrayList<>();
     String title="";
     String location = "";
     String tag="";
     boolean titleFlag=false;
 
+    //클릭해서 들어온 날짜
     String pickedDate="";
     Date pickedDay;
+
+    SingleDateAndTimePicker picker;
+    DoubleDateAndTimePickerDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        picker=findViewById(R.id.picker);
+
 
         FindViewById();
         SetVisibility();
@@ -131,103 +165,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         });
 
 
-
-        mFlComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(titleFlag){
-                    //TODO 일정등록
-                    location = mEdtLocation.getText().toString();
-                    tag = mEdtTag.getText().toString();
-
-                    JsonObject jsonObject = new JsonObject();
-                    JsonArray jsonArray = new JsonArray();
-
-                    jsonObject.addProperty("title",title);
-                    jsonObject.addProperty("location",location);
-                    jsonObject.addProperty("tag",tag);
-                    jsonObject.addProperty("color",color);
-
-                    JsonObject dayInfo = new JsonObject();
-                    //TODO 시간추가에서 days 넣기
-                    if(PickedEndDay==-1){
-                        //TODO 종료 시간 설정 안했을 경우
-                        dayInfo.addProperty("day",pickedDate);
-                        String time="";
-                        if(PickedStartMin==-1){
-                            time = "00:00";
-                        }
-                        dayInfo.addProperty("time",time);
-                        jsonArray.add(dayInfo);
-
-                    }
-
-                    else if(PickedStartMonth==PickedEndMonth){//시작과 끝달이 같을 때
-                        //2020-05-14 , 10:00
-                        int s = PickedStartDay;
-                        int e = PickedEndDay;
-                        int sub = e-s;
-                        String tempDate = "";
-                        tempDate+= String.valueOf(PickedStartYear);
-                        tempDate+= "-";
-                        if(PickedStartMonth<10){
-                            tempDate+="0";
-                        }
-                        tempDate+=String.valueOf(PickedStartMonth);
-                        tempDate+="-";
-                        String sendDate;
-                        for(int i=s;i<=s+sub;i++){
-                            sendDate=tempDate;
-                            if(i<10){
-                                sendDate+="0";
-                            }
-                            sendDate+=String.valueOf(i);
-                            String time = "";
-                            if(i<s+sub){
-                                if(PickedStartHour<10){
-                                    time+="0";
-                                }
-                                time += String.valueOf(PickedStartHour);
-                                time+=":";
-                                if(PickedStartMin<10){
-                                    time+="0";
-                                }
-                                time+= String.valueOf(PickedStartMin);
-                            }else{
-                                if(PickedEndHour<10){
-                                    time+="0";
-                                }
-                                time+=String.valueOf(PickedEndHour);
-                                time+=":";
-                                if(PickedEndMin<10){
-                                    time+="0";
-                                }
-                                time+=String.valueOf(PickedEndMin);
-                            }
-                            dayInfo.addProperty("day",sendDate);
-                            dayInfo.addProperty("time",time);
-                            jsonArray.add(dayInfo);
-                        }
-                    }else{
-                        //TODO 시작월, 끝 월 다를 경우 만들기
-
-
-                    }
-                    jsonObject.add("days",jsonArray);
-                    try {
-                        Log.e("jsonarray",""+jsonArray);
-                        Log.e("jsonObject",""+jsonObject);
-                        PostAddSchedule(jsonObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-    public void PostAddSchedule(JsonObject jsonObject) throws JSONException {
-        AddService addService = new AddService(this);
-        addService.PostAddSchedule(jsonObject);
     }
 
     private void SetVisibility() {
@@ -269,10 +206,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
         mTvRepeatEveryWeekBlack.setVisibility(View.INVISIBLE);
         mTvRepeatEveryWeekBlur.setVisibility(View.VISIBLE);
-
-        mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
-        mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
-
         mIvTimeAdd.setVisibility(View.VISIBLE);
         mIvTimeRemove.setVisibility(View.INVISIBLE);
 
@@ -299,73 +232,50 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         //매일
         mTvRepeatEverdayBlur=findViewById(R.id.add_tv_repeat_everyday_blur);
         mTvRepeatEverdayBlack=findViewById(R.id.add_tv_repeat_everyday_black);
-        //매월
-        mTvRepeatEverMonthBlur=findViewById(R.id.add_tv_repeat_every_month_blur);
-        mTvRepeatEverMonthBlack=findViewById(R.id.add_tv_repeat_every_month_black);
         //매주
         mTvRepeatEveryWeekBlack=findViewById(R.id.add_tv_repeat_every_week_black);
         mTvRepeatEveryWeekBlur=findViewById(R.id.add_tv_repeat_every_week_blur);
-
         //매일 매주 매월 선택 오픈,클로즈
         mIvRepeatAdd=findViewById(R.id.add_iv_repeat_add);
         mIvRepeatRemove=findViewById(R.id.add_iv_repeat_remove);
-
         //요일 버튼
         mTvSunBlack=findViewById(R.id.add_tv_repeat_select_day_sun_black);
         mTvSunBlur=findViewById(R.id.add_tv_repeat_select_day_sun_blur);
-
         mTvMonBlack=findViewById(R.id.add_tv_repeat_select_day_mon_black);
         mTvMonBlur=findViewById(R.id.add_tv_repeat_select_day_mon_blur);
-
         mTvTueBlack=findViewById(R.id.add_tv_repeat_select_day_tue_black);
         mTvTueBlur=findViewById(R.id.add_tv_repeat_select_day_tue_blur);
-
         mTvWedBlack=findViewById(R.id.add_tv_repeat_select_day_wed_black);
         mTvWedBlur=findViewById(R.id.add_tv_repeat_select_day_wed_blur);
-
         mTvThuBlack=findViewById(R.id.add_tv_repeat_select_day_thu_black);
         mTvThuBlur=findViewById(R.id.add_tv_repeat_select_day_thu_blur);
-
         mTvFriBlack=findViewById(R.id.add_tv_repeat_select_day_fri_black);
         mTvFriBlur=findViewById(R.id.add_tv_repeat_select_day_fri_blur);
-
         mTvSatBlack=findViewById(R.id.add_tv_repeat_select_day_sat_black);
         mTvSatBlur=findViewById(R.id.add_tv_repeat_select_day_sat_blur);
-
-
-
-        int showColor[] = {R.id.add_iv_show_color1, R.id.add_iv_show_color2, R.id.add_iv_show_color3,
-                R.id.add_iv_show_color4, R.id.add_iv_show_color5, R.id.add_iv_show_color6,
-                R.id.add_iv_show_color7, R.id.add_iv_show_color8};
-        mIvShowColor1=findViewById(showColor[0]);
-        mIvShowColor2=findViewById(showColor[1]);
-        mIvShowColor3=findViewById(showColor[2]);
-        mIvShowColor4=findViewById(showColor[3]);
-        mIvShowColor5=findViewById(showColor[4]);
-        mIvShowColor6=findViewById(showColor[5]);
-        mIvShowColor7=findViewById(showColor[6]);
-        mIvShowColor8=findViewById(showColor[7]);
-
+        mIvShowColor1 = findViewById(R.id.add_iv_show_color1);
+        mIvShowColor2 = findViewById(R.id.add_iv_show_color2);
+        mIvShowColor3 = findViewById(R.id.add_iv_show_color3);
+        mIvShowColor4 = findViewById(R.id.add_iv_show_color4);
+        mIvShowColor5 = findViewById(R.id.add_iv_show_color5);
+        mIvShowColor6 = findViewById(R.id.add_iv_show_color6);
+        mIvShowColor7 = findViewById(R.id.add_iv_show_color7);
+        mIvShowColor8 = findViewById(R.id.add_iv_show_color8);
         mTvStartDate =findViewById(R.id.add_tv_start_date);
         mTvStartTime =findViewById(R.id.add_tv_start_time);
         mTvEndDate = findViewById(R.id.add_tv_end_date);
         mTvEndTime =findViewById(R.id.add_tv_end_time);
-
         mIvTimeAdd=findViewById(R.id.add_iv_time_add);
         mIvTimeRemove=findViewById(R.id.add_iv_time_remove);
-
         mLlEndTime=findViewById(R.id.add_ll_end_time);
-
         mIvAlarmAdd=findViewById(R.id.add_iv_alarm_add);
         mIvAlarmRemove=findViewById(R.id.add_iv_alarm_remove);
-
         mTvAlarmSelected=findViewById(R.id.add_tv_alarm_what);
         mIvTagAdd=findViewById(R.id.add_iv_tag_add);
         mIvTagRemove=findViewById(R.id.add_iv_tag_remove);
         mEdtTag=findViewById(R.id.add_edt_tag);
         mTvAddCompleteRed=findViewById(R.id.add_tv_complete_red);
         mTvAddCompleteBlack=findViewById(R.id.add_tv_complete_black);
-
         mEdtTitle=findViewById(R.id.add_edt_title);
         mFlComplete = findViewById(R.id.add_fl_complete);
     }
@@ -696,12 +606,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     mTvRepeatEveryWeekBlack.setVisibility(View.INVISIBLE);
                     mTvRepeatEveryWeekBlur.setVisibility(View.VISIBLE);
                 }
-                //매월 닫기
-                if(EveryMonthFlag){
-                    EveryMonthFlag=false;
-                    mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
-                    mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
-                }
 
 
                 break;
@@ -724,39 +628,6 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                     mTvRepeatEverdayBlack.setVisibility(View.INVISIBLE);
                     mTvRepeatEverdayBlur.setVisibility(View.VISIBLE);
                 }
-                if(EveryMonthFlag){
-                    EveryMonthFlag=false;
-                    mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
-                    mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
-                }
-
-
-
-                break;
-            case R.id.add_fl_repeat_every_month:
-                //매달 일정반복복
-                if(!EveryMonthFlag){
-                    EveryMonthFlag=true;
-                    mTvRepeatEverMonthBlack.setVisibility(View.VISIBLE);
-                    mTvRepeatEverMonthBlur.setVisibility(View.INVISIBLE);
-                }else{
-                    EveryMonthFlag=false;
-                    mTvRepeatEverMonthBlack.setVisibility(View.INVISIBLE);
-                    mTvRepeatEverMonthBlur.setVisibility(View.VISIBLE);
-                }
-
-                if(EveryDayFlag){
-                    EveryDayFlag=false;
-                    mTvRepeatEverdayBlack.setVisibility(View.INVISIBLE);
-                    mTvRepeatEverdayBlur.setVisibility(View.VISIBLE);
-                }
-                if(EveryWeekFlag){
-                    EveryWeekFlag=false;
-                    CloseSelectMonToSun();
-                    mTvRepeatEveryWeekBlack.setVisibility(View.INVISIBLE);
-                    mTvRepeatEveryWeekBlur.setVisibility(View.VISIBLE);
-                }
-
 
 
 
@@ -1016,14 +887,22 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     @Override
     public void postAddSuccess(AddResponse.Result result) throws JSONException {
         //TODO 일정등록 성공했으니까 일정 반복 시도 ㄱㄱㄱ 일정반복도 성공하면 뒤로 넘어간다.
+        Log.e("일정등록은 성공","일정반복 할지 말지 ");
 
-        if(!EveryDayFlag && !EveryWeekFlag && !EveryMonthFlag){
+        if(!EveryDayFlag && !EveryWeekFlag){
             // TODO 그냥 뒤로 가기! 반복할 일정이 없다.
             showCustomToast("일정이 등록되었습니다.");
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             AddActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+
+            Log.e("반복할 일정이 없다.","반복할 일정이 없다.");
+
+
         }else{
+
+            Log.e("반복할 일정이 있다.","반복할 일정이 있다.");
+
             //TODO 반복 존재
              int taskNo = result.getTaskNo();
             JsonObject jsonObject = new JsonObject(); //Post 할 jsonobject
@@ -1031,7 +910,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
             JsonArray jsonArray = new JsonArray(); //배열
             JsonObject object = new JsonObject(); //배열에 넣을 것
 
-            if(EveryDayFlag){
+            if(EveryDayFlag && !EveryWeekFlag){
                 //TODO 매일반복
                 object.addProperty("repeatweek",1);
                 object.addProperty("repeatweek",2);
@@ -1041,40 +920,12 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                 object.addProperty("repeatweek",6);
                 object.addProperty("repeatweek",7);
 
-            }else if(EveryWeekFlag) {
+            }else if(!EveryDayFlag && EveryWeekFlag) {
                 //TODO 매주반복
                 for(int i=0;i<7;i++){
                     if(DayFlag[i]){
                         object.addProperty("repeatweek",i+1);
                     }
-                }
-            }else if(EveryMonthFlag) {
-                //TODO 매월반복
-                String DayOfWeek= DAYOFWEEK.format(pickedDay);
-                switch (DayOfWeek){
-                    case "일":
-                        object.addProperty("repeatweek",1);
-                        break;
-                    case "월":
-                        object.addProperty("repeatweek",2);
-                        break;
-                    case "화":
-                        object.addProperty("repeatweek",3);
-                        break;
-                    case "수":
-                        object.addProperty("repeatweek",4);
-                        break;
-                    case "목":
-                        object.addProperty("repeatweek",5);
-                        break;
-                    case "금":
-                        object.addProperty("repeatweek",6);
-                        break;
-                    case "토":
-                        object.addProperty("repeatweek",7);
-                        break;
-                    default:
-                        break;
                 }
             }
             jsonArray.add(object);
@@ -1092,6 +943,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     @Override
     public void postAddTaskRepeatSuccess() {
             //TODO 일정반복 등록 성공
+        Log.e("일정반복 등록 성공","일정반복 등록 성공");
             showCustomToast("일정이 등록되었습니다.");
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
@@ -1103,4 +955,98 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         //TODO 일정반복 등록 성공
 
     }
+
+    public void completeClick(View view) {
+        //완료 버튼 클릭시 일정 등록
+        if(titleFlag){ //최소한 타이틀이 입력되어 있어야 등록 가능
+            location = mEdtLocation.getText().toString(); //장소
+            tag = mEdtTag.getText().toString(); //태그
+
+            JsonObject jsonObject = new JsonObject();
+            JsonArray jsonArray = new JsonArray();
+
+            jsonObject.addProperty("title",title); //입력했어야 진입 가능
+            jsonObject.addProperty("location",location); //입력 안했으면 ""
+            jsonObject.addProperty("tag",tag); //입력 안했으면 ""
+            jsonObject.addProperty("color",color); //입력 안했으면 1
+
+            JsonObject dayInfo = new JsonObject(); //추가한 시간들 정보 담기
+            if(PickedEndDay==-1){ //종료 시간 설정 안했을 경우
+                dayInfo.addProperty("day",pickedDate);
+                String time="";
+                if(PickedStartMin==-1){
+                    //TODO 현재 시간으로 바꾸기
+                    time = "00:00";
+                }
+                dayInfo.addProperty("time",time);
+                jsonArray.add(dayInfo);
+
+            }
+
+            else if(PickedStartMonth==PickedEndMonth){//시작과 끝달이 같을 때
+                //2020-05-14 , 10:00
+                int s = PickedStartDay;
+                int e = PickedEndDay;
+                int sub = e-s;
+                String tempDate = "";
+                tempDate+= String.valueOf(PickedStartYear);
+                tempDate+= "-";
+                if(PickedStartMonth<10){
+                    tempDate+="0";
+                }
+                tempDate+=String.valueOf(PickedStartMonth);
+                tempDate+="-";
+                String sendDate;
+                for(int i=s;i<=s+sub;i++){
+                    sendDate=tempDate;
+                    if(i<10){
+                        sendDate+="0";
+                    }
+                    sendDate+=String.valueOf(i);
+                    String time = "";
+                    if(i<s+sub){
+                        if(PickedStartHour<10){
+                            time+="0";
+                        }
+                        time += String.valueOf(PickedStartHour);
+                        time+=":";
+                        if(PickedStartMin<10){
+                            time+="0";
+                        }
+                        time+= String.valueOf(PickedStartMin);
+                    }else{
+                        if(PickedEndHour<10){
+                            time+="0";
+                        }
+                        time+=String.valueOf(PickedEndHour);
+                        time+=":";
+                        if(PickedEndMin<10){
+                            time+="0";
+                        }
+                        time+=String.valueOf(PickedEndMin);
+                    }
+                    dayInfo.addProperty("day",sendDate);
+                    dayInfo.addProperty("time",time);
+                    jsonArray.add(dayInfo);
+                }
+            }else{
+                //TODO 시작월, 끝 월 다를 경우 만들기
+
+
+            }
+            jsonObject.add("days",jsonArray);
+            try {
+                Log.e("jsonarray",""+jsonArray);
+                Log.e("jsonObject",""+jsonObject);
+                PostAddSchedule(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void PostAddSchedule(JsonObject jsonObject) throws JSONException {
+        AddService addService = new AddService(this);
+        addService.PostAddSchedule(jsonObject);
+    }
+
 }

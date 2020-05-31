@@ -2,17 +2,26 @@ package com.example.makeushifive.src.main.setting.change;
 
 import android.util.Log;
 
+import com.example.makeushifive.src.main.chatting.interfaces.ChattingRetrofitInterface;
+import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
 import com.example.makeushifive.src.main.setting.change.interfaces.ChangeActivityView;
 import com.example.makeushifive.src.main.setting.change.interfaces.ChangeRetrofitInterface;
 import com.example.makeushifive.src.main.setting.change.models.ChangeResponse;
+import com.example.makeushifive.src.main.setting.change.models.ImageResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.Part;
 
 import static com.example.makeushifive.src.ApplicationClass.MEDIA_TYPE_JSON;
 import static com.example.makeushifive.src.ApplicationClass.getRetrofit;
@@ -81,4 +90,7 @@ public class ChangeService {
         });
 
     }
+
+
+
 }

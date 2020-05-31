@@ -13,15 +13,102 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.applandeo.materialcalendarview.CalendarView
-                android:id="@+id/home_calendarView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:selectionColor="#F4F4F4"
-                app:swipeEnabled="false"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--        헤더-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:background="@color/colorPrimary"
+                    android:orientation="horizontal">
 
-                app:selectedDayBackgroundColor="#EDEDED"
-                app:headerLabelColor="#000000"/>
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="16dp"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+                <!--요일-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="#eaeae9"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="일"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="월"
+                        android:textColor="@color/black"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="화"
+                        android:textColor="@color/black"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="수"
+                        android:textColor="@color/black"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="목"
+                        android:textColor="@color/black"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="금"
+                        android:textColor="@color/black"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+
+                        android:text="토"
+                        android:textSize="9sp" />
+                </LinearLayout>
+                <!--달력뷰-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -81,6 +168,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

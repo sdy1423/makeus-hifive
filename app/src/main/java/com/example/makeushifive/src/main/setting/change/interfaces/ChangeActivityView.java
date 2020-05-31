@@ -9,4 +9,7 @@ public interface ChangeActivityView {
     void postOverlapUserNameSuccess(int code,String message);
     void postOverlapUserNameFail();
 
+    void postImageSuccess();
+    void postImageFail();
+
 }

@@ -292,6 +292,15 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
 
     }
 
+    @Override
+    public void postImageSuccess() {
+
+    }
+
+    @Override
+    public void postImageFail() {
+
+    }
 
 
 }

@@ -69,6 +69,6 @@ dependencies {
     implementation('io.socket:socket.io-client:1.0.0') {
         exclude group: 'org.json', module: 'json'
     }
-
+    implementation 'com.github.florent37:singledateandtimepicker:2.2.5'
 
 }

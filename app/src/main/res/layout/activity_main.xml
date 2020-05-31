@@ -20,40 +20,42 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/main_tl_tabs"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="58dp"
         app:tabBackground="@drawable/tab_color_selector"
         app:tabIndicatorHeight="0dp"
-        app:tabSelectedTextColor="#FF7979"
         app:tabTextAppearance="@style/TabLayoutStyle"
         app:tabTextColor="#33000000"
         app:layout_constraintTop_toBottomOf="@id/main_vp_view_pager"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:tabSelectedTextColor="#FF7979"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/home"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/feed"
+            android:layout_marginBottom="5dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/setting"
+            android:layout_marginBottom="5dp"
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
     </com.google.android.material.tabs.TabLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

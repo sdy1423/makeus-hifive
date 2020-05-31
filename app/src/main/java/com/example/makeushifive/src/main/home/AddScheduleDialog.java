@@ -24,6 +24,7 @@ import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.home.add.AddActivity;
 import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -69,18 +70,26 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
 
         Bundle bundle =savedInstanceState !=null ? savedInstanceState :getArguments();
         assert bundle != null;
-        Date ShowDate = (Date)bundle.getSerializable("date");
-        assert ShowDate != null;
+//        Date ShowDate = (Date)bundle.getSerializable("date");
+        String getDate = bundle.getString("date");
+        Date getDateDate = null;
+        try {
+            assert getDate != null;
+            getDateDate = DATE_FORMAT.parse(getDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        String dialogFormDate = DOT_FORMAT.format(ShowDate); //dialog에 표시할 날짜 형식
-        String getScheduleFormat = DATE_FORMAT.format(ShowDate);
+
+        String dialogFormDate = DOT_FORMAT.format(getDateDate); //dialog에 표시할 날짜 형식
+        String getScheduleFormat = DATE_FORMAT.format(getDateDate);
         AddScheduleService addScheduleService = new AddScheduleService(this);
         addScheduleService.getPickedDaySchedule(getScheduleFormat);
 
         //addActivity로 보낼것들
-        String year = YEAR.format(ShowDate);
-        String month = MONTH.format(ShowDate);
-        String day = DAY.format(ShowDate);
+        String year = YEAR.format(getDateDate);
+        String month = MONTH.format(getDateDate);
+        String day = DAY.format(getDateDate);
 
 
         //TODO 오늘의 일정 보여주는 Recyclerview만들기 (오늘의 일정 get API 엮어서 보여주자)

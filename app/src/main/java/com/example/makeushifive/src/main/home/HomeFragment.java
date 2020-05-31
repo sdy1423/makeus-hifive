@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,10 @@ import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
+import com.example.makeushifive.src.main.home.calendar.CalendarAdapter;
+import com.example.makeushifive.src.main.home.calendar.DATA;
+import com.example.makeushifive.src.main.home.calendar.Keys;
+import com.example.makeushifive.src.main.home.calendar.TileItem;
 import com.example.makeushifive.src.main.home.interfaces.HomeFragmentView;
 import com.example.makeushifive.src.main.home.models.HomeResponse;
 import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
@@ -38,6 +43,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,11 +56,14 @@ import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
+    int CurrentYear=0, CurrentMonth=0; //캘린더를 set할때 설정한다.
+    ArrayList<TileItem> tileItems = new ArrayList<>();
+
     Context mContext;
     private ImageView mIvSearch,mIvAlarm;
     TextView mTvCurrentDate;
-    private Calendar calendar;
-    CalendarView calendarView;
+//    private Calendar calendar;
+//    CalendarView calendarView;
     HomeService homeService;
     AddScheduleDialog addScheduleDialog;
     ArrayList<CalendarItem> calendarItems = new ArrayList<>();
@@ -66,30 +75,33 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     RecyclerView TodayRecyclerView;
     TextView mTvTodayNoSchedule;
 
+    //TODO 직접 구현한 캘린더
+    public int mCenterPosition;
+    private long mCurrentTime;
+    public ArrayList<Object> mCalendarList = new ArrayList<>();
+    public TextView textView;
+    public RecyclerView recyclerView;
+    private CalendarAdapter mAdapter;
+    private StaggeredGridLayoutManager manager;
+    ArrayList<DATA> datas = new ArrayList<>();
+
 
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//            calendar.set(year, month,dayOfMonth);
+//            try {
+//                calendarView.setDate(calendar);
+//            } catch (OutOfDateRangeException e) {
+//                e.printStackTrace();
+//            }
+            ShowScheduleInfo(true);
+            CurrentYear=year;
+            CurrentMonth=month;
 
 
-            calendar.set(year, month,dayOfMonth);
-            try {
-                calendarView.setDate(calendar);
-            } catch (OutOfDateRangeException e) {
-                e.printStackTrace();
-            }
-            ShowScheduleInfo();
-
-            String showMonth="";
-            if(month<10){
-                showMonth="0";
-            }
-            showMonth+=String.valueOf(month);
-            String ShowDate = String.valueOf(year);
-            ShowDate+=". ";
-            ShowDate+=showMonth;
-            ShowDate+=" ";
-            mTvCurrentDate.setText(ShowDate);
+            initCalendarList(year,month-1,true);
+            setRecycler();
         }
     };
 
@@ -100,8 +112,14 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        GregorianCalendar cal = new GregorianCalendar();
+        CurrentYear = cal.get(Calendar.YEAR);
+        CurrentMonth = cal.get(Calendar.MONTH);
+
+        FindViewById(rootView);
+
+
         mContext = getContext();
-        mIvSearch=rootView.findViewById(R.id.home_toolbar_search);
         mIvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,46 +127,20 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 startActivity(intent);
             }
         });
-        mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
-
-        TodayRecyclerView=rootView.findViewById(R.id.home_today_schedule_recycler);
-        mTvTodayNoSchedule=rootView.findViewById(R.id.home_today_schedule_tv_no);
         mTvTodayNoSchedule.setVisibility(View.VISIBLE);
         TodayRecyclerView.setVisibility(View.INVISIBLE);
-
-
-        calendarView = rootView.findViewById(R.id.home_calendarView);
-
-
-        calendarView.setOnDayClickListener(new OnDayClickListener() {
-            @Override
-            public void onDayClick(EventDay eventDay) {
-
-
-//                String pickedDate = DAY.format(eventDay.getCalendar().getTime()); //dialog에 표시할 날짜 형식
-//                int pickedNum = Integer.parseInt(pickedDate);
-//                Log.e("picked",""+pickedNum);
-//                String today = DAY.format(Calendar.getInstance().getTime());
-//                int todayNum = Integer.parseInt(today);
-//                Log.e("today",""+todayNum);
-//                if(todayNum<=pickedNum){
-
-                    //TODO dialog내부 recyclerview에 해당 날짜 일정 쏴주기
-                    addScheduleDialog = new AddScheduleDialog(getActivity());
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("date",eventDay.getCalendar().getTime());
-                    addScheduleDialog.setArguments(bundle);
-                    addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"tag");
-//                }
-            }
-        });
-
-        //상단 날짜 표시
-        String date = CALENDAR_FORMAT.format(calendarView.getCurrentPageDate().getTime());
-        mTvCurrentDate=rootView.findViewById(R.id.home_toolbar_tv_today);
-        mTvCurrentDate.setText(date);
-
+//
+//        calendarView.setOnDayClickListener(new OnDayClickListener() {
+//            @Override
+//            public void onDayClick(EventDay eventDay) {
+//                //TODO dialog내부 recyclerview에 해당 날짜 일정 쏴주기
+//                addScheduleDialog = new AddScheduleDialog(getActivity());
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("date", eventDay.getCalendar().getTime());
+//                addScheduleDialog.setArguments(bundle);
+//                addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "tag");
+//            }
+//        });
         mTvCurrentDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,17 +149,24 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 yd.show(Objects.requireNonNull(getFragmentManager()),"YearMonthPicker");
             }
         });
-
-
         homeService = new HomeService(this);
         homeService.getSchedule();
-
         Date CurrentDate = Calendar.getInstance().getTime();
         String Today =DATE_FORMAT.format(CurrentDate);
-
         HomeService homeService1 = new HomeService(this);
         homeService1.getTodaySchedule(Today);
+
         return rootView;
+    }
+    public void FindViewById(View rootView){
+        mIvSearch=rootView.findViewById(R.id.home_toolbar_search);
+        mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
+        TodayRecyclerView=rootView.findViewById(R.id.home_today_schedule_recycler);
+        mTvTodayNoSchedule=rootView.findViewById(R.id.home_today_schedule_tv_no);
+        mTvCurrentDate=rootView.findViewById(R.id.home_toolbar_tv_today);
+        textView = rootView.findViewById(R.id.title);
+        recyclerView = rootView.findViewById(R.id.calendar);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -178,6 +177,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 //TODO 달력에 쏴준다.
                 //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
                 //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
+
+                //TODO 지금은 모든 일정 다 담아놔야 달력 바꿀때 꺼내 쓸 수 있음
                 taskNo=result.get(i).getTaskNo();
                 title=result.get(i).getTitle();
                 title=result.get(i).getTitle();
@@ -188,7 +189,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
                 calendarItems.add(calendarItem);
             }
-            ShowScheduleInfo();
+            ShowScheduleInfo(false);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,39 +197,61 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     }
 
-    private void ShowScheduleInfo() {
-        String ThisMonth = MONTH.format(calendarView.getCurrentPageDate().getTime());
+    private void ShowScheduleInfo(boolean flag) {
+//        String ThisMonth = MONTH.format(calendarView.getCurrentPageDate().getTime());
 //        Log.e("thismonth",""+calendarView.getCurrentPageDate().getTime());
-        List<EventDay> events = new ArrayList<>();
-        int year_int,month_int,day_int;
-        String year_st,month_st,day_st;
-        for(int i=0;i<calendarItems.size();i++){
+//        int year_int,month_int,day_int;
+//        String year_st,month_st,day_st;
+//        List<EventDay> events = new ArrayList<>();
 
-            month_st = MONTH.format(calendarItems.get(i).getDay());
-            if(month_st.equals(ThisMonth)){//이번달이면
-
-                year_st=YEAR.format(calendarItems.get(i).getDay());
-                year_int=Integer.parseInt(year_st);
-                month_int=Integer.parseInt(month_st);
-                day_st=DAY.format(calendarItems.get(i).getDay());
-                day_int=Integer.parseInt(day_st);
-
-                calendar=Calendar.getInstance();
-
-                calendar.set(year_int,month_int-1,day_int);
-//                events.add(new EventDay(calendar, R.drawable.ic_hifive_icon));
-//                TextDrawable textDrawable = new TextDrawable("song");
-//                    events.add(new EventDay(calendar,textDrawable));
-                Drawable text = CalendarUtils.getDrawableText(Objects.requireNonNull(getContext()), calendarItems.get(i).getTitle(), null, R.color.one, 7);
-                events.add(new EventDay(calendar,text));
-
-                calendarView.setEvents(events);
-            }else{
-                continue;
+        if(!flag){
+            for(int i=0;i<calendarItems.size();i++){
+                //같은 달인지 파싱한다.
+                int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
+                int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
+                if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+1){ //현재 달력과 년 월이 같다면
+                    int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
+                    int ItemColor = calendarItems.get(i).getColor();
+                    String ItemTitle = calendarItems.get(i).getTitle();
+                    TileItem item = new TileItem(ItemYear,ItemMonth,ItemDay,ItemColor,ItemTitle);
+                    tileItems.add(item);
+                }else{
+                    continue;
+                }
+            }
+        }else{
+            for(int i=0;i<calendarItems.size();i++){
+                //같은 달인지 파싱한다.
+                int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
+                int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
+                if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+2){ //현재 달력과 년 월이 같다면
+                    int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
+                    int ItemColor = calendarItems.get(i).getColor();
+                    String ItemTitle = calendarItems.get(i).getTitle();
+                    TileItem item = new TileItem(ItemYear,ItemMonth,ItemDay,ItemColor,ItemTitle);
+                    tileItems.add(item);
+                }else{
+                    continue;
+                }
             }
         }
 
+        //타일 안에 들어간 정보를 다 담고 달력 만든다.
+        for(int i=0;i<tileItems.size();i++){
+            int yea = tileItems.get(i).getYear();
+            int mon = tileItems.get(i).getMonth();
+            int day = tileItems.get(i).getDay();
+            String strin = tileItems.get(i).getTitle();
+            int colo = tileItems.get(i).getColor();
+//            Log.e("타일 year",""+yea);
+//            Log.e("타일 mon",""+mon);
+//            Log.e("타일 day",""+day);
+//            Log.e("타일 title",""+strin);
+//            Log.e("타일 color",""+colo);
 
+        }
+        initSet();
+        setRecycler();
     }
 
     @Override
@@ -272,24 +295,126 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 mTvTodayNoSchedule.setVisibility(View.INVISIBLE);
 
             }
-
-
-
-
-
         }catch (Exception e) {
             e.printStackTrace();
             //TODO 오늘의 일정 없음 보여주기
             mTvTodayNoSchedule.setVisibility(View.VISIBLE);
             TodayRecyclerView.setVisibility(View.INVISIBLE);
-
         }
-
-
     }
 
     @Override
     public void getTodayScheduleFail() {
 
     }
+
+
+    private void setRecycler() {
+        if (mCalendarList == null) {
+//            Log.w(TAG, "No Query, not initializing RecyclerView");
+        }
+
+        manager = new StaggeredGridLayoutManager(7, StaggeredGridLayoutManager.VERTICAL);
+        mAdapter = new CalendarAdapter(tileItems,datas,mCalendarList,getContext());
+        mAdapter.setCalendarList(mCalendarList);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
+                //TODO Dialog 띄운다.
+                String date = MakeStringForm(year,month+1,day);
+                addScheduleDialog = new AddScheduleDialog(getActivity());
+                Bundle bundle = new Bundle();
+                bundle.putString("date",date);
+//                Log.e("SHOWSHOW",""+date);
+//                bundle.putSerializable("date", date.getTime());
+                addScheduleDialog.setArguments(bundle);
+                addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "tag");
+            }
+        });
+
+        if (mCenterPosition >= 0) {
+            recyclerView.scrollToPosition(mCenterPosition);
+        }
+
+
+    }
+
+    private void initSet() {
+        initCalendarList(0,0,false);
+    }
+
+    private void initCalendarList(int year,int month,boolean flag) {
+        if(!flag){
+            GregorianCalendar cal = new GregorianCalendar();
+            setCalendarList(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH));
+        }else{
+            setCalendarList(year,month);
+        }
+    }
+    private void setCalendarList(int year,int month) {
+        CurrentYear=year;
+        CurrentMonth=month;
+        //TODO Month는 미리 +1해서 줄것.
+//        setTitle((int) cal.getTimeInMillis());
+        datas.clear();
+        ArrayList<Object> calendarList = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
+            try {
+                GregorianCalendar calendar = new GregorianCalendar(year, month, 1, 0, 0, 0);
+                if (i == 0) {
+                    mCenterPosition = calendarList.size();
+                }
+                //상단!
+                Date ShowDate = MakeDateForm(year,month+1,1);
+                String date = CALENDAR_FORMAT.format(ShowDate);
+                mTvCurrentDate.setText(date);
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; //해당 월에 시작하는 요일 -1 을 하면 빈칸을 구할 수 있겠죠 ?
+                int max = calendar.getActualMaximum(Calendar.DAY_OF_MONTH); // 해당 월에 마지막 요일
+
+                // EMPTY 생성
+                for (int j = 0; j < dayOfWeek; j++) {
+                    calendarList.add(Keys.EMPTY);
+                    DATA data = new DATA(0, 0, 0);
+                    datas.add(data);
+                }
+                for (int j = 1; j <= max; j++) {
+                    calendarList.add(new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), j));
+                    DATA data = new DATA(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), j);
+                    datas.add(data);
+                }
+                // TODO : 결과값 넣을떄 여기다하면될듯
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        mCalendarList = calendarList;
+    }
+
+    private void initView(View rootView) {
+    }
+
+    public String MakeStringForm(int year,int month,int day) throws ParseException {
+//        month+=1;
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        return stringDate;
+    }
+    public Date MakeDateForm(int year,int month,int day) throws ParseException {
+//        month+=1;
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        Date date = DATE_FORMAT.parse(stringDate);
+        return date;
+    }
+
 }

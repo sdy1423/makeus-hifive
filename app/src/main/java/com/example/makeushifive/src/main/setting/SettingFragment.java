@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import com.example.makeushifive.src.BaseFragment;
 import com.example.makeushifive.src.main.setting.change.ChangeActivity;
 import com.example.makeushifive.src.main.setting.interfaces.SettingFragmentView;
 import com.example.makeushifive.src.main.setting.models.SettingResponse;
+import com.example.makeushifive.src.splash.SplashActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -38,6 +41,7 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
     TextView mTvUserName,mTvChangeUserInfo,mTvShareFriendSetting,mTvThemeSetting;
     int UserNo;
     private String ProfileUrl, NickName, Email;
+    Button mBtnLogOut;
 
     @Nullable
     @Override
@@ -69,6 +73,22 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
             }
         });
 
+        mBtnLogOut=rootView.findViewById(R.id.setting_btn_logout);
+        mBtnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sSharedPreferences.edit();
+                editor.remove(X_ACCESS_TOKEN);
+                editor.remove("userNo");
+                editor.remove("profileUrl");
+                editor.remove("nickname");
+                editor.apply();
+                Intent intent = new Intent(getActivity(), SplashActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+            }
+        });
         return rootView;
     }
 

@@ -69,6 +69,7 @@ public class PickedRecyclerAdapter extends RecyclerView.Adapter<PickedRecyclerAd
             super(itemView);
             mIvProfile = itemView.findViewById(R.id.picked_iv_profile);
             mTvUserName = itemView.findViewById(R.id.picked_tv_user_name);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

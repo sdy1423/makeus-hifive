@@ -1,4 +1,6 @@
 package com.example.makeushifive.src.main.home.add;
+import android.util.Log;
+
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
 import com.example.makeushifive.src.main.home.add.interfaces.AddRetrofitInterface;
 import com.example.makeushifive.src.main.home.add.models.AddResponse;
@@ -24,6 +26,7 @@ public class AddService {
     }
 
     public void PostAddSchedule(final JsonObject jsonObject) throws JSONException{
+        Log.e("추가하는 일정",jsonObject.toString());
         final AddRetrofitInterface addRetrofitInterface=getRetrofit().create(AddRetrofitInterface.class);
         addRetrofitInterface.PostAddSchedule(RequestBody.create(jsonObject.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<AddResponse>() {
             @Override
@@ -48,6 +51,7 @@ public class AddService {
     }
 
     public void PostAddTaskRepeat(final JsonObject jsonObject) throws  JSONException{
+        Log.e("추가하는 반복일정",""+jsonObject);
         final AddRetrofitInterface addRetrofitInterface=getRetrofit().create(AddRetrofitInterface.class);
         addRetrofitInterface.PostAddTaskRepeat(RequestBody.create(jsonObject.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<AddResponse>() {
             @Override

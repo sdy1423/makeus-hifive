@@ -70,8 +70,8 @@ public class AddTimeDialog extends Dialog {
         WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
-        layoutParams.height = dpToPx(400,context);
-        layoutParams.width = dpToPx(296,context);
+        layoutParams.height = dpToPx(800,context);
+        layoutParams.width = dpToPx(400,context);
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
         startDay= Integer.parseInt(DAY.format(PickedDate));

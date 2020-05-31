@@ -5,11 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,10 +15,10 @@ import android.widget.TextView;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.chatting.interfaces.ChattingActivityView;
+import com.example.makeushifive.src.main.chatting.models.ChatUserResponse;
+import com.example.makeushifive.src.main.chatting.models.ChattingHistoryResponse;
 import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
 import com.example.makeushifive.src.main.chatting.share.ShareActivity;
-import com.example.makeushifive.src.main.setting.change.ChangeService;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -30,11 +27,9 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import io.socket.client.IO;
@@ -43,7 +38,6 @@ import io.socket.emitter.Emitter;
 
 import static com.example.makeushifive.src.ApplicationClass.Chatting;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
-import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
 import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class ChattingActivity extends BaseActivity implements ChattingActivityView {
@@ -66,6 +60,10 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
     ImageView mIvSend;
     RecyclerView chatRecyclerView;
     String MyName;
+
+    ArrayList<ChatUser> chatUsers = new ArrayList<>(); //채팅방 인원들
+    RecyclerView mChatUserRecycler;
+    ChattingService chattingService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +98,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 //        Log.e("받는taskNo",""+taskNo);
 //        Log.e("받는color",""+color);
 
-        ChattingService chattingService = new ChattingService(this);
+        chattingService = new ChattingService(this);
         chattingService.getDetailSchedule(taskNo);
 
         mTvLocation= findViewById(R.id.chatting_tv_location);
@@ -127,16 +125,6 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         });
 
 
-        //채팅!
-        mEdtMessage=findViewById(R.id.chatting_edt_message);
-        mIvSend = findViewById(R.id.chatting_iv_send);
-
-        mIvSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
-            }
-        });
 
         //leave는 일단 안만듬
 
@@ -151,6 +139,18 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         chatRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+        //채팅!
+        mEdtMessage=findViewById(R.id.chatting_edt_message);
+        mIvSend = findViewById(R.id.chatting_iv_send);
+
+        mIvSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
 
         try {
             mSocket = IO.socket("http://15.165.78.22:8080");
@@ -173,6 +173,12 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
 
         MyName = sSharedPreferences.getString("nickname",null);
+
+        mChatUserRecycler = findViewById(R.id.chatting_drawer_recyclerview);
+
+
+
+        chattingService.getChatHistory(taskNo);
 
     }
 
@@ -344,10 +350,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
 
         //TODO Result사이즈에 따라 시작일 끝일이 있을수도, 없을수도
-
-
-
-
+        chattingService.getChatUser(taskNo);
     }
 
     @Override
@@ -355,6 +358,60 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
     }
 
+    @Override
+    public void getChatUserSuccess(ArrayList<ChatUserResponse.Result> result) {
+        try {
+            for(int i =0;i<result.size();i++){
+                int userno = result.get(i).getUserNo();
+                String profileurl = result.get(i).getProfileUrl();
+                String nickname = result.get(i).getNickname();
+                ChatUser chatUser = new ChatUser(userno,profileurl,nickname);
+                chatUsers.add(chatUser);
+            }
+            Log.e("showshow","show "+chatUsers);
+            ChatUserRecyclerAdapter adapter = new ChatUserRecyclerAdapter(chatUsers,this);
+            mChatUserRecycler.setAdapter(adapter);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void getChatUserFail() {
+
+    }
+
+    @Override
+    public void getChatHistorySuccess(ArrayList<ChattingHistoryResponse.Result> result) {
+        try{
+            if(!result.isEmpty()){
+                for(int i=0;i<result.size();i++){
+                    String username = result.get(i).getNickname();
+                    String msg = result.get(i).getMsg();
+                    String profileurl = result.get(i).getProfileUrl();
+                    if(username.equals(MyName)){
+                        Message message = new Message(username,msg,msg,0,profileurl);
+                        addItemToRecyclerView(message);
+                    }else {
+                        Message message = new Message(username,msg,msg,1,profileurl);
+                        addItemToRecyclerView(message);
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void getChatHistoryFail() {
+
+    }
 
 
     @Override

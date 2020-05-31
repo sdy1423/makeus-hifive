@@ -93,6 +93,7 @@
         android:id="@+id/add_dialog_time_fl_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/add_dialog_time_ll_start"
             android:orientation="horizontal"
@@ -145,4 +146,21 @@
         android:layout_width="156dp"
         android:layout_height="33dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <DatePicker
+            android:id="@+id/dataPicker"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"/>
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"/>
+    </LinearLayout>
 </LinearLayout>

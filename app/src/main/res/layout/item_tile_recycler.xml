@@ -3,15 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
     <ImageView
-        android:id="@+id/custom_tab_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"/>
+
+        android:id="@+id/tile_iv"
+        android:layout_width="4dp"
+        android:layout_height="4dp"/>
     <TextView
-        android:id="@+id/custom_tab_tv"
-        android:textSize="10dp"
+        android:id="@+id/tile_tv"
         android:fontFamily="@font/notosanscjkr_regular"
+        android:textSize="9dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

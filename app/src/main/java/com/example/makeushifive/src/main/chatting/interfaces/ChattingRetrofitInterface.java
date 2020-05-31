@@ -1,10 +1,13 @@
 package com.example.makeushifive.src.main.chatting.interfaces;
 
+import com.example.makeushifive.src.main.chatting.models.ChatUserResponse;
+import com.example.makeushifive.src.main.chatting.models.ChattingHistoryResponse;
 import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ChattingRetrofitInterface {
 
@@ -14,5 +17,12 @@ public interface ChattingRetrofitInterface {
     );
 
 
+
+    @GET("/chatuser")
+    Call<ChatUserResponse> getChatUser(@Query("taskNo") int taskNo);
+
+
+    @GET("/chat")
+    Call<ChattingHistoryResponse> getChatHistory(@Query("room") int room);
 
 }
