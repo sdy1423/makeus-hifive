@@ -8,7 +8,8 @@
     <ImageView
         android:layout_gravity="center"
         android:id="@+id/custom_tab_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
+        android:layout_width="39dp"
+        android:layout_height="38dp"/>
 
 </LinearLayout>
+

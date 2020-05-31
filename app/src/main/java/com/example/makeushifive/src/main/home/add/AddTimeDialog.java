@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -32,34 +33,23 @@ import static com.example.makeushifive.src.ApplicationClass.DAY;
 public class AddTimeDialog extends Dialog {
 
     int startDay;
-    private DatePickerDialog.OnDateSetListener startDateListener;
     private TimePickerDialog.OnTimeSetListener startTimeListener;
-    private DatePickerDialog.OnDateSetListener endDateListener;
     private TimePickerDialog.OnTimeSetListener endTimeListener;
     public Calendar calendar = Calendar.getInstance();
     private Context context;
-    private Date PickedDate;
 
 
-    public AddTimeDialog(@NonNull Context context, DatePickerDialog.OnDateSetListener startDateListener,
+    public AddTimeDialog(@NonNull Context context,
                          TimePickerDialog.OnTimeSetListener startTimeListener,
-                         DatePickerDialog.OnDateSetListener endDateListener,
-                         TimePickerDialog.OnTimeSetListener endTimeListener,
-                         Date pickedDate) {
+                         TimePickerDialog.OnTimeSetListener endTimeListener) {
         super(context);
         this.context=context;
-        this.startDateListener = startDateListener;
         this.startTimeListener = startTimeListener;
-        this.endDateListener=endDateListener;
         this.endTimeListener=endTimeListener;
-        this.PickedDate=pickedDate;
     }
 
-    Button btnComplete;
-    FrameLayout mFlLeftText,mFlRightText;
-    TextView mTvLeftBlur,mTvLeftBlack,mTvRightBlur,mTvRightBlack;
-    LinearLayout mLlStartPick,mLlEndPick;
-    ImageView mIvClose;
+    private TextView mTvLeftBlur,mTvLeftBlack,mTvRightBlur,mTvRightBlack;
+    private LinearLayout mLlStartPick,mLlEndPick;
 
 
     @Override
@@ -70,19 +60,15 @@ public class AddTimeDialog extends Dialog {
         WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
-        layoutParams.height = dpToPx(800,context);
-        layoutParams.width = dpToPx(400,context);
+        layoutParams.height = dpToPx(370,context);
+        layoutParams.width = dpToPx(276,context);
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
-        startDay= Integer.parseInt(DAY.format(PickedDate));
-
-
-
-        btnComplete = findViewById(R.id.add_time_dialog_btn_complete);
+        Button btnComplete = findViewById(R.id.add_time_dialog_btn_complete);
 
         //TODO 클릭이벤트
-        mFlLeftText = findViewById(R.id.add_dialog_time_fl_left);
-        mFlRightText = findViewById(R.id.add_dialog_time_fl_right);
+        FrameLayout mFlLeftText = findViewById(R.id.add_dialog_time_fl_left);
+        FrameLayout mFlRightText = findViewById(R.id.add_dialog_time_fl_right);
 
         mTvLeftBlur = findViewById(R.id.add_dialog_time_tv_left_blur);
         mTvLeftBlack=findViewById(R.id.add_dialog_time_tv_left_black);
@@ -93,24 +79,22 @@ public class AddTimeDialog extends Dialog {
         mLlStartPick=findViewById(R.id.add_dialog_time_ll_start);
         mLlEndPick=findViewById(R.id.add_dialog_time_ll_end);
 
-        mIvClose = findViewById(R.id.add_dialog_time_iv_close);
+        ImageView mIvClose = findViewById(R.id.add_dialog_time_iv_close);
         //TODO 처음 오픈하면 LEFT=BLACK, RIGHT=BLUR,
         StartVisible();
 
-        final NumberPicker startDayPicker =findViewById(R.id.add_dialog_time_np_start_day);
-        final NumberPicker startHourPicker =findViewById(R.id.add_dialog_time_np_start_hour);
-        final NumberPicker startMinPicker = findViewById(R.id.add_dialog_time_np_start_min);
-        final NumberPicker endDayPicker=findViewById(R.id.add_dialog_time_np_end_day);
-        final NumberPicker endHourPicker =findViewById(R.id.add_dialog_time_np_end_hour);
-        final NumberPicker endMinPicker = findViewById(R.id.add_dialog_time_np_end_min);
+        NumberPicker startHour = findViewById(R.id.time_picker_start_hour);
+        NumberPicker startMin = findViewById(R.id.time_picker_start_min);
+        NumberPicker endHour = findViewById(R.id.time_picker_end_hour);
+        NumberPicker endMin = findViewById(R.id.time_picker_end_min);
 
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startDateListener.onDateSet(null,2020,calendar.get(Calendar.MONTH)+1,startDayPicker.getValue());
-                startTimeListener.onTimeSet(null,startHourPicker.getValue(),startMinPicker.getValue());
-                endDateListener.onDateSet(null,2020,calendar.get(Calendar.MONTH)+1,endDayPicker.getValue());
-                endTimeListener.onTimeSet(null,endHourPicker.getValue(),endMinPicker.getValue());
+                Log.e("선택안했을 경우!시작",""+startHour.getValue()+" "+startMin.getValue());
+                Log.e("선택안했을 경우!종료",""+endHour.getValue()+" "+endMin.getValue());
+                startTimeListener.onTimeSet(null,startHour.getValue(),startMin.getValue());
+                endTimeListener.onTimeSet(null,endHour.getValue(),endMin.getValue());
                 dismiss();
             }
         });
@@ -136,40 +120,29 @@ public class AddTimeDialog extends Dialog {
             }
         });
 
-        //시작날짜 고정
-        startDayPicker.setMinValue(startDay);
-        startDayPicker.setMaxValue(startDay);
+        startHour.setMinValue(0);
+        startHour.setMaxValue(23);
 
-        startHourPicker.setMinValue(0);
-        startHourPicker.setMaxValue(23);
+        endHour.setMinValue(0);
+        endHour.setMaxValue(23);
 
-        startMinPicker.setMinValue(0);
-        startMinPicker.setMaxValue(59);
+        startMin.setMinValue(0);
+        startMin.setMaxValue(59);
 
-        endDayPicker.setMinValue(startDay);
-        endDayPicker.setMaxValue(calendar.getMaximum(Calendar.DAY_OF_MONTH));
+        endMin.setMinValue(0);
+        endMin.setMaxValue(59);
 
-        endHourPicker.setMinValue(0);
-        endHourPicker.setMaxValue(23);
+        mTvLeftBlur.setText("시작시간");
+        mTvLeftBlack.setText("시작시간");
 
-        endMinPicker.setMinValue(0);
-        endMinPicker.setMaxValue(59);
+        mTvRightBlur.setText("종료시간");
+        mTvRightBlack.setText("종료시간");
 
+        startHour.setValue(12);
+        startMin.setValue(0);
 
-        startDayPicker.setValue(startDay);
-        endDayPicker.setValue(startDay);
-
-        startHourPicker.setValue(calendar.get(Calendar.HOUR_OF_DAY));
-        endHourPicker.setValue(calendar.get(Calendar.HOUR_OF_DAY));
-
-        startMinPicker.setValue(calendar.get(Calendar.MINUTE));
-        endMinPicker.setValue(calendar.get(Calendar.MINUTE));
-
-        mTvLeftBlur.setText("시작날짜");
-        mTvLeftBlack.setText("시작날짜");
-
-        mTvRightBlur.setText("종료날짜");
-        mTvRightBlack.setText("종료날짜");
+        endHour.setValue(12);
+        endMin.setValue(0);
 
 
     }

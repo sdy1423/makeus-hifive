@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeushifive.R;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 
 public class TodayRecyclerAdapter extends RecyclerView.Adapter<TodayRecyclerAdapter.ViewHolder>{
 
@@ -32,8 +35,11 @@ public class TodayRecyclerAdapter extends RecyclerView.Adapter<TodayRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull TodayRecyclerAdapter.ViewHolder holder, int position)  {
         holder.mTvTitle.setText(pickedDayTasks.get(position).getTitle());
-        holder.mTvLocation.setText(pickedDayTasks.get(position).getLocation());
-        holder.mTvTime.setText(pickedDayTasks.get(position).getTime());
+        String show = pickedDayTasks.get(position).getTime();
+        show = show.substring(0,5);
+        show+="\n";
+        show+=pickedDayTasks.get(position).getLocation();
+        holder.mTvDetail.setText(show);
         int color = 0;
         color = pickedDayTasks.get(position).getColor();
         switch (color){
@@ -70,17 +76,14 @@ public class TodayRecyclerAdapter extends RecyclerView.Adapter<TodayRecyclerAdap
     public int getItemCount() {
         return pickedDayTasks.size();
     }
-
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView mTvTitle,mTvTime,mTvLocation;
+        TextView mTvTitle,mTvDetail;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTvTitle=itemView.findViewById(R.id.today_tv_title);
-            mTvTime=itemView.findViewById(R.id.today_tv_time);
-            mTvLocation=itemView.findViewById(R.id.today_tv_location);
-
+            mTvDetail=itemView.findViewById(R.id.today_tv_detail);
         }
-
     }
+
 }

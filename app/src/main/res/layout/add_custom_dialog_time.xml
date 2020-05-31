@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_marginLeft="133dp"
-            android:layout_marginRight="93dp"
+            android:layout_marginLeft="123dp"
+            android:layout_marginRight="83dp"
             android:text="시간"
             android:fontFamily="@font/notosanscjkr_regular"
             android:textSize="16dp"
@@ -25,12 +25,12 @@
             android:layout_gravity="center_vertical"
             android:id="@+id/add_dialog_time_iv_close"
             android:src="@drawable/ic_close_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -88,6 +88,49 @@
                 android:textSize="14dp"/>
         </FrameLayout>
     </LinearLayout>
+<!--    <FrameLayout-->
+<!--        android:layout_gravity="center"-->
+<!--        android:id="@+id/add_dialog_time_fl_picker"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/add_dialog_time_ll_start"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+<!--            <NumberPicker-->
+<!--                android:id="@+id/add_dialog_time_np_start_day"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--            <NumberPicker-->
+<!--                android:id="@+id/add_dialog_time_np_start_hour"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--            <NumberPicker-->
+<!--                android:id="@+id/add_dialog_time_np_start_min"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--        </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/add_dialog_time_ll_end"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+<!--            <NumberPicker-->
+<!--                android:id="@+id/add_dialog_time_np_end_day"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--            <NumberPicker-->
+<!--                android:id="@+id/add_dialog_time_np_end_hour"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--            <NumberPicker-->
+<!--                android:id="@+id/add_dialog_time_np_end_min"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--        </LinearLayout>-->
+<!--    </FrameLayout>-->
     <FrameLayout
         android:layout_gravity="center"
         android:id="@+id/add_dialog_time_fl_picker"
@@ -100,15 +143,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <NumberPicker
-                android:id="@+id/add_dialog_time_np_start_day"
+                android:id="@+id/time_picker_start_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <NumberPicker
-                android:id="@+id/add_dialog_time_np_start_hour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <NumberPicker
-                android:id="@+id/add_dialog_time_np_start_min"
+                android:id="@+id/time_picker_start_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -118,15 +157,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <NumberPicker
-                android:id="@+id/add_dialog_time_np_end_day"
+                android:id="@+id/time_picker_end_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <NumberPicker
-                android:id="@+id/add_dialog_time_np_end_hour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <NumberPicker
-                android:id="@+id/add_dialog_time_np_end_min"
+                android:id="@+id/time_picker_end_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -146,21 +181,4 @@
         android:layout_width="156dp"
         android:layout_height="33dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <DatePicker
-            android:id="@+id/dataPicker"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"/>
-
-        <TimePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner"/>
-    </LinearLayout>
 </LinearLayout>

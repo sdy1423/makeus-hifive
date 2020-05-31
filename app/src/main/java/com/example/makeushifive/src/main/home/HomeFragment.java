@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,10 +18,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.applandeo.materialcalendarview.CalendarUtils;
@@ -62,8 +65,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     Context mContext;
     private ImageView mIvSearch,mIvAlarm;
     TextView mTvCurrentDate;
-//    private Calendar calendar;
-//    CalendarView calendarView;
     HomeService homeService;
     AddScheduleDialog addScheduleDialog;
     ArrayList<CalendarItem> calendarItems = new ArrayList<>();
@@ -156,6 +157,43 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         HomeService homeService1 = new HomeService(this);
         homeService1.getTodaySchedule(Today);
 
+
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                if(e.getAction()==MotionEvent.ACTION_DOWN){//화면에 손가락 닿았을때
+                    try {
+                        View child =rv.findChildViewUnder(e.getX(),e.getY());
+                        assert child != null;
+                        LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
+                        linearLayout.setBackgroundColor(Color.parseColor("#F4F4F4"));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                if(e.getAction()== MotionEvent.ACTION_UP){
+                    try {
+                        View child =rv.findChildViewUnder(e.getX(),e.getY());
+                        assert child != null;
+                        LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
+                        linearLayout.setBackgroundResource(R.drawable.calendar_tile_border_second);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
         return rootView;
     }
     public void FindViewById(View rootView){

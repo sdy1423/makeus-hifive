@@ -15,4 +15,5 @@
     <color name="seven">#191919</color>
     <color name="eight">#7BC94B</color>
     <color name="black">#000000</color>
+    <color name="sun_to_sat_color">#4AEFEFEF</color>
 </resources>

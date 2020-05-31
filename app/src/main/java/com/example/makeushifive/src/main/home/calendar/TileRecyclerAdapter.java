@@ -2,6 +2,7 @@ package com.example.makeushifive.src.main.home.calendar;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,20 +38,28 @@ public class TileRecyclerAdapter extends RecyclerView.Adapter<TileRecyclerAdapte
         int color = tileItems.get(position).getColor();
         if(color==1){
             holder.title.setTextColor(Color.parseColor("#F87BAB"));
+            holder.showColor.setBackgroundColor(Color.parseColor("#F87BAB"));
         }else if(color==2){
+            holder.showColor.setBackgroundColor(Color.parseColor("#FAB462"));
             holder.title.setTextColor(Color.parseColor("#FAB462"));
         }
         else if(color==3){
+            holder.showColor.setBackgroundColor(Color.parseColor("#4A62E3"));
             holder.title.setTextColor(Color.parseColor("#4A62E3"));
         }else if(color==4){
+            holder.showColor.setBackgroundColor(Color.parseColor("#D10000"));
             holder.title.setTextColor(Color.parseColor("#D10000"));
         }else if(color==5){
+            holder.showColor.setBackgroundColor(Color.parseColor("#53BFAB"));
             holder.title.setTextColor(Color.parseColor("#53BFAB"));
         }else if(color==6){
+            holder.showColor.setBackgroundColor(Color.parseColor("#9B50D3"));
             holder.title.setTextColor(Color.parseColor("#9B50D3"));
         }else if(color==7){
+            holder.showColor.setBackgroundColor(Color.parseColor("#191919"));
             holder.title.setTextColor(Color.parseColor("#191919"));
         }else if(color==8) {
+            holder.showColor.setBackgroundColor(Color.parseColor("#7BC94B"));
             holder.title.setTextColor(Color.parseColor("#7BC94B"));
         }
         holder.title.setText(tileItems.get(position).getTitle());

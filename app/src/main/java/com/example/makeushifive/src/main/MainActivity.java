@@ -24,34 +24,36 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     TabLayout mTlTabLayout;
     ViewPager mVpViewPager;
 
+    View tabView1,tabView2,tabView3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tabView1 = LayoutInflater.from(this).inflate(R.layout.custom_tab_calendar, null);
+        tabView2 = LayoutInflater.from(this).inflate(R.layout.custom_tab_feed, null);
+        tabView3 = LayoutInflater.from(this).inflate(R.layout.custom_tab_profile, null);
 
-        Log.e("onCreate","onStart");
         mTlTabLayout=findViewById(R.id.main_tl_tabs);
         mVpViewPager=findViewById(R.id.main_vp_view_pager);
-        MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(),3);
-        mVpViewPager.setAdapter(mainViewPagerAdapter);
 
+        Log.e("onCreate","onStart");
+        mTlTabLayout.addTab(mTlTabLayout.newTab().setCustomView(changeSelectedTabView(0)));
+        mTlTabLayout.addTab(mTlTabLayout.newTab().setCustomView(changeUnSelectedTabView(1)));
+        mTlTabLayout.addTab(mTlTabLayout.newTab().setCustomView(changeUnSelectedTabView(2)));
+
+//        mTlTabLayout.addTab(mTlTabLayout.newTab().setIcon(R.drawable.calendar_red_tab2));
+//        mTlTabLayout.addTab(mTlTabLayout.newTab().setIcon(R.drawable.feed_tab2_black));
+//        mTlTabLayout.addTab(mTlTabLayout.newTab().setIcon(R.drawable.profile_tab2_black));
+        mTlTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+
+        MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(),mTlTabLayout.getTabCount());
+        mVpViewPager.setAdapter(mainViewPagerAdapter);
         mVpViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTlTabLayout));
 
-//        mTlTabLayout.addTab(mTlTabLayout.newTab().setText("캘린더"));
-//        mTlTabLayout.addTab(mTlTabLayout.newTab().setText("일정 피드"));
-//        mTlTabLayout.addTab(mTlTabLayout.newTab().setText("프로필"));
-        Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setIcon(R.drawable.ic_today_24px);
-        Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setIcon(R.drawable.ic_calendar_view_day_24px);
-        Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setIcon(R.drawable.ic_person_outline_24px);
-
         mTlTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mVpViewPager));
-
-
-//        mTlTabLayout.addTab(mTlTabLayout.newTab().setCustomView(createTabView("캘린더",1)));
-//        mTlTabLayout.addTab(mTlTabLayout.newTab().setCustomView(createTabView("일정 피드",2)));
-//        mTlTabLayout.addTab(mTlTabLayout.newTab().setCustomView(createTabView("프로필",3)));
 
         mTlTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
@@ -59,6 +61,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             public void onTabSelected(TabLayout.Tab tab) {
                 int pos = tab.getPosition();
                 changeView(pos);
+                mVpViewPager.setCurrentItem(tab.getPosition());
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -70,43 +73,49 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
             }
         });
-
-
-
-
-
-
-
     }
-//    private View createTabView(String tabName,int num) {
+    private View changeSelectedTabView(int index) {
+        if(index==0){
+            tabView1.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.calendar_red_tab2);
+            return tabView1;
+        }else if(index==1){
+            tabView2.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.feed_tab2_red);
+            return tabView2;
+        }else if(index==2){
+            tabView3.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.profile_tab2_red);
+            return tabView3;
+        }
+        return tabView1;
+    }
+    private View changeUnSelectedTabView(int index) {
 //        View tabView = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-////        TextView txt_name = (TextView) tabView.findViewById(R.id.custom_tab_tv);
-//        txt_name.setText(tabName);
-////        ImageView IvIcon=findViewById(R.id.custom_tab_iv);
-//        if(num==1){
-//            IvIcon.setImageResource(R.drawable.ic_today_24px_black);
-//        }else if(num==2){
-//            IvIcon.setImageResource(R.drawable.ic_calendar_view_day_24px);
-//        }else if(num==3){
-//            IvIcon.setImageResource(R.drawable.ic_person_outline_24px);
-//        }
-//        return tabView;
-//    }
+        if(index==0){
+            tabView1.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.calendar_tab2_black);
+            return tabView1;
+        }else if(index==1){
+            tabView2.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.feed_tab2_black);
+            return tabView2;
+        }else if(index==2){
+            tabView3.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.profile_tab2_black);
+            return tabView3;
+        }
+        return tabView1;
+    }
+
     public void changeView(int index){
         if(index==0){
-            Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setIcon(R.drawable.ic_today_24px);
-            Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setIcon(R.drawable.ic_calendar_view_day_24px);
-            Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setIcon(R.drawable.ic_person_outline_24px);
+            Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setCustomView(changeSelectedTabView(0));
+            Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setCustomView(changeUnSelectedTabView(1));
+            Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setCustomView(changeUnSelectedTabView(2));
         }else if(index==1){
-            Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setIcon(R.drawable.ic_today_24px_black);
-            Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setIcon(R.drawable.ic_calendar_view_day_24px_red);
-            Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setIcon(R.drawable.ic_person_outline_24px);
+            Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setCustomView(changeUnSelectedTabView(0));
+            Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setCustomView(changeSelectedTabView(1));
+            Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setCustomView(changeUnSelectedTabView(2));
         }else if(index==2){
-            Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setIcon(R.drawable.ic_today_24px_black);
-            Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setIcon(R.drawable.ic_calendar_view_day_24px);
-            Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setIcon(R.drawable.ic_person_outline_24px_red);
+            Objects.requireNonNull(mTlTabLayout.getTabAt(0)).setCustomView(changeUnSelectedTabView(0));
+            Objects.requireNonNull(mTlTabLayout.getTabAt(1)).setCustomView(changeUnSelectedTabView(1));
+            Objects.requireNonNull(mTlTabLayout.getTabAt(2)).setCustomView(changeSelectedTabView(2));
         }
-
     }
 
     @Override

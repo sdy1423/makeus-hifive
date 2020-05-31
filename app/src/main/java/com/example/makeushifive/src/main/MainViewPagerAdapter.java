@@ -23,11 +23,14 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new HomeFragment();
+                HomeFragment homeFragment = new HomeFragment();
+                return homeFragment;
             case 1:
-                return new FeedFragment();
+                FeedFragment feedFragment = new FeedFragment();
+                return feedFragment;
             case 2:
-                return new SettingFragment();
+                SettingFragment settingFragment = new SettingFragment();
+                return settingFragment;
             default:
                 return null;
         }

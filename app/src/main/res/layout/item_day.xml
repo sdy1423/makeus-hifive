@@ -3,16 +3,23 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/item_layout"
     android:orientation="vertical"
-    android:background="@drawable/calendar_tile_border"
+    android:gravity="center_horizontal"
+    android:background="@drawable/calendar_tile_border_second"
     android:layout_width="match_parent"
     android:layout_height="80dp">
 
+    <View
+        android:alpha="0.1"
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
     <TextView
+        android:textAlignment="center"
         android:id="@+id/item_day"
-        android:textSize="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_width="wrap_content"
+        style="@style/TileDayItem"
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tool:text="00" />
 
