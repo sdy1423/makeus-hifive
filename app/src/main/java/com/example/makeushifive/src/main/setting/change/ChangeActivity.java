@@ -96,16 +96,17 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         SpannableString content = new SpannableString(mTvChangeImg.getText().toString());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         mTvChangeImg.setText(content);
-        mTvChangeImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO 프로필 사진 변경 dialog ㄱㄱ
-
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, GET_GALLERY_IMAGE);
-            }
-        });
+        //TODO 프사 변경은 밖으로 빼라
+//        mTvChangeImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //TODO 프로필 사진 변경 dialog ㄱㄱ
+//
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//                startActivityForResult(intent, GET_GALLERY_IMAGE);
+//            }
+//        });
 
         img1 = getApplicationContext().getResources().getDrawable(R.drawable.ic_check_circle_outline_24px);
         img2 = getApplicationContext().getResources().getDrawable(R.drawable.ic_cancel_24px);
@@ -239,25 +240,26 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         //회원정보 수정 API
         if (PwdFlag && UserNameFlag) {
             ChangeService changeService = new ChangeService(this);
-            changeService.patchUserInfoChange(Email, mNewPwd, ProfileUrl, mNewUserName);
+            changeService.patchUserInfoChange(mNewPwd, mNewUserName);
         }
     }
 
     @Override
     public void patchUserInfoChangeSuccess(int code) {
-        if (code == 100 || code == 201) {
+        if (code == 100) {
             //회원 정보 수정 성공(통신 성공)
             //todo sharedpreference에 있는 내용 지운다.
             SharedPreferences.Editor editor = sSharedPreferences.edit();
             editor.remove(X_ACCESS_TOKEN);
-            editor.remove("userNo");
+            editor.remove("profileUrl");
+            editor.remove("nickname");
             editor.apply();
             Intent intent = new Intent(this, SplashActivity.class);
             startActivity(intent);
         } else if (code == 200) {
             //todo 유효하지 않은 토큰입니다.
             showCustomToast("미구현 기능입니다.");
-        } else if (code == 202) {
+        } else if (code == 201) {
             //todo 이미 등록된 유저네임
             ShowImpossibleUserName();
         }

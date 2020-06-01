@@ -3,8 +3,10 @@ package com.example.makeushifive.src.main.setting;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +34,7 @@ import com.example.makeushifive.src.splash.SplashActivity;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
 import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
@@ -42,6 +46,7 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
     int UserNo;
     private String ProfileUrl, NickName, Email;
     Button mBtnLogOut;
+    private final int GET_GALLERY_IMAGE = 200;
 
     @Nullable
     @Override
@@ -89,6 +94,18 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
 
             }
         });
+
+        mIvProfileImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+
+                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                Objects.requireNonNull(getActivity()).startActivityForResult(intent, GET_GALLERY_IMAGE);
+                //TODO MainActivity로 가서 이미지 처리하라.
+            }
+        });
+
         return rootView;
     }
 
@@ -104,10 +121,6 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
                 .into(mIvProfileImg);
         mTvUserName.setText(NickName);
 
-//        Log.e("ProfileUrl",""+ProfileUrl);
-//        Log.e("NickName",""+NickName);
-//        Log.e("Email",""+Email);
-
 
     }
 
@@ -115,5 +128,4 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
     public void getUserInfoDetailFail() {
 
     }
-
 }

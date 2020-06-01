@@ -1,25 +1,64 @@
 package com.example.makeushifive.src.main;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.interfaces.MainActivityView;
+import com.example.makeushifive.src.main.setting.SettingFragment;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Objects;
 
+import retrofit2.http.PUT;
+
+import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
+
 public class MainActivity extends BaseActivity implements MainActivityView {
+
+    FirebaseStorage storage = FirebaseStorage.getInstance("gs://hifive-d16d6.appspot.com");
+    // Create a storage reference from our app
+    StorageReference storageRef = storage.getReference();
+    // Create a reference to "mountains.jpg"
+    StorageReference spaceRef = storageRef.child("profile.png");
+//    // Create a reference to 'images/mountains.jpg'
+
+    String profileUrl;
 
     TabLayout mTlTabLayout;
     ViewPager mVpViewPager;
@@ -30,6 +69,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // While the file names are the same, the references point to different files
+//        mountainsRef.getName().equals(mountainImagesRef.getName());    // true
+//        mountainsRef.getPath().equals(mountainImagesRef.getPath());    // false
+
 
         tabView1 = LayoutInflater.from(this).inflate(R.layout.custom_tab_calendar, null);
         tabView2 = LayoutInflater.from(this).inflate(R.layout.custom_tab_feed, null);
@@ -156,5 +200,110 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     protected void onStart() {
         super.onStart();
         Log.e("onStart","onStart");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+            //TODO 파이어베이스에 업로드하고 프로필 사진 수정 API 수행
+            //이미지 업로드 성공
+            try {
+                UpLoadImageToFireBase(selectedImageUri);
+                Log.e("보낸건가?",""+profileUrl);
+
+            } catch (FileNotFoundException e) {
+                Log.e("보내지도 못함",""+e);
+                e.printStackTrace();
+            }
+        }
+
+    }
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
+    public void UpLoadImageToFireBase(Uri uri) throws FileNotFoundException {
+        Log.e("진입은 성공?",""+uri);
+//        Uri file = Uri.fromFile(new File(profileUrl));
+        UploadTask uploadTask=spaceRef.putFile(uri);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("업로드 실패","업로드 실패"+e);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.e("업로드 성공","업로드 성공"+taskSnapshot);
+                //TODO 프사 수정 API 수행
+                try {
+                    getProfileUrlFromFireBase();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    private void getProfileUrlFromFireBase() throws JSONException {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference reference = storage.getReference().child("profile.png");
+        reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    profileUrl= Objects.requireNonNull(task.getResult()).toString();
+                    try {
+                        ChangeProfile();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    //실패
+                }
+            }
+        });
+    }
+
+    public void ChangeProfile() throws JSONException {
+        MainService mainService = new MainService(this);
+        mainService.patchProfile(profileUrl); //파이어베이스에 리얼패스를 업로드 했으므로 Url 보낸다.
+    }
+
+
+    @Override
+    public void ChangeProfileSuccess() {
+        ImageView imageView = findViewById(R.id.setting_iv_profile_img);
+        //TODO 이미지뷰 수정
+        Glide.with(MainActivity.this)
+                .load(profileUrl)
+                .override(1024, 980)
+                .into(imageView);
+
+        SharedPreferences.Editor editor = sSharedPreferences.edit();
+        editor.remove("profileUrl");
+        editor.putString("profileUrl", String.valueOf(profileUrl));
+        editor.apply();
+        Log.e("프사변경 성공","성공");
+
+
+
+    }
+
+
+    @Override
+    public void ChangeProfileFail() {
+        showCustomToast("프로필 사진 수정에 실패했습니다.");
     }
 }

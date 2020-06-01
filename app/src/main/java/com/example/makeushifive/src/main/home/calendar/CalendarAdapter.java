@@ -1,6 +1,8 @@
 package com.example.makeushifive.src.main.home.calendar;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.makeushifive.R;
+import com.example.makeushifive.src.main.home.AddScheduleDialog;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
+import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
+
 public class CalendarAdapter extends RecyclerView.Adapter {
     private final int HEADER_TYPE = 0;
     private final int EMPTY_TYPE = 1;
@@ -39,7 +46,7 @@ public class CalendarAdapter extends RecyclerView.Adapter {
         this.mListener = listener;
     }
 
-    public CalendarAdapter(ArrayList<TileItem> tileItem,ArrayList<DATA> datas,List<Object> calendarList,Context context) {
+    public CalendarAdapter(ArrayList<TileItem> tileItem, ArrayList<DATA> datas, List<Object> calendarList, Context context) {
         this.tileItems=tileItem;
         this.mCalendarList = calendarList;
         this.context = context;
@@ -155,12 +162,16 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                         holder.TileRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                         TileRecyclerAdapter adapter = new TileRecyclerAdapter(items,context);
                         holder.TileRecycler.setAdapter(adapter);
+                        adapter.setOnItemClickListener(new TileRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
+                                mListener.onItemClick(v,pos,year,month,day);
+                            }
+                        });
+
                     }
                 }
             }
-//            if(year==2020 && month==4 && day==20){
-//                holder.textView.setText("도!!!!");
-//            }
 
         }
     }
@@ -270,4 +281,28 @@ public class CalendarAdapter extends RecyclerView.Adapter {
 
         };
     }
+
+
+    public String MakeStringForm(int year,int month,int day) throws ParseException {
+//        month+=1;
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        return stringDate;
+    }
+    public Date MakeDateForm(int year,int month,int day) throws ParseException {
+//        month+=1;
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        Date date = DATE_FORMAT.parse(stringDate);
+        return date;
+    }
+
 }

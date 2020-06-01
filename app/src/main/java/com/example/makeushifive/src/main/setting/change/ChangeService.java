@@ -35,13 +35,14 @@ public class ChangeService {
     }
 
     //유저 정보 수정 API
-    public void patchUserInfoChange(String email, String pw, String profileUrl, String nickname) throws JSONException {
+    public void patchUserInfoChange(String pw, String nickname) throws JSONException {
         JSONObject params = new JSONObject();
-        params.put("email", email);
+//        params.put("email", email);
+//        params.put("profileUrl", profileUrl);
         params.put("pw", pw);
-        params.put("profileUrl", profileUrl);
         params.put("nickname", nickname);
 
+        Log.e("sned params",""+params);
 
         ChangeRetrofitInterface changeRetrofitInterface = getRetrofit().create(ChangeRetrofitInterface.class);
         changeRetrofitInterface.PatchChangeInfo(RequestBody.create(params.toString(),MEDIA_TYPE_JSON)).
