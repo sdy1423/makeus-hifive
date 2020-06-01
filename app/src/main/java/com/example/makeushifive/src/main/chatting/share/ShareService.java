@@ -78,6 +78,7 @@ public class ShareService {
     }
 
     public void getSearchUser(String nickname){
+        Log.e("in service nickname",""+nickname);
         ShareRetrofitInterface shareRetrofitInterface = getRetrofit()
                 .create(ShareRetrofitInterface.class);
         shareRetrofitInterface.getSearchUser(nickname).enqueue(new Callback<SearchUserResponse>() {

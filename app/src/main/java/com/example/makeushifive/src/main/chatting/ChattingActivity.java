@@ -38,6 +38,8 @@ import io.socket.emitter.Emitter;
 
 import static com.example.makeushifive.src.ApplicationClass.Chatting;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
+import static com.example.makeushifive.src.ApplicationClass.TIME;
+import static com.example.makeushifive.src.ApplicationClass.TIME_KOREAN;
 import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class ChattingActivity extends BaseActivity implements ChattingActivityView {
@@ -63,6 +65,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
     ArrayList<ChatUser> chatUsers = new ArrayList<>(); //채팅방 인원들
     RecyclerView mChatUserRecycler;
+
     ChattingService chattingService;
 
     @Override
@@ -121,6 +124,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
             @Override
             public void onClick(View v) {
                 ShareSchedule();
+
             }
         });
 
@@ -177,9 +181,10 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         mChatUserRecycler = findViewById(R.id.chatting_drawer_recyclerview);
 
 
-
         chattingService.getChatHistory(taskNo);
 
+
+        chattingService.getChatUser(taskNo);
     }
 
     private void ShareSchedule() {
@@ -220,6 +225,10 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         jsonObject.addProperty("profileUrl",profileUrl);
         Log.e("sMsg",""+jsonObject);
         mSocket.emit("sMsg",jsonObject);
+
+        //채팅 보내면 메세지 사라지게
+        mEdtMessage.getText().clear();
+
 
 
 
@@ -336,21 +345,28 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         location = result.get(0).getLocation();
         time = result.get(0).getTime();
         title = result.get(0).getTitle();
-
         day = result.get(0).getDay();
         Date dateformat;
         dateformat = DATE_FORMAT.parse(day); //string to date
+
+        String showTime = null;
+        try {
+            showTime = time.substring(0,5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
         assert dateformat != null;
         String today = Chatting.format(dateformat); //date to string
 
         mTvLocation.setText(location);
         mTvDay.setText(today);
-        mTvTime.setText(time);
+        mTvTime.setText(showTime);
         mTvTitle.setText(title);
 
 
-        //TODO Result사이즈에 따라 시작일 끝일이 있을수도, 없을수도
-        chattingService.getChatUser(taskNo);
     }
 
     @Override
@@ -367,11 +383,15 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
                 String nickname = result.get(i).getNickname();
                 ChatUser chatUser = new ChatUser(userno,profileurl,nickname);
                 chatUsers.add(chatUser);
+                Log.e("userno",""+userno);
+                Log.e("profileurl",""+profileurl);
+                Log.e("nickname",""+nickname);
             }
             Log.e("showshow","show "+chatUsers);
+
+            mChatUserRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
             ChatUserRecyclerAdapter adapter = new ChatUserRecyclerAdapter(chatUsers,this);
             mChatUserRecycler.setAdapter(adapter);
-
 
         } catch (Exception e) {
             e.printStackTrace();

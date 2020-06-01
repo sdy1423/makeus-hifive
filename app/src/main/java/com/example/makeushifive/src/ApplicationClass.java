@@ -39,6 +39,9 @@ public class ApplicationClass extends Application {
     public static SimpleDateFormat DAY = new SimpleDateFormat("dd",Locale.KOREA);
     public static SimpleDateFormat DAYOFWEEK = new SimpleDateFormat("EE",Locale.KOREA);
     public static SimpleDateFormat Chatting = new SimpleDateFormat("MM월 dd일 / EE",Locale.KOREA);
+    public static SimpleDateFormat TIME = new SimpleDateFormat("HH:mm",Locale.KOREA);
+    public static SimpleDateFormat TIME_KOREAN = new SimpleDateFormat("HH시 mm분",Locale.KOREA);
+
 
     // Retrofit 인스턴스
     public static Retrofit retrofit;

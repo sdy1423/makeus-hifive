@@ -146,8 +146,8 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                     int TileYear = tileItems.get(i).getYear();
                     int TileMonth = tileItems.get(i).getMonth();
                     int TileDay = tileItems.get(i).getDay();
-                    Log.e("년월일",""+year+" "+month+" "+day);
-                    Log.e("타일 년월일",""+TileYear+" "+TileMonth+" "+TileDay);
+                    Log.e("calendar date",""+year+" "+month+" "+day);
+                    Log.e("calendar tile date",""+TileYear+" "+TileMonth+" "+TileDay);
 
                     if(year==TileYear && (month+1)==TileMonth && day==TileDay){
                         TileItem tileItem = new TileItem(TileYear,TileMonth,TileDay,tileItems.get(i).getColor(),tileItems.get(i).getTitle());

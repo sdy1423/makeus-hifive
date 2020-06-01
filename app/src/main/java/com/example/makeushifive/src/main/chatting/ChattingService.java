@@ -56,6 +56,8 @@ public class ChattingService {
             public void onResponse(Call<ChatUserResponse> call, Response<ChatUserResponse> response) {
                 Log.e("채팅방 유저정보","받아오기 성공");
                 if(response.body()!=null){
+                    Log.e("CHAT","why"+response.body().getResult());
+
                     chattingActivityView.getChatUserSuccess(response.body().getResult());
                 }else{
                     chattingActivityView.getChatUserFail();

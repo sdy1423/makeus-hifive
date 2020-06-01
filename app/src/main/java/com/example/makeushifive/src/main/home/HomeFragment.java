@@ -96,13 +96,16 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 //            } catch (OutOfDateRangeException e) {
 //                e.printStackTrace();
 //            }
-            ShowScheduleInfo(true);
+
             CurrentYear=year;
-            CurrentMonth=month;
+            CurrentMonth=month-1;
 
+            Log.e("(DatePickerDialog)",""+year+" "+month);
 
-            initCalendarList(year,month-1,true);
-            setRecycler();
+            ShowScheduleInfo(true);
+//            initCalendarList(year,month-1,true);
+//            setRecycler();
+
         }
     };
 
@@ -258,11 +261,12 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 }
             }
         }else{
+            tileItems.clear();
             for(int i=0;i<calendarItems.size();i++){
                 //같은 달인지 파싱한다.
                 int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
                 int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
-                if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+2){ //현재 달력과 년 월이 같다면
+                if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+1){ //현재 달력과 년 월이 같다면
                     int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
                     int ItemColor = calendarItems.get(i).getColor();
                     String ItemTitle = calendarItems.get(i).getTitle();
@@ -275,20 +279,20 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         }
 
         //타일 안에 들어간 정보를 다 담고 달력 만든다.
-        for(int i=0;i<tileItems.size();i++){
-            int yea = tileItems.get(i).getYear();
-            int mon = tileItems.get(i).getMonth();
-            int day = tileItems.get(i).getDay();
-            String strin = tileItems.get(i).getTitle();
-            int colo = tileItems.get(i).getColor();
-//            Log.e("타일 year",""+yea);
-//            Log.e("타일 mon",""+mon);
-//            Log.e("타일 day",""+day);
-//            Log.e("타일 title",""+strin);
-//            Log.e("타일 color",""+colo);
-
-        }
-        initSet();
+//        for(int i=0;i<tileItems.size();i++){
+//            int yea = tileItems.get(i).getYear();
+//            int mon = tileItems.get(i).getMonth();
+//            int day = tileItems.get(i).getDay();
+//            String strin = tileItems.get(i).getTitle();
+//            int colo = tileItems.get(i).getColor();
+////            Log.e("타일 year",""+yea);
+////            Log.e("타일 mon",""+mon);
+////            Log.e("타일 day",""+day);
+////            Log.e("타일 title",""+strin);
+////            Log.e("타일 color",""+colo);
+//
+//        }
+        initSet(flag);
         setRecycler();
     }
 
@@ -379,23 +383,27 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     }
 
-    private void initSet() {
-        initCalendarList(0,0,false);
+    private void initSet(boolean flag) {
+        initCalendarList(flag);
     }
 
-    private void initCalendarList(int year,int month,boolean flag) {
+    private void initCalendarList(boolean flag) {
         if(!flag){
             GregorianCalendar cal = new GregorianCalendar();
             setCalendarList(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH));
         }else{
-            setCalendarList(year,month);
+            Log.e("initCalendarList",""+CurrentYear+" "+CurrentMonth);
+            setCalendarList(CurrentYear,CurrentMonth);
         }
     }
     private void setCalendarList(int year,int month) {
         CurrentYear=year;
         CurrentMonth=month;
+
+        Log.e("setCalendarlist",""+year+" "+month);
+
         //TODO Month는 미리 +1해서 줄것.
-//        setTitle((int) cal.getTimeInMillis());
+
         datas.clear();
         ArrayList<Object> calendarList = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
@@ -422,6 +430,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                     DATA data = new DATA(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), j);
                     datas.add(data);
                 }
+                for(int j = 0;j<(7-(dayOfWeek + max)%7);j++){
+                    calendarList.add(Keys.EMPTY);
+                    DATA data = new DATA(0, 0, 0);
+                    datas.add(data);
+                }
+
+
                 // TODO : 결과값 넣을떄 여기다하면될듯
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/item_layout"
-    android:background="@drawable/calendar_tile_border"
+    android:background="@drawable/calendar_tile_border_second"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="80dp"
+    android:orientation="vertical">
 
     <View
+        android:layout_gravity="bottom"
         android:alpha="0.1"
         android:background="#000000"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
 
-</RelativeLayout>
+</LinearLayout>

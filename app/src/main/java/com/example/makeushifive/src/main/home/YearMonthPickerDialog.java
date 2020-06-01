@@ -27,9 +27,6 @@ import java.util.Objects;
 
 public class YearMonthPickerDialog extends DialogFragment {
 
-    private static final int MAX_YEAR =2099;
-    private static final int MIN_YEAR = 1980;
-
     private DatePickerDialog.OnDateSetListener listener;
     public Calendar calendar = Calendar.getInstance();
 
@@ -67,8 +64,8 @@ public class YearMonthPickerDialog extends DialogFragment {
         });
         int this_month = calendar.get(Calendar.MONTH);
 
-        monthPicker.setMinValue(this_month+1);
-        monthPicker.setMaxValue(this_month+4);
+        monthPicker.setMinValue(this_month-3);
+        monthPicker.setMaxValue(this_month+3);
         monthPicker.setValue(calendar.get(Calendar.MONTH)+1);
         int this_year = calendar.get(Calendar.YEAR);
 

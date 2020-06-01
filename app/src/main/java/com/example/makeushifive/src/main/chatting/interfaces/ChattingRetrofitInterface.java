@@ -19,7 +19,7 @@ public interface ChattingRetrofitInterface {
 
 
     @GET("/chatuser")
-    Call<ChatUserResponse> getChatUser(@Query("taskNo") int taskNo);
+    Call<ChatUserResponse> getChatUser(@Query("room") int room);
 
 
     @GET("/chat")

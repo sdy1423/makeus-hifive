@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.makeushifive.R;
@@ -37,7 +38,7 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
 
     ImageView mIvClose;
     FrameLayout mFlShare;
-    TextView mTvShareBlack,mTvShareRed,mTvPlusFriend;
+    TextView mTvShareBlack,mTvShareRed,mTvPlusFriend,mTvRecentFriends;
     boolean ShareFlag=false; //TODO 한명이라도 추가되면 true로 바뀐다.
     EditText mEdtSearch;
     String searchMessage;
@@ -63,6 +64,7 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         mTvShareRed.setVisibility(View.INVISIBLE);
         mEdtSearch = findViewById(R.id.share_edt_search);
         mIvClose = findViewById(R.id.share_iv_close);
+        mTvRecentFriends = findViewById(R.id.share_tv_recent_friend);
 
         mRecyclerShared.setLayoutManager(new LinearLayoutManager(this));
 
@@ -89,6 +91,9 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
             public void afterTextChanged(Editable s) {
                 searchMessage = mEdtSearch.getText().toString();
                 //TODO 검색
+
+
+                Log.e("검색내용: ",""+searchMessage);
                 SearchUser();
             }
         });
@@ -148,6 +153,7 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         //TODO 최근 유저검색, 리사이클러뷰
         //TODO SharedUser는 아니지만 재활용 ㄱㄱㄱㄱ
         users.clear();
+        mTvRecentFriends.setText("검색 결과");
         try{
             int userNo;
             String profileUrl,nickname;
@@ -192,6 +198,8 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
     @Override
     public void getRecentShareSuccess(ArrayList<SharedUserResponse.Result> result) {
         //TODO 최근 유저검색, 리사이클러뷰
+        mTvRecentFriends.setText("최근 공유 친구");
+
         users.clear();
         try{
             int shareduserNo;

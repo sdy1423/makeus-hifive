@@ -3,6 +3,7 @@ package com.example.makeushifive.src.main.chatting;
 import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +48,15 @@ public class ChatUserRecyclerAdapter extends RecyclerView.Adapter<ChatUserRecycl
                 .load(chatUsers.get(position).getProfileUrl())
                 .centerCrop()
                 .into(holder.mIvProfile);
-
         //rounded imageview
         holder.mIvProfile.setBackground(new ShapeDrawable(new OvalShape()));
         holder.mIvProfile.setClipToOutline(true);
+
+        holder.mTvUserName.setText(chatUsers.get(position).getNickname());
+
+        Log.e("뷰홀대 내 profil",""+chatUsers.get(position).getProfileUrl());
+        Log.e("뷰홀대 내 nickname",""+chatUsers.get(position).getNickname());
+
     }
 
     @Override
