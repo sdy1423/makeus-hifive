@@ -3,6 +3,7 @@ package com.example.makeushifive.src.main.home.calendar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +98,8 @@ public class TileRecyclerAdapter extends RecyclerView.Adapter<TileRecyclerAdapte
                         int month = tileItems.get(pos).getMonth();
                         int day = tileItems.get(pos).getDay();
                         try {
-                            mListener.onItemClick(v,pos,year,month,day);
+                            Log.e("타일",""+year+" "+month+" "+day);
+                            mListener.onItemClick(v,pos,year,month-1,day);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }

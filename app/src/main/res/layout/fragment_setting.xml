@@ -132,28 +132,16 @@
         android:background="#707070"
         android:alpha="0.35"/>
     <TextView
-        android:id="@+id/setting_tv_theme_setting"
-        android:text="테마 설정"
+        android:id="@+id/setting_tv_log_out"
+        android:text="로그 아웃"
         android:textColor="#000000"
         android:textSize="16dp"
         android:drawablePadding="12dp"
         android:gravity="center|left"
         android:fontFamily="@font/notosanscjkr_regular"
-        android:drawableLeft="@drawable/ic_people_outline_24px"
+        android:drawableLeft="@drawable/ic_exit_to_app_24px"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginLeft="16dp"/>
 
-    <Button
-        android:id="@+id/setting_btn_logout"
-        android:text="로그아웃"
-        android:textSize="16dp"
-        android:layout_marginTop="218dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginRight="28dp"
-        android:textColor="#000000"
-        android:stateListAnimator="@null"
-        android:background="@drawable/setting_logout_border"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -78,7 +78,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     //TODO 직접 구현한 캘린더
     public int mCenterPosition;
-    private long mCurrentTime;
     public ArrayList<Object> mCalendarList = new ArrayList<>();
     public TextView textView;
     public RecyclerView recyclerView;
@@ -90,17 +89,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//            calendar.set(year, month,dayOfMonth);
-//            try {
-//                calendarView.setDate(calendar);
-//            } catch (OutOfDateRangeException e) {
-//                e.printStackTrace();
-//            }
-
             CurrentYear=year;
             CurrentMonth=month-1;
-
-            Log.e("(DatePickerDialog)",""+year+" "+month);
 
             ShowScheduleInfo(true);
 //            initCalendarList(year,month-1,true);
@@ -207,7 +197,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         mTvCurrentDate=rootView.findViewById(R.id.home_toolbar_tv_today);
         textView = rootView.findViewById(R.id.title);
         recyclerView = rootView.findViewById(R.id.calendar);
-        recyclerView.setNestedScrollingEnabled(false);
+//        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -365,6 +355,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             @Override
             public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
                 //TODO Dialog 띄운다.
+                Log.e("Home",""+year+" "+month+" "+day);
+
                 String date = MakeStringForm(year,month+1,day);
                 addScheduleDialog = new AddScheduleDialog(getActivity());
                 Bundle bundle = new Bundle();

@@ -165,6 +165,7 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                         adapter.setOnItemClickListener(new TileRecyclerAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
+                                Log.e("캘린더",""+year+" "+month+" "+day);
                                 mListener.onItemClick(v,pos,year,month,day);
                             }
                         });

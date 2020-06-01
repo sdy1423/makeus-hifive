@@ -42,10 +42,9 @@ import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 public class SettingFragment extends BaseFragment implements SettingFragmentView {
 
     ImageView mIvProfileImg;
-    TextView mTvUserName,mTvChangeUserInfo,mTvShareFriendSetting,mTvThemeSetting;
+    TextView mTvUserName,mTvChangeUserInfo,mTvShareFriendSetting,mTvLogOut;
     int UserNo;
     private String ProfileUrl, NickName, Email;
-    Button mBtnLogOut;
     private final int GET_GALLERY_IMAGE = 200;
 
     @Nullable
@@ -64,9 +63,17 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
         SettingService settingService = new SettingService(this);
         settingService.getUserInfoDetail(UserNo);
 
+        mTvLogOut=rootView.findViewById(R.id.setting_tv_log_out);
         mTvChangeUserInfo=rootView.findViewById(R.id.setting_tv_change_user_info);
         mTvShareFriendSetting=rootView.findViewById(R.id.setting_tv_share_friend);
-        mTvThemeSetting=rootView.findViewById(R.id.setting_tv_theme_setting);
+
+        mTvShareFriendSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCustomToast("미 구현 기능입니다.");
+            }
+        });
+
         mTvChangeUserInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +85,7 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
             }
         });
 
-        mBtnLogOut=rootView.findViewById(R.id.setting_btn_logout);
-        mBtnLogOut.setOnClickListener(new View.OnClickListener() {
+        mTvLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sSharedPreferences.edit();
