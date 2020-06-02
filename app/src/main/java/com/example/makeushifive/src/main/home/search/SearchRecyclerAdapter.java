@@ -115,7 +115,7 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView mTvTitle,mTvDay,mTvNumOfPeople;
         ImageView[] mIvColor = new ImageView[8];
         Context context;
@@ -136,32 +136,24 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
             mIvColor[7]=itemView.findViewById(R.id.feed_iv_color_8);
             context = itemView.getContext();
 
-            mLlschedules =itemView.findViewById(R.id.feed_ll_schedules);
-            mLlschedules.setOnClickListener(this);
-
-
-
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            //TODO title검색에 taskNo달라고 해야될듯!
-            switch (v.getId()){
-                case R.id.feed_ll_schedules:
-                    int TaskNo = items.get(getAdapterPosition()).getTaskNo();
-                    int Color = items.get(getAdapterPosition()).getColor();
-
-                    Intent intent = new Intent(context, ChattingActivity.class);
-                    intent.putExtra("taskNo",TaskNo);
-                    intent.putExtra("color",Color);
-                    Log.e("보내는taskNo",""+TaskNo);
-                    Log.e("보내는color",""+Color);
-                    context.startActivity(intent);
-                    break;
-                default:
-                    break;
-            }
+//            mLlschedules =itemView.findViewById(R.id.feed_ll_schedules);
+//            mLlschedules.setOnClickListener(context);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        int TaskNo = items.get(getAdapterPosition()).getTaskNo();
+                        int Color = items.get(getAdapterPosition()).getColor();
+                        Intent intent = new Intent(context, ChattingActivity.class);
+                        intent.putExtra("taskNo",TaskNo);
+                        intent.putExtra("color",Color);
+                        Log.e("보내는taskNo",""+TaskNo);
+                        Log.e("보내는color",""+Color);
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
     }
 }

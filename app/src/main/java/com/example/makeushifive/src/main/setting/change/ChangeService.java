@@ -51,8 +51,12 @@ public class ChangeService {
             public void onResponse(Call<ChangeResponse> call, Response<ChangeResponse> response) {
                 int code =0;
                 if(response.body() != null){
-                    code = response.body().getCode();
-                    changeActivityView.patchUserInfoChangeSuccess(code);
+                    try {
+                        code = response.body().getCode();
+                        changeActivityView.patchUserInfoChangeSuccess(code);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     changeActivityView.patchUserInfoChangeFail();
@@ -77,10 +81,15 @@ public class ChangeService {
             public void onResponse(Call<ChangeResponse> call, Response<ChangeResponse> response) {
                 int code = 0;
                 assert response.body() != null;
-                code = response.body().getCode();
-                String message;
-                message = response.body().getMessage();
-                changeActivityView.postOverlapUserNameSuccess(code, message);
+                try{
+                    code = response.body().getCode();
+                    String message;
+                    message = response.body().getMessage();
+                    changeActivityView.postOverlapUserNameSuccess(code, message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    changeActivityView.postOverlapUserNameFail();
+                }
             }
 
             @Override
@@ -90,6 +99,32 @@ public class ChangeService {
 
         });
 
+    }
+
+    void getUser(String nickname){
+        ChangeRetrofitInterface changeRetrofitInterface = getRetrofit().create(ChangeRetrofitInterface.class);
+        changeRetrofitInterface.getUser(nickname).enqueue(new Callback<ChangeResponse>() {
+            @Override
+            public void onResponse(Call<ChangeResponse> call, Response<ChangeResponse> response) {
+                try {
+                    if(response.body().getCode()==100){
+
+                        changeActivityView.getUserSuccess();
+                    }else{
+                        changeActivityView.getUserFail();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    changeActivityView.getUserFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChangeResponse> call, Throwable t) {
+                changeActivityView.getUserFail();
+            }
+        });
     }
 
 

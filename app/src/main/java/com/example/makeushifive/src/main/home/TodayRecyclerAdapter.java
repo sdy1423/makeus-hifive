@@ -36,7 +36,7 @@ public class TodayRecyclerAdapter extends RecyclerView.Adapter<TodayRecyclerAdap
     public void onBindViewHolder(@NonNull TodayRecyclerAdapter.ViewHolder holder, int position)  {
         holder.mTvTitle.setText(pickedDayTasks.get(position).getTitle());
         String show = pickedDayTasks.get(position).getTime();
-        show = show.substring(0,5);
+//        show = show.substring(0,5);
         show+="\n";
         show+=pickedDayTasks.get(position).getLocation();
         holder.mTvDetail.setText(show);

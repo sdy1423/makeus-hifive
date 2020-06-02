@@ -15,4 +15,6 @@ public interface ShareActivityView {
     void postShareSuccess(int code, String message);
     void postShareFail();
 
+    void getUserSuccess();
+    void getUserFail();
 }

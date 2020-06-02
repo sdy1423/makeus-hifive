@@ -67,12 +67,13 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
     RecyclerView mChatUserRecycler;
 
     ChattingService chattingService;
+    Bundle mbundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mbundle = savedInstanceState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
-
 
         drawerLayout=findViewById(R.id.chatting_drawer);
 
@@ -444,4 +445,25 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 //        mSocket.disconnect();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String nickname = sSharedPreferences.getString("nickname",null);
+        Log.e("ChattingActivity","onResume"+nickname);
+        ChattingService chattingService = new ChattingService(this);
+        chattingService.getUser(nickname);
+    }
+
+    @Override
+    public void getUserSuccess() {
+        Log.e("ChattingActivity","onCreateㄱㄱ");
+        onCreate(mbundle);
+    }
+
+    @Override
+    public void getUserFail() {
+
+    }
+
 }

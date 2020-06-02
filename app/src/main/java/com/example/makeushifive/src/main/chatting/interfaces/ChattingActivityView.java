@@ -17,4 +17,7 @@ public interface ChattingActivityView {
 
     void getChatHistorySuccess(ArrayList<ChattingHistoryResponse.Result> result);
     void getChatHistoryFail();
+
+    void getUserSuccess();
+    void getUserFail();
 }

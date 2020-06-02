@@ -56,6 +56,7 @@ public class SearchActivity extends BaseActivity implements SearchActivityView {
                 //TODO 글자 입력할때마다 API로 쏜다
                 searchText = mEdtSearch.getText().toString();
                 searchService.getSearchTitle(searchText);
+                searchService.getSearchTitle(searchText);
             }
         });
 

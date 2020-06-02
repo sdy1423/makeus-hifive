@@ -65,11 +65,12 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     View tabView1,tabView2,tabView3;
 
+    Bundle mBundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mBundle = savedInstanceState;
         // While the file names are the same, the references point to different files
 //        mountainsRef.getName().equals(mountainImagesRef.getName());    // true
 //        mountainsRef.getPath().equals(mountainImagesRef.getPath());    // false
@@ -164,8 +165,10 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     @Override
     protected void onResume() {
-        Log.e("onResume","onStart");
-
+        String nickname = sSharedPreferences.getString("nickname",null);
+        Log.e("onResume","onResume"+nickname);
+        MainService mainService = new MainService(this);
+        mainService.getUser(nickname);
         super.onResume();
     }
 
@@ -302,8 +305,20 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
 
+
     @Override
     public void ChangeProfileFail() {
         showCustomToast("프로필 사진 수정에 실패했습니다.");
+    }
+
+    @Override
+    public void getUserSuccess() {
+        Log.e("onCreatㄱㄱ","ONON");
+        onCreate(mBundle);
+    }
+
+    @Override
+    public void getUserFail() {
+
     }
 }

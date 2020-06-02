@@ -12,4 +12,6 @@ public interface AddActivityView {
     void postAddTaskRepeatSuccess();
     void postAddTaskRepeatFail();
 
+    void getUserSuccess();
+    void getUserFail();
 }

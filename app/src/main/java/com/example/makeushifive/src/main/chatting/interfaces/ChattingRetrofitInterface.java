@@ -25,4 +25,9 @@ public interface ChattingRetrofitInterface {
     @GET("/chat")
     Call<ChattingHistoryResponse> getChatHistory(@Query("room") int room);
 
+
+    @GET("/user")
+    Call<ChattingResponse> getUser(@Query("nickname") String nickname);
+
+
 }

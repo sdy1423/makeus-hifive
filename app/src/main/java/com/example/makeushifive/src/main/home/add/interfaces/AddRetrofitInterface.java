@@ -1,11 +1,14 @@
 package com.example.makeushifive.src.main.home.add.interfaces;
 
 import com.example.makeushifive.src.main.home.add.models.AddResponse;
+import com.example.makeushifive.src.main.models.MainResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface AddRetrofitInterface {
 
@@ -19,6 +22,10 @@ public interface AddRetrofitInterface {
     Call<AddResponse> PostAddTaskRepeat(
             @Body RequestBody params
     );
+
+    @GET("/user")
+    Call<MainResponse> getUser(@Query("nickname") String nickname);
+
 
 
 }

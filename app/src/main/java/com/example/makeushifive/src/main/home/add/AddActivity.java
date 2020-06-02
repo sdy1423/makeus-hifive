@@ -23,6 +23,7 @@ import android.widget.TimePicker;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.MainActivity;
+import com.example.makeushifive.src.main.MainService;
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
 import com.example.makeushifive.src.main.home.add.models.AddResponse;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
@@ -43,6 +44,7 @@ import static com.example.makeushifive.src.ApplicationClass.DAYOFWEEK;
 import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.MONTH;
 import static com.example.makeushifive.src.ApplicationClass.YEAR;
+import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class AddActivity extends BaseActivity implements AddActivityView {
 
@@ -102,6 +104,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     String pickedDate="";
     Date pickedDay;
 
+    Bundle mBundele;
 
 
     @Override
@@ -109,6 +112,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        mBundele =savedInstanceState;
         ImageView mIvClose = findViewById(R.id.add_iv_ex);
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -963,6 +967,26 @@ public class AddActivity extends BaseActivity implements AddActivityView {
     @Override
     public void postAddTaskRepeatFail() {
         //TODO 일정반복 등록 성공
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String nickname = sSharedPreferences.getString("nickname",null);
+        Log.e("AddActivity","onResume"+nickname);
+        AddService mainService = new AddService(this);
+        mainService.getUser(nickname);
+    }
+
+    @Override
+    public void getUserSuccess() {
+        Log.e("AddActivity","onCreateㄱㄱ");
+        onCreate(mBundele);
+    }
+
+    @Override
+    public void getUserFail() {
 
     }
 

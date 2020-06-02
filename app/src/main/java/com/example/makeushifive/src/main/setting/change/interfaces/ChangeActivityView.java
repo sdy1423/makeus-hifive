@@ -12,4 +12,6 @@ public interface ChangeActivityView {
     void postImageSuccess();
     void postImageFail();
 
+    void getUserSuccess();
+    void getUserFail();
 }

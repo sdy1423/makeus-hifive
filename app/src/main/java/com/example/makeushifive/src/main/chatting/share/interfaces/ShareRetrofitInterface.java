@@ -3,6 +3,7 @@ package com.example.makeushifive.src.main.chatting.share.interfaces;
 import com.example.makeushifive.src.main.chatting.share.models.SearchUserResponse;
 import com.example.makeushifive.src.main.chatting.share.models.SharedUserResponse;
 import com.example.makeushifive.src.main.chatting.share.models.TaskShareResponse;
+import com.example.makeushifive.src.main.models.MainResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -23,6 +24,8 @@ public interface ShareRetrofitInterface {
     @GET("/user")
     Call<SearchUserResponse> getSearchUser(@Query("nickname") String nickname);
 
+    @GET("/user")
+    Call<MainResponse> getUser(@Query("nickname") String nickname);
 
 
 

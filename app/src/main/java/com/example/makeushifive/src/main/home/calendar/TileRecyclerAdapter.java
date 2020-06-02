@@ -46,30 +46,38 @@ public class TileRecyclerAdapter extends RecyclerView.Adapter<TileRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int color = tileItems.get(position).getColor();
+        Log.e("들어오는color","color: "+color);
         if(color==1){
             holder.title.setTextColor(Color.parseColor("#F87BAB"));
+            holder.showColor.setBackgroundResource(R.drawable.small_border1);
             holder.showColor.setBackgroundColor(Color.parseColor("#F87BAB"));
-        }else if(color==2){
-            holder.showColor.setBackgroundColor(Color.parseColor("#FAB462"));
+        }
+        if(color==2){
+            holder.showColor.setBackgroundResource(R.drawable.small_border2);
             holder.title.setTextColor(Color.parseColor("#FAB462"));
         }
-        else if(color==3){
-            holder.showColor.setBackgroundColor(Color.parseColor("#4A62E3"));
+        if(color==3){
+            holder.showColor.setBackgroundResource(R.drawable.small_border3);
             holder.title.setTextColor(Color.parseColor("#4A62E3"));
-        }else if(color==4){
-            holder.showColor.setBackgroundColor(Color.parseColor("#D10000"));
+        }
+        if(color==4){
+            holder.showColor.setBackgroundResource(R.drawable.small_border4);
             holder.title.setTextColor(Color.parseColor("#D10000"));
-        }else if(color==5){
-            holder.showColor.setBackgroundColor(Color.parseColor("#53BFAB"));
+        }
+        if(color==5){
+            holder.showColor.setBackgroundResource(R.drawable.small_border5);
             holder.title.setTextColor(Color.parseColor("#53BFAB"));
-        }else if(color==6){
-            holder.showColor.setBackgroundColor(Color.parseColor("#9B50D3"));
+        }
+        if(color==6){
+            holder.showColor.setBackgroundResource(R.drawable.small_border6);
             holder.title.setTextColor(Color.parseColor("#9B50D3"));
-        }else if(color==7){
-            holder.showColor.setBackgroundColor(Color.parseColor("#191919"));
+        }
+        if(color==7){
+            holder.showColor.setBackgroundResource(R.drawable.small_border7);
             holder.title.setTextColor(Color.parseColor("#191919"));
-        }else if(color==8) {
-            holder.showColor.setBackgroundColor(Color.parseColor("#7BC94B"));
+        }
+        if(color==8) {
+            holder.showColor.setBackgroundResource(R.drawable.small_border8);
             holder.title.setTextColor(Color.parseColor("#7BC94B"));
         }
         holder.title.setText(tileItems.get(position).getTitle());

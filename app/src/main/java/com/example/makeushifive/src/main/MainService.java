@@ -1,7 +1,10 @@
 package com.example.makeushifive.src.main;
 
+import android.util.Log;
+
 import com.example.makeushifive.src.main.interfaces.MainActivityView;
 import com.example.makeushifive.src.main.interfaces.MainRetrofitInterface;
+import com.example.makeushifive.src.main.models.MainResponse;
 import com.example.makeushifive.src.main.models.ProfileResponse;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +46,38 @@ public class MainService {
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
                 mainActivityView.ChangeProfileFail();
+            }
+        });
+
+    }
+
+    public void getUser(String nickname){
+        Log.e("sned getUser",""+nickname);
+        MainRetrofitInterface mainRetrofitInterface = getRetrofit()
+                .create(MainRetrofitInterface.class);
+        mainRetrofitInterface.getUser(nickname).enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                try{
+
+                    if(response.body()!=null){
+                        if(response.body().getCode()==100){
+                            Log.e("success",""+"success");
+                            mainActivityView.getUserSuccess();
+                        }else{
+                            Log.e("fail",""+"100아님");
+                            mainActivityView.getUserFail();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                mainActivityView.getUserFail();
             }
         });
 

@@ -40,13 +40,17 @@ public class SignupService {
             @Override
             public void onResponse(Call<OverlapResponse> call, Response<OverlapResponse> response) {
                 int code =0;
+                String message = null;
                 if (response.body() != null) {
-                    code = response.body().getCode();
+                    try {
+                        code = response.body().getCode();
+                        message=response.body().getMessage();
+                        Log.e("username",code+" "+message);
+                        mSignupActivityView.OverlapUserNameSuccess(code,message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                String message;
-                message=response.body().getMessage();
-                Log.e("username",code+" "+message);
-                mSignupActivityView.OverlapUserNameSuccess(code,message);
             }
 
             @Override
@@ -65,12 +69,17 @@ public class SignupService {
             @Override
             public void onResponse(Call<OverlapResponse> call, @NotNull Response<OverlapResponse> response) {
                 int code = 0;
+                String message =null;
                 if (response.body() != null) {
-                    code = response.body().getCode();
+                    try {
+                        code = response.body().getCode();
+                        message = response.body().getMessage();
+                        Log.e("통신 성공",code+" "+message);
+                        mSignupActivityView.OverlapEmailSuccess(code,message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                String message = response.body().getMessage();
-                Log.e("통신 성공",code+" "+message);
-                mSignupActivityView.OverlapEmailSuccess(code,message);
             }
 
             @Override
@@ -92,12 +101,16 @@ public class SignupService {
             public void onResponse(Call<SignupResponse> call, Response<SignupResponse> response) {
                 int code =0;
                 if(response.body()!=null){
-                    code = response.body().getCode();
-                    Log.e("code: ", String.valueOf(code));
-                    if(code==100 || code==200 || code==201){
-                        mSignupActivityView.SignUpSuccess(code);
-                    }else{
-                        mSignupActivityView.SignUpFail();
+                    try {
+                        code = response.body().getCode();
+                        Log.e("code: ", String.valueOf(code));
+                        if(code==100 || code==200 || code==201){
+                            mSignupActivityView.SignUpSuccess(code);
+                        }else{
+                            mSignupActivityView.SignUpFail();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }

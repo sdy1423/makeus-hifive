@@ -17,16 +17,21 @@ import android.widget.TextView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
+import com.example.makeushifive.src.main.chatting.ChattingService;
 import com.example.makeushifive.src.main.chatting.share.interfaces.ShareActivityView;
 import com.example.makeushifive.src.main.chatting.share.models.SearchUserResponse;
 import com.example.makeushifive.src.main.chatting.share.models.SharedUserResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 
 //TODO ACTIVITY로 진입하면 최근공유 친구들 보여준다, 검색하면 검색인원 보여준다. , 클릭하면 추가 리스트에 추가된다. (한명이라도 추가 되면 빨간색으로 바뀐다) 추가 버튼 누르면 친구가 추가된다.
@@ -46,8 +51,10 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
     RecyclerView mRecyclerShared,mRecyclerPicked;
     RecentSharedRecyclerAdapter adapter;
     PickedRecyclerAdapter pickedRecyclerAdapter;
+    Bundle mBundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mBundle=savedInstanceState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
@@ -58,16 +65,16 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         mRecyclerShared = findViewById(R.id.share_recyclerview);
         mTvPlusFriend = findViewById(R.id.chatting_drawer_tv_share_schedule);
         mFlShare = findViewById(R.id.share_fl_complete);
-        mTvShareBlack = findViewById(R.id.share_tv_complete_black);
-        mTvShareRed = findViewById(R.id.share_tv_complete_red);
-        mTvShareBlack.setVisibility(View.VISIBLE);
-        mTvShareRed.setVisibility(View.INVISIBLE);
-        mEdtSearch = findViewById(R.id.share_edt_search);
         mIvClose = findViewById(R.id.share_iv_close);
         mTvRecentFriends = findViewById(R.id.share_tv_recent_friend);
-
+        mEdtSearch = findViewById(R.id.share_edt_search);
         mRecyclerShared.setLayoutManager(new LinearLayoutManager(this));
 
+        mTvShareBlack = findViewById(R.id.share_tv_complete_black);
+        mTvShareRed = findViewById(R.id.share_tv_complete_red);
+
+        mTvShareBlack.setVisibility(View.VISIBLE);
+        mTvShareRed.setVisibility(View.INVISIBLE);
 
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,36 +113,35 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         mFlShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(ShareFlag){
-                    JsonObject SendObject = new JsonObject();
-                    SendObject.addProperty("taskNo",taskNo);
-                    JsonArray SendArray = new JsonArray();
-                    JsonObject ArrayObject = new JsonObject();
-                    try {
-                        for(int i=0;i<shareUsersCandi.size();i++){
+                if(ShareFlag){
+                    try{
+                        JSONObject SendObject = new JSONObject();
+                        SendObject.put("taskNo", taskNo);
+
+                        JSONArray SendArray = new JSONArray();
+                        for (int i = 0; i < shareUsersCandi.size(); i++) {
                             int userNo = shareUsersCandi.get(i).getSharedUserNo();
-                            ArrayObject.addProperty("shareduserNo",userNo);
+                            JSONObject ArrayObject = new JSONObject();
+                            ArrayObject.put("shareduserNo", userNo);
+                            SendArray.put(ArrayObject);
                         }
+                        SendObject.put("shareduserNoList", SendArray);
+//                        Log.e("check share",""+SendObject);
+                      ShareTask(SendObject);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    SendArray.add(ArrayObject);
-                    SendObject.add("shareduserNoList",SendArray);
 
-                    try {
-                        ShareTask(SendObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-//                }
+                }
             }
         });
 
 
     }
 
-    private void ShareTask(JsonObject sendObject) throws JSONException {
+    private void ShareTask(JSONObject sendObject) throws JSONException {
         ShareService shareService = new ShareService(this);
         shareService.postTaskShare(sendObject);
 
@@ -240,6 +246,28 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
         showCustomToast("일정 공유에 실패 했습니다.");
 
     }
+
+    @Override
+    protected void onResume() {
+        String nickname = sSharedPreferences.getString("nickname",null);
+        Log.e("onResume","shareActivity");
+        ShareService shareService = new ShareService(this);
+        shareService.getUser(nickname);
+        super.onResume();
+
+        super.onResume();
+    }
+
+    @Override
+    public void getUserSuccess() {
+        onCreate(mBundle);
+    }
+
+    @Override
+    public void getUserFail() {
+
+    }
+
     public void showFriendsList(){
         adapter = new RecentSharedRecyclerAdapter(users,this);
         mRecyclerShared.setAdapter(adapter);
@@ -276,6 +304,15 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
     }
     public void showPickedFriendsList(){
         //가로 리사이클러
+        if(shareUsersCandi.isEmpty()){
+            ShareFlag=false;
+            mTvShareBlack.setVisibility(View.VISIBLE);
+            mTvShareRed.setVisibility(View.INVISIBLE);
+        }else{
+            ShareFlag=true;
+            mTvShareBlack.setVisibility(View.INVISIBLE);
+            mTvShareRed.setVisibility(View.VISIBLE);
+        }
         mRecyclerPicked.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
         pickedRecyclerAdapter = new PickedRecyclerAdapter(shareUsersCandi,getApplicationContext());
         mRecyclerPicked.setAdapter(pickedRecyclerAdapter);

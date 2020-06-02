@@ -60,13 +60,12 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
         mSignupService = new SignupService(this);
 
         mEdtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                mEmail = mEdtEmail.getText().toString();
                 if(hasFocus){
 
                 }else{
+                    mEmail = mEdtEmail.getText().toString();
                     if(!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()){
                         Log.e("매치안함", " " + mEmail);
 
@@ -84,10 +83,10 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
         mEdtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                mUserName=mEdtUserName.getText().toString();
                 if(hasFocus){
 
                 }else{
+                    mUserName=mEdtUserName.getText().toString();
                     Log.e("유저네임",""+mUserName);
                     if(mUserName.equals("")){
 //                        ShowImPossibleUserName("다른 유저 네임을 사용해주세요.");

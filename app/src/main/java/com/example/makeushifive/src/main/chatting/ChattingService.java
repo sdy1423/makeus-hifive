@@ -96,4 +96,33 @@ public class ChattingService {
         });
     }
 
+    public void getUser(String nickname){
+        final ChattingRetrofitInterface chattingRetrofitInterface = getRetrofit().create(ChattingRetrofitInterface.class);
+
+        chattingRetrofitInterface.getUser(nickname).enqueue(new Callback<ChattingResponse>() {
+            @Override
+            public void onResponse(Call<ChattingResponse> call, Response<ChattingResponse> response) {
+                try{
+                    assert response.body() != null;
+                    int code = response.body().getCode();
+                    if(code ==100){
+                        chattingActivityView.getUserSuccess();
+                    }else{
+                        chattingActivityView.getUserFail();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    chattingActivityView.getUserFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChattingResponse> call, Throwable t) {
+                chattingActivityView.getUserFail();
+            }
+        });
+    }
+
 }

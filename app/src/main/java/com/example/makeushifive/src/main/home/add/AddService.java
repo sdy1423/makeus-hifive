@@ -4,6 +4,7 @@ import android.util.Log;
 import com.example.makeushifive.src.main.home.add.interfaces.AddActivityView;
 import com.example.makeushifive.src.main.home.add.interfaces.AddRetrofitInterface;
 import com.example.makeushifive.src.main.home.add.models.AddResponse;
+import com.example.makeushifive.src.main.models.MainResponse;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -71,4 +72,34 @@ public class AddService {
             }
         });
     }
+
+    public void getUser(String nickname){
+        Log.e("sned getUser",""+nickname);
+        AddRetrofitInterface addRetrofitInterface =getRetrofit().create(AddRetrofitInterface.class);
+        addRetrofitInterface.getUser(nickname).enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                try{
+
+                    if(response.body()!=null){
+                        if(response.body().getCode()==100){
+                            addActivityView.getUserSuccess();
+                        }else{
+                            addActivityView.getUserFail();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                addActivityView.getUserFail();
+            }
+        });
+
+    }
+
 }

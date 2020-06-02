@@ -125,7 +125,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         editor.putInt("userNo",mUserNo);
         editor.putString("profileUrl",result.getProfileUrl());
         editor.putString("nickname",result.getNickname());
-
         editor.apply();
 
         Log.e("jwt",""+mJwtToken);

@@ -87,6 +87,11 @@ public class AddTimeDialog extends Dialog {
         NumberPicker startMin = findViewById(R.id.time_picker_start_min);
         NumberPicker endHour = findViewById(R.id.time_picker_end_hour);
         NumberPicker endMin = findViewById(R.id.time_picker_end_min);
+        startHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        startMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        endHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        endMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
 
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override

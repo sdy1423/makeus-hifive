@@ -138,7 +138,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         mTvCurrentDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                YearMonthPickerDialog yd = new YearMonthPickerDialog();
+                YearMonthPickerDialog yd = new YearMonthPickerDialog(CurrentYear,CurrentMonth);
                 yd.setListener(d);
                 yd.show(Objects.requireNonNull(getFragmentManager()),"YearMonthPicker");
             }
@@ -213,7 +213,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 taskNo=result.get(i).getTaskNo();
                 title=result.get(i).getTitle();
                 title=result.get(i).getTitle();
-                color=result.get(i).getCount();
+                color=result.get(i).getColor();
                 count=result.get(i).getCount();
                 day = DATE_FORMAT.parse(result.get(i).getDay());
 

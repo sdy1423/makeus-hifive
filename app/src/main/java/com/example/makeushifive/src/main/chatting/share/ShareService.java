@@ -8,9 +8,11 @@ import com.example.makeushifive.src.main.chatting.share.models.SearchUserRespons
 import com.example.makeushifive.src.main.chatting.share.models.SharedUserResponse;
 import com.example.makeushifive.src.main.chatting.share.models.TaskShareResponse;
 import com.example.makeushifive.src.main.home.search.interfaces.SearchRetrofitInterface;
+import com.example.makeushifive.src.main.models.MainResponse;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -27,7 +29,7 @@ public class ShareService {
         this.shareActivityView = shareActivityView;
     }
 
-    public void postTaskShare(final JsonObject jsonObject)throws JSONException {
+    public void postTaskShare(final JSONObject jsonObject)throws JSONException {
         Log.e("send object",jsonObject.toString());
         ShareRetrofitInterface shareRetrofitInterface = getRetrofit()
                 .create(ShareRetrofitInterface.class);
@@ -99,4 +101,33 @@ public class ShareService {
         });
 
     }
+    void getUser(String nickname){
+        ShareRetrofitInterface shareRetrofitInterface =getRetrofit().create(ShareRetrofitInterface.class);
+        shareRetrofitInterface.getUser(nickname).enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                try {
+                    assert response.body() != null;
+                    int code = response.body().getCode();
+                    if(code==100){
+                        shareActivityView.getUserSuccess();
+
+                    }else{
+                        shareActivityView.getSearchUserFail();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    shareActivityView.getSearchUserFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                shareActivityView.getSearchUserFail();
+
+            }
+        });
+    }
+
 }

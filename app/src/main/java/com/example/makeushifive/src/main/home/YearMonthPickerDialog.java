@@ -29,6 +29,12 @@ public class YearMonthPickerDialog extends DialogFragment {
 
     private DatePickerDialog.OnDateSetListener listener;
     public Calendar calendar = Calendar.getInstance();
+    int curYear,curMonth;
+
+    public YearMonthPickerDialog(int curYear, int curMonth) {
+        this.curYear = curYear;
+        this.curMonth = curMonth;
+    }
 
     public void setListener(DatePickerDialog.OnDateSetListener listener){
         this.listener = listener;
@@ -48,6 +54,11 @@ public class YearMonthPickerDialog extends DialogFragment {
 
         final NumberPicker yearPicker = (NumberPicker)rootview.findViewById(R.id.home_year_picker);
         final NumberPicker monthPicker =(NumberPicker)rootview.findViewById(R.id.home_month_picker);
+        yearPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        monthPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+
+        출처: https://woodongwoo.tistory.com/52 [우동우동우's note]
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,15 +75,18 @@ public class YearMonthPickerDialog extends DialogFragment {
         });
         int this_month = calendar.get(Calendar.MONTH);
 
-        monthPicker.setMinValue(this_month-3);
-        monthPicker.setMaxValue(this_month+3);
-        monthPicker.setValue(calendar.get(Calendar.MONTH)+1);
+        monthPicker.setMinValue(1);
+        monthPicker.setMaxValue(12);
+
+//        monthPicker.setValue(calendar.get(Calendar.MONTH)+1);
+        monthPicker.setValue(curMonth+1);
+
         int this_year = calendar.get(Calendar.YEAR);
 
         //일단 올해로 고정
         yearPicker.setMinValue(this_year);
         yearPicker.setMaxValue(this_year);
-        yearPicker.setValue(this_year);
+        yearPicker.setValue(curYear);
 
 
 

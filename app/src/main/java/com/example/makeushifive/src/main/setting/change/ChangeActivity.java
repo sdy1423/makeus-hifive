@@ -45,6 +45,7 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
     Drawable img1, img2;
     private final int GET_GALLERY_IMAGE = 200;
 
+    Bundle mBundle;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -77,6 +78,7 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        mBundle = savedInstanceState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change);
 
@@ -134,8 +136,8 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         mEdtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                mNewUserName = mEdtUserName.getText().toString();
                 if (!hasFocus) {
+                    mNewUserName = mEdtUserName.getText().toString();
                     if (mNewUserName.equals("")) {
                         ShowImpossibleUserName();
 
@@ -304,5 +306,25 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
 
     }
 
+    @Override
+    public void getUserSuccess() {
+        Log.e("onCreate","ChangeActivity");
+        onCreate(mBundle);
+    }
 
+    @Override
+    public void getUserFail() {
+
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        String nickname = sSharedPreferences.getString("nickname",null);
+        Log.e("onResume","ChangeActivity"+nickname);
+        ChangeService changeService = new ChangeService(this);
+        changeService.getUser(nickname);
+        super.onResume();
+    }
 }
