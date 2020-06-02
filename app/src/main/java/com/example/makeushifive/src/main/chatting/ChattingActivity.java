@@ -99,8 +99,8 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         taskNo = Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
         color = intent.getExtras().getInt("color");
 
-//        Log.e("받는taskNo",""+taskNo);
-//        Log.e("받는color",""+color);
+        Log.e("받는taskNo",""+taskNo);
+        Log.e("받는color",""+color);
 
         chattingService = new ChattingService(this);
         chattingService.getDetailSchedule(taskNo);
@@ -342,32 +342,35 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
     @Override
     public void getScheduleDetailSuccess(ArrayList<ChattingResponse.Result> result) throws ParseException {
+        //TODO 일정상세 조회에 taskNo, repeatweek 추가 되었으니 활용할것 (repeatweek는 일정반복)
+        if(!result.isEmpty()){
 
-        location = result.get(0).getLocation();
-        time = result.get(0).getTime();
-        title = result.get(0).getTitle();
-        day = result.get(0).getDay();
-        Date dateformat;
-        dateformat = DATE_FORMAT.parse(day); //string to date
+            location = result.get(0).getLocation();
+            time = result.get(0).getTime();
+            title = result.get(0).getTitle();
+            day = result.get(0).getDay();
+            Date dateformat;
+            dateformat = DATE_FORMAT.parse(day); //string to date
 
-        String showTime = null;
-        try {
-            showTime = time.substring(0,5);
-        } catch (Exception e) {
-            e.printStackTrace();
+            String showTime = null;
+            try {
+                showTime = time.substring(0, 5);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            assert dateformat != null;
+            String today = Chatting.format(dateformat); //date to string
+
+            mTvLocation.setText(location);
+            mTvDay.setText(today);
+            mTvTime.setText(showTime);
+            mTvTitle.setText(title);
+
+
+
         }
-
-
-
-        assert dateformat != null;
-        String today = Chatting.format(dateformat); //date to string
-
-        mTvLocation.setText(location);
-        mTvDay.setText(today);
-        mTvTime.setText(showTime);
-        mTvTitle.setText(title);
-
-
     }
 
     @Override

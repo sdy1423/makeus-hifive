@@ -9,6 +9,9 @@ public class ChattingResponse {
     @SerializedName("result")
     public ArrayList<Result> result;
     public class Result{
+        @SerializedName("taskNo")
+        public int taskNo;
+
         @SerializedName("title")
         public String title;
 
@@ -20,6 +23,17 @@ public class ChattingResponse {
 
         @SerializedName("time")
         public String time;
+
+        @SerializedName("repeatweek")
+        public int repeatweek;
+
+        public int getRepeatweek() {
+            return repeatweek;
+        }
+
+        public int getTaskNo() {
+            return taskNo;
+        }
 
         public String getTitle() {
             return title;

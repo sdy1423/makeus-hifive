@@ -12,10 +12,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,6 +35,7 @@ import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
+import com.example.makeushifive.src.main.NotificationDialogAdapter;
 import com.example.makeushifive.src.main.home.calendar.CalendarAdapter;
 import com.example.makeushifive.src.main.home.calendar.DATA;
 import com.example.makeushifive.src.main.home.calendar.Keys;
@@ -58,6 +61,9 @@ import static com.example.makeushifive.src.ApplicationClass.MONTH;
 import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView {
+
+    Boolean Flag = false;
+
 
     int CurrentYear=0, CurrentMonth=0; //캘린더를 set할때 설정한다.
     ArrayList<TileItem> tileItems = new ArrayList<>();
@@ -154,19 +160,33 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                if(e.getAction()==MotionEvent.ACTION_DOWN){//화면에 손가락 닿았을때
+                if (e.getAction() == MotionEvent.ACTION_DOWN) {//화면에 손가락 닿았을때
                     try {
-                        View child =rv.findChildViewUnder(e.getX(),e.getY());
+                        View child = rv.findChildViewUnder(e.getX(), e.getY());
                         assert child != null;
-                        LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
-                        linearLayout.setBackgroundColor(Color.parseColor("#F4F4F4"));
+                        final LinearLayout[] linearLayout = {rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout)};
+                        linearLayout[0].setBackgroundColor(Color.parseColor("#F4F4F4"));
+
+                        // 2초간 멈추게 하고싶다면
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                try {
+                                    linearLayout[0] = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
+                                    linearLayout[0].setBackgroundResource(R.drawable.calendar_tile_border_second);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }, 1000);  // 2000은 2초를 의미합니다.
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                if(e.getAction()== MotionEvent.ACTION_UP){
+                if (e.getAction() == MotionEvent.ACTION_UP) {
                     try {
-                        View child =rv.findChildViewUnder(e.getX(),e.getY());
+                        View child = rv.findChildViewUnder(e.getX(), e.getY());
                         assert child != null;
                         LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
                         linearLayout.setBackgroundResource(R.drawable.calendar_tile_border_second);
@@ -174,8 +194,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                         ex.printStackTrace();
                     }
                 }
+
+
                 return false;
             }
+
+
+
 
             @Override
             public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -185,6 +210,16 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+            }
+        });
+
+        mIvAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationDialogAdapter adapter = new NotificationDialogAdapter(getContext());
+                assert getFragmentManager() != null;
+                adapter.setStyle(DialogFragment.STYLE_NO_FRAME, 0);
+                adapter.show(getFragmentManager(),"notification");
             }
         });
         return rootView;

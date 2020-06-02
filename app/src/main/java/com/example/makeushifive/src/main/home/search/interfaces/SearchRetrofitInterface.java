@@ -12,4 +12,7 @@ public interface SearchRetrofitInterface {
     @GET("/task")
     Call<SearchResponse> getSearchTitle(@Query("title") String title);
 
+    @GET("/task")
+    Call<SearchResponse> getTagTitle(@Query("tag") String tag);
+
 }

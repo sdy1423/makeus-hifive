@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
+import com.example.makeushifive.src.main.NotificationDialogAdapter;
 import com.example.makeushifive.src.main.feed.interfaces.FeedFragmentView;
 import com.example.makeushifive.src.main.feed.models.FeedResponse;
 import com.example.makeushifive.src.main.home.search.SearchActivity;
@@ -28,7 +29,7 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
     private RecyclerView mRecyclerView;
     private FeedRecyclerAdapter feedRecyclerAdapter;
 
-    ImageView mIvSearch;
+    ImageView mIvSearch,mIvNoti;
 
     @Nullable
     @Override
@@ -38,6 +39,17 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
         feedService.getSchedule();
 
         mRecyclerView=rootView.findViewById(R.id.feed_rv_recycler);
+
+        mIvNoti = rootView.findViewById(R.id.feed_iv_alarm);
+        mIvNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationDialogAdapter adapter = new NotificationDialogAdapter(getContext());
+                assert getFragmentManager() != null;
+                adapter.show(getFragmentManager(),"notification");
+            }
+        });
+
 
         mIvSearch = rootView.findViewById(R.id.feed_iv_search);
         mIvSearch.setOnClickListener(new View.OnClickListener() {

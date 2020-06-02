@@ -38,4 +38,25 @@ public class SearchService {
             }
         });
     }
+    void getSearchTag(String tag) {
+        SearchRetrofitInterface searchRetrofitInterface = getRetrofit().
+                create(SearchRetrofitInterface.class);
+        searchRetrofitInterface.getSearchTitle(tag).enqueue(new Callback<SearchResponse>(){
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                if(response.body()!=null){
+                    if(response.body().code==100){
+                        searchActivityView.getSearchSuccess(response.body().getResult());
+                    }else{
+                        searchActivityView.getSearchFail();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+                searchActivityView.getSearchFail();
+            }
+        });
+    }
+
 }

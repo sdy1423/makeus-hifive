@@ -158,6 +158,9 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
                     int TaskNo = tasks.get(getAdapterPosition()).getTaskNo();
                     int Color = tasks.get(getAdapterPosition()).getColor();
 
+                    Log.e("feedrecycler",""+TaskNo);
+                    Log.e("feedrecycler",""+Color);
+
                     Intent intent = new Intent(context, ChattingActivity.class);
                     intent.putExtra("taskNo",TaskNo);
                     intent.putExtra("color",Color);

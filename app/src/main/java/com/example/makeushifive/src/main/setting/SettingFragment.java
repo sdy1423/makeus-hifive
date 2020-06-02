@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
+import com.example.makeushifive.src.main.NotificationDialogAdapter;
 import com.example.makeushifive.src.main.setting.change.ChangeActivity;
 import com.example.makeushifive.src.main.setting.interfaces.SettingFragmentView;
 import com.example.makeushifive.src.main.setting.models.SettingResponse;
@@ -41,7 +42,7 @@ import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class SettingFragment extends BaseFragment implements SettingFragmentView {
 
-    ImageView mIvProfileImg;
+    ImageView mIvProfileImg,mIvNotification;
     TextView mTvUserName,mTvChangeUserInfo,mTvShareFriendSetting,mTvLogOut;
     int UserNo;
     private String ProfileUrl, NickName, Email;
@@ -55,6 +56,7 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
         mIvProfileImg = (rootView).findViewById(R.id.setting_iv_profile_img);
         mTvUserName = (rootView).findViewById(R.id.setting_tv_username);
 
+        mIvNotification=rootView.findViewById(R.id.setting_iv_notifications);
         mIvProfileImg.setBackground(new ShapeDrawable(new OvalShape()));
         mIvProfileImg.setClipToOutline(true);
 
@@ -112,6 +114,14 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
             }
         });
 
+        mIvNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationDialogAdapter adapter = new NotificationDialogAdapter(getContext());
+                assert getFragmentManager() != null;
+                adapter.show(getFragmentManager(),"notification");
+            }
+        });
         return rootView;
     }
 
