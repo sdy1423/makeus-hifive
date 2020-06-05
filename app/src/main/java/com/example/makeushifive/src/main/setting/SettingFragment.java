@@ -1,32 +1,26 @@
 package com.example.makeushifive.src.main.setting;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
-import com.example.makeushifive.src.main.NotificationDialogAdapter;
+import com.example.makeushifive.src.main.home.search.SearchActivity;
+import com.example.makeushifive.src.main.notification.NotificationDialogAdapter;
 import com.example.makeushifive.src.main.setting.change.ChangeActivity;
 import com.example.makeushifive.src.main.setting.interfaces.SettingFragmentView;
 import com.example.makeushifive.src.main.setting.models.SettingResponse;
@@ -35,14 +29,12 @@ import com.example.makeushifive.src.splash.SplashActivity;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
 import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class SettingFragment extends BaseFragment implements SettingFragmentView {
 
-    ImageView mIvProfileImg,mIvNotification;
+    ImageView mIvProfileImg,mIvNotification,mIvSearch;
     TextView mTvUserName,mTvChangeUserInfo,mTvShareFriendSetting,mTvLogOut;
     int UserNo;
     private String ProfileUrl, NickName, Email;
@@ -55,6 +47,7 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
 
         mIvProfileImg = (rootView).findViewById(R.id.setting_iv_profile_img);
         mTvUserName = (rootView).findViewById(R.id.setting_tv_username);
+        mIvSearch = rootView.findViewById(R.id.setting_iv_search_black);
 
         mIvNotification=rootView.findViewById(R.id.setting_iv_notifications);
         mIvProfileImg.setBackground(new ShapeDrawable(new OvalShape()));
@@ -122,6 +115,15 @@ public class SettingFragment extends BaseFragment implements SettingFragmentView
                 adapter.show(getFragmentManager(),"notification");
             }
         });
+
+        mIvSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 

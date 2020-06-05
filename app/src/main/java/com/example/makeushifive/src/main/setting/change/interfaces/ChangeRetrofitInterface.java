@@ -3,10 +3,13 @@ package com.example.makeushifive.src.main.setting.change.interfaces;
 import com.example.makeushifive.src.main.setting.change.models.ChangeResponse;
 import com.example.makeushifive.src.main.setting.change.models.ImageResponse;
 
+import java.lang.annotation.Documented;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -39,5 +42,8 @@ public interface ChangeRetrofitInterface {
     @GET("/user")
     Call<ChangeResponse> getUser(@Query("nickname") String nickname);
 
+
+    @DELETE("/user")
+    Call<ChangeResponse> deleteUser();
 
 }

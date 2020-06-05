@@ -14,4 +14,8 @@ public interface ChangeActivityView {
 
     void getUserSuccess();
     void getUserFail();
+
+    void deleteUserSuccess();
+    void deleteUserFail();
+
 }

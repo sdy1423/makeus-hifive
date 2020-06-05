@@ -2,6 +2,8 @@ package com.example.makeushifive.src.main.home.add.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class AddResponse {
 
     @SerializedName("result")
@@ -17,6 +19,37 @@ public class AddResponse {
         public int getTaskNo() {
             return taskNo;
         }
+
+        @SerializedName("title")
+        public int title;
+        public int getTitle() {
+            return title;
+        }
+
+        @SerializedName("location")
+        public int location;
+        public int getLocation() {
+            return location;
+        }
+
+        @SerializedName("tag")
+        public int tag;
+        public int getTag() {
+            return tag;
+        }
+
+        @SerializedName("color")
+        public int color;
+        public int getColor() {
+            return color;
+        }
+
+        @SerializedName("days")
+        public ArrayList days;
+        public ArrayList getDays () {
+            return days;
+        }
+
     }
 
     @SerializedName("isSuccess")

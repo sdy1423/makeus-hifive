@@ -147,10 +147,16 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <DatePicker
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:id="@+id/date_picker_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"/>
             <NumberPicker
                 android:id="@+id/time_picker_start_hour"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
             <NumberPicker
                 android:id="@+id/time_picker_start_min"
                 android:layout_width="wrap_content"
@@ -161,6 +167,12 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <DatePicker
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:id="@+id/date_picker_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"/>
             <NumberPicker
                 android:id="@+id/time_picker_end_hour"
                 android:layout_width="wrap_content"
@@ -172,6 +184,8 @@
         </LinearLayout>
     </FrameLayout>
     <Button
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="10sp"
         android:stateListAnimator="@null"
         android:id="@+id/add_time_dialog_btn_complete"
         android:layout_marginBottom="14dp"
@@ -179,6 +193,7 @@
         android:layout_gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="14dp"
+        android:textAlignment="center"
         android:gravity="center"
         android:fontFamily="@font/notosanscjkr_regular"
         android:text="완료"

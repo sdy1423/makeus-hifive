@@ -46,7 +46,7 @@ public class TileRecyclerAdapter extends RecyclerView.Adapter<TileRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int color = tileItems.get(position).getColor();
-        Log.e("들어오는color","color: "+color);
+//        Log.e("들어오는color","color: "+color);
         if(color==1){
             holder.title.setTextColor(Color.parseColor("#F87BAB"));
             holder.showColor.setBackgroundResource(R.drawable.small_border1);

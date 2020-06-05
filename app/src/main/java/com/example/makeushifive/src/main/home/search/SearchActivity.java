@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
+import com.example.makeushifive.src.main.feed.UserInfo;
 import com.example.makeushifive.src.main.home.search.interfaces.SearchActivityView;
 import com.example.makeushifive.src.main.home.search.models.SearchResponse;
 
@@ -70,21 +71,32 @@ public class SearchActivity extends BaseActivity implements SearchActivityView {
         try {
             String title,day;
             int color,taskNo,week,count;
-            for(int i=0;i<result.size();i++){
-                taskNo = result.get(i).getTaskNo();
-                title = result.get(i).getTitle();
-                color = result.get(i).getColor();
-                day = result.get(i).getDay();
-                week = result.get(i).getWeek();
-                count = result.get(i).getCount();
-                ITEM item = new ITEM(taskNo,title,color,day,week,count);
-                items.add(item);
-                //TODO 배열에 담는다.
+            if(!result.isEmpty()){
+                for(int i=0;i<result.size();i++){
+                    taskNo = result.get(i).getTaskNo();
+                    title = result.get(i).getTitle();
+                    color = result.get(i).getColor();
+                    day = result.get(i).getDay();
+                    week = result.get(i).getWeek();
+                    count = result.get(i).getCount();
+                    ArrayList<UserInfo> userInfos = new ArrayList<>();
+                    if(!result.get(i).getUserInfo().isEmpty()){
+                        for(int j=0;j<result.get(i).getUserInfo().size();j++){
+                            int userno = result.get(i).getUserInfo().get(j).getUserNo();
+                            String profileurl = result.get(i).getUserInfo().get(j).getProfileUrl();
+                            UserInfo userInfo = new UserInfo(userno,profileurl);
+                            userInfos.add(userInfo);
+                        }
+                    }
+                    ITEM item = new ITEM(taskNo,title,color,day,week,count,userInfos);
+                    items.add(item);
+                    //TODO 배열에 담는다.
+                }
+                //TODO recyclerview 만들어
+                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+                SearchRecyclerAdapter searchRecyclerAdapter = new SearchRecyclerAdapter(items,getApplicationContext());
+                recyclerView.setAdapter(searchRecyclerAdapter);
             }
-            //TODO recyclerview 만들어
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            SearchRecyclerAdapter searchRecyclerAdapter = new SearchRecyclerAdapter(items);
-            recyclerView.setAdapter(searchRecyclerAdapter);
 
 
 

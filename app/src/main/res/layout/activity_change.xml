@@ -200,6 +200,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:id="@+id/change_btn_bye"
             android:stateListAnimator="@null"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -209,7 +210,6 @@
             android:textSize="16dp"
             android:textColor="#000000"
             android:background="@drawable/change_bye_border"
-            android:id="@+id/change_btn_bye"
             android:layout_width="match_parent"
             android:layout_marginBottom="40dp"
             android:layout_height="44dp"/>

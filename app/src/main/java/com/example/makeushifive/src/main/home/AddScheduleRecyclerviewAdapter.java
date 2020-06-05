@@ -1,5 +1,8 @@
 package com.example.makeushifive.src.main.home;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,11 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.feed.FeedRecyclerAdapter;
+import com.example.makeushifive.src.main.taskchange.TaskChangeActivity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 //RecyclerView.Adapter<FeedRecyclerAdapterr.ViewHolder>
@@ -19,9 +25,17 @@ import java.util.ArrayList;
 public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddScheduleRecyclerviewAdapter.ViewHolder>{
 
     private ArrayList<PickedDayTasks> pickedDayTasks = null;
-
     public AddScheduleRecyclerviewAdapter(ArrayList<PickedDayTasks> pickedDayTasks) {
         this.pickedDayTasks = pickedDayTasks;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(View v, int pos,int taskNo,String time) throws ParseException;
+    }
+    private OnItemClickListener mListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
     }
 
     @NonNull
@@ -50,7 +64,7 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
         return pickedDayTasks.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder{
         TextView mTvTitle;
         int[] colors ={R.id.item_home_picked_schedule_iv_color_one,R.id.item_home_picked_schedule_iv_color_two,R.id.item_home_picked_schedule_iv_color_three,R.id.item_home_picked_schedule_iv_color_four,
                 R.id.item_home_picked_schedule_iv_color_five,R.id.item_home_picked_schedule_iv_color_six,R.id.item_home_picked_schedule_iv_color_seven,R.id.item_home_picked_schedule_iv_color_eight};
@@ -64,20 +78,26 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
             }
             mTvTitle=itemView.findViewById(R.id.item_home_picked_schedule_tv_title);
             mIvChange=itemView.findViewById(R.id.item_home_picked_schedule_iv_change);
-            mIvChange.setOnClickListener(this);
+            mIvChange.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        int taskNo = pickedDayTasks.get(pos).getTaskNo();
+                        String time = pickedDayTasks.get(pos).getTime();
+                        try {
+//                            Log.e("타일",""+year+" "+month+" "+day);
+                            //TODO 리스터 달고 밖에서 일정정보 수정으로 이동(인텐트로 taskNo도 같이 전송)
+                            mListener.onItemClick(v,pos,taskNo,time);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+                }
+            });
         }
 
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.item_home_picked_schedule_iv_change:
-                    //TODO 일정정보 변경하기
 
-
-                    break;
-            }
-
-        }
     }
 }

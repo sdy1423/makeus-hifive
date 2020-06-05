@@ -30,6 +30,11 @@ public class HomeTodayResponse {
         public String getTime() {
             return time;
         }
+        @SerializedName("taskNo")
+        public int taskNo;
+        public int getTaskNo() {
+            return taskNo;
+        }
     }
 
     public ArrayList<Result> getResult() {

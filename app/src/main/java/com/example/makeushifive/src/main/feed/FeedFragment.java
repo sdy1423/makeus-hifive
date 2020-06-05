@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,10 @@ import android.widget.ImageView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
-import com.example.makeushifive.src.main.NotificationDialogAdapter;
 import com.example.makeushifive.src.main.feed.interfaces.FeedFragmentView;
 import com.example.makeushifive.src.main.feed.models.FeedResponse;
 import com.example.makeushifive.src.main.home.search.SearchActivity;
+import com.example.makeushifive.src.main.notification.NotificationDialogAdapter;
 
 import java.util.ArrayList;
 
@@ -51,6 +50,8 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
         });
 
 
+
+
         mIvSearch = rootView.findViewById(R.id.feed_iv_search);
         mIvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,26 +66,47 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
     @Override
     public void getScheduleSuccess(ArrayList<FeedResponse.Result> result) {
         //TODO
-        int taskNo = 0,color=0,week=0,count=0;
-        String title = null, location = null, day = null, time = null;
-        for (int i = 0; i < result.size(); i++) {
-            taskNo=result.get(i).getTaskNo();
-            title=result.get(i).getTitle();
-            color=result.get(i).getColor();
-            day=result.get(i).getDay();
-            week=result.get(i).getWeek();
-            count=result.get(i).getCount();
-            TASK task = new TASK(taskNo, title, color, day, week, count);
-            tasks.add(task);
+        if(!result.isEmpty()){
+            tasks.clear();
+            int taskNo = 0,color=0,week=0,count=0;
+            String title = null, location = null, day = null, time = null;
+            for (int i = 0; i < result.size(); i++) {
+                taskNo=result.get(i).getTaskNo();
+                title=result.get(i).getTitle();
+                color=result.get(i).getColor();
+                day=result.get(i).getDay();
+                week=result.get(i).getWeek();
+                count=result.get(i).getCount();
+                ArrayList<UserInfo> userInfos = new ArrayList<>();
+                if(!result.get(i).getUserInfo().isEmpty()){
+                    for(int j=0;j<result.get(i).getUserInfo().size();j++){
+                        int userNo = result.get(i).getUserInfo().get(j).getUserNo();
+                        String profileurl = result.get(i).getUserInfo().get(j).getProfileUrl();
+                        UserInfo userInfo = new UserInfo(userNo,profileurl);
+                        userInfos.add(userInfo);
+                    }
+                }
+                TASK task = new TASK(taskNo, title, color, day, week, count,userInfos);
+                tasks.add(task);
+            }
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            feedRecyclerAdapter = new FeedRecyclerAdapter(tasks,getContext());
+            mRecyclerView.setAdapter(feedRecyclerAdapter);
+
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
-        mRecyclerView.setAdapter(feedRecyclerAdapter);
 
     }
 
     @Override
     public void getScheduleFail() {
 
+    }
+
+    @Override
+    public void onResume() {
+        FeedService feedService = new FeedService(this);
+        feedService.getSchedule();
+
+        super.onResume();
     }
 }

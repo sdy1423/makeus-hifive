@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -123,6 +124,36 @@ public class ChangeService {
             @Override
             public void onFailure(Call<ChangeResponse> call, Throwable t) {
                 changeActivityView.getUserFail();
+            }
+        });
+    }
+    void deleteUser(){
+        ChangeRetrofitInterface changeRetrofitInterface = getRetrofit().create(ChangeRetrofitInterface.class);
+        changeRetrofitInterface.deleteUser().enqueue(new Callback<ChangeResponse>() {
+            @Override
+            public void onResponse(Call<ChangeResponse> call, Response<ChangeResponse> response) {
+                try {
+                    if(Objects.requireNonNull(response.body()).getCode()==100){
+                        changeActivityView.deleteUserSuccess();
+                    }else{
+                        changeActivityView.deleteUserFail();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    changeActivityView.deleteUserFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChangeResponse> call, Throwable t) {
+                try {
+
+                    changeActivityView.deleteUserFail();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

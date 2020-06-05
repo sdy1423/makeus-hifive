@@ -2,7 +2,9 @@ package com.example.makeushifive.src.main.home.calendar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +36,7 @@ public class CalendarAdapter extends RecyclerView.Adapter {
     private final int EMPTY_TYPE = 1;
     private final int DAY_TYPE = 2;
     Context context;
+    int rowCount=0;
     private ArrayList<DATA> datas;
     private ArrayList<TileItem> tileItems;
     private List<Object> mCalendarList;
@@ -126,15 +130,29 @@ public class CalendarAdapter extends RecyclerView.Adapter {
 //        }
 //        /** 비어있는 날짜 타입 꾸미기 */
 //        /** EX : empty */
+
+
         if (viewType == EMPTY_TYPE) {
             EmptyViewHolder holder = (EmptyViewHolder) viewHolder;
             EmptyDay model = new EmptyDay();
             holder.bind(model);
+
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            //if you need three fix imageview in width
+            holder.itemView.getLayoutParams().width = displaymetrics.widthPixels / 7;
+
         }
         /** 일자 타입 꾸미기 */
         /** EX : 22 */
         else if (viewType == DAY_TYPE) {
             DayViewHolder holder = (DayViewHolder) viewHolder;
+
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            holder.itemView.getLayoutParams().width = displaymetrics.widthPixels / 7;
+
+
             Object item = mCalendarList.get(position);
             Day model = new Day();
             if (item instanceof Calendar) {
@@ -153,8 +171,8 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                     int TileYear = tileItems.get(i).getYear();
                     int TileMonth = tileItems.get(i).getMonth();
                     int TileDay = tileItems.get(i).getDay();
-                    Log.e("calendar date",""+year+" "+month+" "+day);
-                    Log.e("calendar tile date",""+TileYear+" "+TileMonth+" "+TileDay);
+//                    Log.e("calendar date",""+year+" "+month+" "+day);
+//                    Log.e("calendar tile date",""+TileYear+" "+TileMonth+" "+TileDay);
 
                     if(year==TileYear && (month+1)==TileMonth && day==TileDay){
                         TileItem tileItem = new TileItem(TileYear,TileMonth,TileDay,tileItems.get(i).getColor(),tileItems.get(i).getTitle());
@@ -165,7 +183,7 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                         adapter.setOnItemClickListener(new TileRecyclerAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
-                                Log.e("캘린더",""+year+" "+month+" "+day);
+//                                Log.e("캘린더",""+year+" "+month+" "+day);
                                 mListener.onItemClick(v,pos,year,month,day);
                             }
                         });
@@ -174,6 +192,10 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                 }
             }
 
+            GregorianCalendar cal = new GregorianCalendar();
+            if(year==cal.get(Calendar.YEAR) && month==cal.get(Calendar.MONTH) && day==cal.get(Calendar.DATE)){
+                holder.itemView.setBackgroundColor(Color.parseColor("#F4F4F4"));
+            }
         }
     }
 

@@ -26,7 +26,7 @@ public class AddService {
         this.addActivityView = addActivityView;
     }
 
-    public void PostAddSchedule(final JsonObject jsonObject) throws JSONException{
+    public void PostAddSchedule(final JSONObject jsonObject) throws JSONException{
         Log.e("추가하는 일정",jsonObject.toString());
         final AddRetrofitInterface addRetrofitInterface=getRetrofit().create(AddRetrofitInterface.class);
         addRetrofitInterface.PostAddSchedule(RequestBody.create(jsonObject.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<AddResponse>() {

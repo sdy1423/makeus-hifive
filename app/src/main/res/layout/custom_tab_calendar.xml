@@ -5,10 +5,21 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical">
-    <ImageView
+    <FrameLayout
         android:layout_gravity="center"
-        android:id="@+id/custom_tab_iv"
-        android:layout_width="28dp"
-        android:layout_height="38dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/custom_tab_iv_calendar_red"
+            android:layout_width="28dp"
+            android:layout_height="38dp"/>
+        <ImageView
+            android:alpha="0.2"
+            android:layout_gravity="center"
+            android:id="@+id/custom_tab_iv_calendar_blur"
+            android:layout_width="28dp"
+            android:layout_height="38dp"/>
+    </FrameLayout>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.makeushifive.src.main.home;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,30 @@ public class TodayRecyclerAdapter extends RecyclerView.Adapter<TodayRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull TodayRecyclerAdapter.ViewHolder holder, int position)  {
         holder.mTvTitle.setText(pickedDayTasks.get(position).getTitle());
-        String show = pickedDayTasks.get(position).getTime();
+        String Time = pickedDayTasks.get(position).getTime();
 //        show = show.substring(0,5);
-        show+="\n";
-        show+=pickedDayTasks.get(position).getLocation();
-        holder.mTvDetail.setText(show);
+//        show+="\n";
+//        show+=pickedDayTasks.get(position).getLocation();
+
+
+        String ShowTime="";
+        if(Time.length()==17){
+            try{
+                ShowTime+=Time.substring(0,5);
+                ShowTime+=Time.substring(8,14);
+                Log.e("ShowTime",""+Time.length());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            try{
+                ShowTime+=Time.substring(0,5);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        holder.mTvDetail.setText(ShowTime);
+        holder.mTvLocation.setText(pickedDayTasks.get(position).getLocation());
         int color = 0;
         color = pickedDayTasks.get(position).getColor();
         switch (color){
@@ -79,10 +99,12 @@ public class TodayRecyclerAdapter extends RecyclerView.Adapter<TodayRecyclerAdap
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView mTvTitle,mTvDetail;
 
+        TextView mTvLocation;  //쓸수도 안쓸수도
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTvTitle=itemView.findViewById(R.id.today_tv_title);
             mTvDetail=itemView.findViewById(R.id.today_tv_detail);
+            mTvLocation = itemView.findViewById(R.id.today_tv_detail_location);
         }
     }
 

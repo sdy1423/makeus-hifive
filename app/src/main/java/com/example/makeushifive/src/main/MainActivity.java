@@ -2,10 +2,6 @@ package com.example.makeushifive.src.main;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -15,19 +11,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.interfaces.MainActivityView;
-import com.example.makeushifive.src.main.setting.SettingFragment;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.example.makeushifive.src.main.notification.models.NotificationResponse;
+import com.example.makeushifive.src.main.notification.NotificationInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,17 +32,15 @@ import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONException;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Objects;
-
-import retrofit2.http.PUT;
 
 import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class MainActivity extends BaseActivity implements MainActivityView {
+
+    ArrayList<NotificationInfo> notificationInfos;
 
     FirebaseStorage storage = FirebaseStorage.getInstance("gs://hifive-d16d6.appspot.com");
     // Create a storage reference from our app
@@ -79,6 +70,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         tabView1 = LayoutInflater.from(this).inflate(R.layout.custom_tab_calendar, null);
         tabView2 = LayoutInflater.from(this).inflate(R.layout.custom_tab_feed, null);
         tabView3 = LayoutInflater.from(this).inflate(R.layout.custom_tab_profile, null);
+
 
         mTlTabLayout=findViewById(R.id.main_tl_tabs);
         mVpViewPager=findViewById(R.id.main_vp_view_pager);
@@ -121,13 +113,19 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
     private View changeSelectedTabView(int index) {
         if(index==0){
-            tabView1.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.calendar_red_tab2);
+            tabView1.findViewById(R.id.custom_tab_iv_calendar_red).setBackgroundResource(R.drawable.calendar_red_tab2);
+            tabView1.findViewById(R.id.custom_tab_iv_calendar_red).setVisibility(View.VISIBLE);
+            tabView1.findViewById(R.id.custom_tab_iv_calendar_blur).setVisibility(View.INVISIBLE);
             return tabView1;
         }else if(index==1){
-            tabView2.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.feed_tab2_red);
+            tabView2.findViewById(R.id.custom_tab_iv_feed_red).setBackgroundResource(R.drawable.feed_tab2_red);
+            tabView2.findViewById(R.id.custom_tab_iv_feed_red).setVisibility(View.VISIBLE);
+            tabView2.findViewById(R.id.custom_tab_iv_feed_blur).setVisibility(View.INVISIBLE);
             return tabView2;
         }else if(index==2){
-            tabView3.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.profile_tab2_red);
+            tabView3.findViewById(R.id.custom_tab_iv_profile_red).setBackgroundResource(R.drawable.profile_tab2_red);
+            tabView3.findViewById(R.id.custom_tab_iv_profile_red).setVisibility(View.VISIBLE);
+            tabView3.findViewById(R.id.custom_tab_iv_profile_blur).setVisibility(View.INVISIBLE);
             return tabView3;
         }
         return tabView1;
@@ -135,13 +133,19 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private View changeUnSelectedTabView(int index) {
 //        View tabView = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         if(index==0){
-            tabView1.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.calendar_tab2_black);
+            tabView1.findViewById(R.id.custom_tab_iv_calendar_blur).setBackgroundResource(R.drawable.calendar_tab2_black);
+            tabView1.findViewById(R.id.custom_tab_iv_calendar_blur).setVisibility(View.VISIBLE);
+            tabView1.findViewById(R.id.custom_tab_iv_calendar_red).setVisibility(View.INVISIBLE);
             return tabView1;
         }else if(index==1){
-            tabView2.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.feed_tab2_black);
+            tabView2.findViewById(R.id.custom_tab_iv_feed_blur).setBackgroundResource(R.drawable.feed_tab2_black);
+            tabView2.findViewById(R.id.custom_tab_iv_feed_blur).setVisibility(View.VISIBLE);
+            tabView2.findViewById(R.id.custom_tab_iv_feed_red).setVisibility(View.INVISIBLE);
             return tabView2;
         }else if(index==2){
-            tabView3.findViewById(R.id.custom_tab_iv).setBackgroundResource(R.drawable.profile_tab2_black);
+            tabView3.findViewById(R.id.custom_tab_iv_profile_blur).setBackgroundResource(R.drawable.profile_tab2_black);
+            tabView3.findViewById(R.id.custom_tab_iv_profile_blur).setVisibility(View.VISIBLE);
+            tabView3.findViewById(R.id.custom_tab_iv_profile_red).setVisibility(View.INVISIBLE);
             return tabView3;
         }
         return tabView1;
@@ -303,6 +307,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
 
     }
+    public void NotificationClick(View v){
+
+    }
 
 
 
@@ -321,4 +328,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     public void getUserFail() {
 
     }
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.makeushifive.src.main.feed;
 
+import java.util.ArrayList;
+
 public class TASK {
     private int taskNo;
     private String title;
@@ -7,15 +9,25 @@ public class TASK {
     private String day;
     private int week;
     private int count;
+    private ArrayList<UserInfo> userInfos;
 
     public TASK(int taskNo, String title,int color
-            , String day,int week,int count) {
+            , String day,int week,int count,ArrayList<UserInfo> userInfos) {
         this.taskNo = taskNo;
         this.title = title;
         this.color = color;
         this.day = day;
         this.week= week;
         this.count = count;
+        this.userInfos=userInfos;
+    }
+
+    public void setUserInfos(ArrayList<UserInfo> userInfos) {
+        this.userInfos = userInfos;
+    }
+
+    public ArrayList<UserInfo> getUserInfos() {
+        return userInfos;
     }
 
     public void setTaskNo(int taskNo) {

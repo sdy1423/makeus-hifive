@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.home.add.AddActivity;
 import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
+import com.example.makeushifive.src.main.taskchange.TaskChangeActivity;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
         //TODO 리사이클러뷰 만들기
 
         String title,location,time;
-        int color;
+        int color,taskNo;
 
         try {
             if(!result.isEmpty()){
@@ -135,25 +136,26 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
                     location=result.get(i).getLocation();
                     time=result.get(i).getTime();
                     color=result.get(i).getColor();
-                    PickedDayTasks task = new PickedDayTasks(title,location,color,time);
+                    taskNo=result.get(i).getTaskNo();
+                    PickedDayTasks task = new PickedDayTasks(title,location,color,time,taskNo);
                     tasks.add(task);
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
                 AddScheduleRecyclerviewAdapter addScheduleRecyclerviewAdapter = new AddScheduleRecyclerviewAdapter(tasks);
                 recyclerView.setAdapter(addScheduleRecyclerviewAdapter);
+                addScheduleRecyclerviewAdapter.setOnItemClickListener(new AddScheduleRecyclerviewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int pos, int taskNo,String time) throws ParseException {
+                        Intent intent = new Intent(activity, TaskChangeActivity.class);
+                        intent.putExtra("taskNo",taskNo);
+                        intent.putExtra("date",time);
+                        startActivity(intent);
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//        feedRecyclerAdapter = new FeedRecyclerAdapter(tasks);
-//        mRecyclerView.setAdapter(feedRecyclerAdapter);
-
-
-
-
     }
 
     @Override

@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,25 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.applandeo.materialcalendarview.CalendarUtils;
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.EventDay;
-import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.BaseFragment;
-import com.example.makeushifive.src.main.NotificationDialogAdapter;
 import com.example.makeushifive.src.main.home.calendar.CalendarAdapter;
 import com.example.makeushifive.src.main.home.calendar.DATA;
 import com.example.makeushifive.src.main.home.calendar.Keys;
@@ -44,26 +33,25 @@ import com.example.makeushifive.src.main.home.interfaces.HomeFragmentView;
 import com.example.makeushifive.src.main.home.models.HomeResponse;
 import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
 import com.example.makeushifive.src.main.home.search.SearchActivity;
+import com.example.makeushifive.src.main.notification.NotificationDialogAdapter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Objects;
 
 import static com.example.makeushifive.src.ApplicationClass.CALENDAR_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DAY;
-import static com.example.makeushifive.src.ApplicationClass.KOREAN_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.MONTH;
 import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     Boolean Flag = false;
-
+    int rowCount=0;
 
     int CurrentYear=0, CurrentMonth=0; //캘린더를 set할때 설정한다.
     ArrayList<TileItem> tileItems = new ArrayList<>();
@@ -157,61 +145,61 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         homeService1.getTodaySchedule(Today);
 
 
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                if (e.getAction() == MotionEvent.ACTION_DOWN) {//화면에 손가락 닿았을때
-                    try {
-                        View child = rv.findChildViewUnder(e.getX(), e.getY());
-                        assert child != null;
-                        final LinearLayout[] linearLayout = {rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout)};
-                        linearLayout[0].setBackgroundColor(Color.parseColor("#F4F4F4"));
-
-                        // 2초간 멈추게 하고싶다면
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                try {
-                                    linearLayout[0] = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
-                                    linearLayout[0].setBackgroundResource(R.drawable.calendar_tile_border_second);
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                        }, 1000);  // 2000은 2초를 의미합니다.
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                if (e.getAction() == MotionEvent.ACTION_UP) {
-                    try {
-                        View child = rv.findChildViewUnder(e.getX(), e.getY());
-                        assert child != null;
-                        LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
-                        linearLayout.setBackgroundResource(R.drawable.calendar_tile_border_second);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-
-                return false;
-            }
-
-
-
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
+//        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//            @Override
+//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+//                if (e.getAction() == MotionEvent.ACTION_DOWN) {//화면에 손가락 닿았을때
+//                    try {
+//                        View child = rv.findChildViewUnder(e.getX(), e.getY());
+//                        assert child != null;
+//                        final LinearLayout[] linearLayout = {rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout)};
+//                        linearLayout[0].setBackgroundColor(Color.parseColor("#F4F4F4"));
+//
+//                        // 2초간 멈추게 하고싶다면
+//                        Handler handler = new Handler();
+//                        handler.postDelayed(new Runnable() {
+//                            public void run() {
+//                                try {
+//                                    linearLayout[0] = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
+//                                    linearLayout[0].setBackgroundResource(R.drawable.calendar_tile_border_second);
+//                                } catch (Exception ex) {
+//                                    ex.printStackTrace();
+//                                }
+//                            }
+//                        }, 1000);  // 2000은 2초를 의미합니다.
+//
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//                if (e.getAction() == MotionEvent.ACTION_UP) {
+//                    try {
+//                        View child = rv.findChildViewUnder(e.getX(), e.getY());
+//                        assert child != null;
+//                        LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
+//                        linearLayout.setBackgroundResource(R.drawable.calendar_tile_border_second);
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//
+//
+//                return false;
+//            }
+//
+//
+//
+//
+//            @Override
+//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//
+//            }
+//        });
 
         mIvAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,7 +311,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     @Override
     public void getScheduleFail() {
-
+        ShowScheduleInfo(false);
     }
 
     @Override
@@ -332,7 +320,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
         //TODO result.size =0 오늘의 일정이 없다. !=0 오늘 일정 있다.
         try {
-            int color=0;
+            int color=0,taskNo=0;
             String location,time,title;
 
             ArrayList<PickedDayTasks> tasks = new ArrayList<>();
@@ -341,7 +329,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 location = result.get(i).getLocation();
                 time=result.get(i).getTime();
                 title = result.get(i).getTitle();
-                PickedDayTasks pickedDayTasks = new PickedDayTasks(title,location,color,time);
+                taskNo=result.get(i).getTaskNo();
+                PickedDayTasks pickedDayTasks = new PickedDayTasks(title,location,color,time,taskNo);
                 tasks.add(pickedDayTasks);
             }
 
@@ -390,7 +379,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             @Override
             public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
                 //TODO Dialog 띄운다.
-                Log.e("Home",""+year+" "+month+" "+day);
+//                Log.e("Home",""+year+" "+month+" "+day);
 
                 String date = MakeStringForm(year,month+1,day);
                 addScheduleDialog = new AddScheduleDialog(getActivity());
@@ -445,7 +434,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                 mTvCurrentDate.setText(date);
                 int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; //해당 월에 시작하는 요일 -1 을 하면 빈칸을 구할 수 있겠죠 ?
                 int max = calendar.getActualMaximum(Calendar.DAY_OF_MONTH); // 해당 월에 마지막 요일
-
+//                rowCount = ((dayOfWeek+max)/7)+1;
                 // EMPTY 생성
                 for (int j = 0; j < dayOfWeek; j++) {
                     calendarList.add(Keys.EMPTY);

@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
     boolean UserNameFlag = false, PwdFlag = false;
     Drawable img1, img2;
     private final int GET_GALLERY_IMAGE = 200;
+    Button mBtnDelete;
 
     Bundle mBundle;
     @Override
@@ -82,6 +84,7 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change);
 
+        mBtnDelete = findViewById(R.id.change_btn_bye);
         mIvProfile = findViewById(R.id.change_iv_profile_img);
         mTvEmail = findViewById(R.id.change_tv_email);
         mTvSave = findViewById(R.id.change_tv_save);//저장버튼
@@ -206,6 +209,13 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
             }
         });
 
+        mBtnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO 탈퇴하시겠습니까?
+            }
+        });
+
     }
 
 
@@ -317,6 +327,23 @@ public class ChangeActivity extends BaseActivity implements ChangeActivityView {
 
     }
 
+    @Override
+    public void deleteUserSuccess() {
+        //TODO 탈퇴성공하면? 스플래시로 가야될듯
+        //todo sharedpreference에 있는 내용 지운다.
+        SharedPreferences.Editor editor = sSharedPreferences.edit();
+        editor.remove(X_ACCESS_TOKEN);
+        editor.remove("profileUrl");
+        editor.remove("nickname");
+        editor.apply();
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void deleteUserFail() {
+
+    }
 
 
     @Override

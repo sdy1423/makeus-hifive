@@ -331,4 +331,30 @@ public class ShareActivity extends BaseActivity implements ShareActivityView {
             }
         });
     }
+
+    @Override
+    public void onStop() {
+        Log.e("ShareActivity","onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.e("ShareActivity","onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e("ShareActivity","onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("ShareActivity","onRestart");
+
+    }
+
 }

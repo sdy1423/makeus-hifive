@@ -54,12 +54,14 @@ public class FeedResponse {
             public int getUserNo() {
                 return userNo;
             }
+
             @SerializedName("profileUrl")
             public String profileUrl;
 
             public String getProfileUrl() {
                 return profileUrl;
             }
+
 
         }
 

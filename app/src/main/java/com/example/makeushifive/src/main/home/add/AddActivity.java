@@ -31,11 +31,17 @@ import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePick
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
@@ -91,8 +97,8 @@ public class AddActivity extends BaseActivity implements AddActivityView {
             ,TagFlag=false;
 
 
-    int PickedStartMonth=-1,PickedStartDay=-1,PickedStartHour=-1,PickedStartMin=-1,
-            PickedEndMonth=-1,PickedEndDay=-1,PickedEndHour=-1,PickedEndMin=-1,PickedStartYear=-1;
+    int PickedStartYear=-1,PickedStartMonth=-1,PickedStartDay=-1,PickedStartHour=-1,PickedStartMin=-1,
+            PickedEndYear=-1,PickedEndMonth=-1,PickedEndDay=-1,PickedEndHour=-1,PickedEndMin=-1;
 
     FrameLayout mFlComplete;
     String title="";
@@ -399,7 +405,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         //AddTimeDialog띄우기
         if(!TimeFlag){
             TimeFlag=true;
-            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startTimeListener,endTimeListener);
+            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startTimeListener,endTimeListener,pickedDay,startDateListener,endDateListener);
             Objects.requireNonNull(addTimeDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             addTimeDialog.show();
         }else{
@@ -423,6 +429,42 @@ public class AddActivity extends BaseActivity implements AddActivityView {
             PickedEndMin=minute;
             mTvEndTime.setText(MakeSetText(hourOfDay,minute));
             OpenPickedTime();
+        }
+    };
+    DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            PickedStartYear=year;
+            PickedStartMonth = month;
+            PickedStartDay=dayOfMonth;
+
+            Date StartDate = null;
+            try {
+                StartDate = MakeDateForm(PickedStartYear,PickedStartMonth,PickedStartDay);
+                Log.e("startDate",""+StartDate);
+                String date = KOREAN_FORMAT.format(StartDate);
+                mTvStartDate.setText(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+    DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            PickedEndYear=year;
+            PickedEndMonth = month;
+            PickedEndDay = dayOfMonth;
+
+            Date EndDate = null;
+            try {
+                EndDate = MakeDateForm(PickedEndYear,PickedEndMonth,PickedEndDay);
+                Log.e("EndDate",""+EndDate);
+                String date = KOREAN_FORMAT.format(EndDate);
+                mTvEndDate.setText(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -990,33 +1032,32 @@ public class AddActivity extends BaseActivity implements AddActivityView {
 
     }
 
-    public void completeClick(View view) {
+    public void completeClick(View view) throws ParseException, JSONException {
         //완료 버튼 클릭시 일정 등록
         if(titleFlag){ //최소한 타이틀이 입력되어 있어야 등록 가능
             location = mEdtLocation.getText().toString(); //장소
             tag = mEdtTag.getText().toString(); //태그
 
-            JsonObject jsonObject = new JsonObject();
+            if(PickedStartHour==-1){//TODO 1  => 시작시간만 설정 (유저가 날짜 설정 안한것)
+            JSONObject jsonObject = new JSONObject();
 
-            jsonObject.addProperty("title",title); //입력했어야 진입 가능
-            jsonObject.addProperty("location",location); //입력 안했으면 ""
-            jsonObject.addProperty("tag",tag); //입력 안했으면 ""
-            jsonObject.addProperty("color",color); //입력 안했으면 1
+            jsonObject.put("title",title); //입력했어야 진입 가능
+            jsonObject.put("location",location); //입력 안했으면 ""
+            jsonObject.put("tag",tag); //입력 안했으면 ""
+            jsonObject.put("color",color); //입력 안했으면 1
 
             //TODO 1.시작시간X, 종료시간X => 시작시간만 설정
             //TODO 2. 시작시간O , 종료시간X ->없음
             //TODO 3. 시작시간X , 종료시간O ->없음
             //TODO 4. 시작시간O , 종료시간O => 둘 다 설정
-            JsonObject dayInfo = new JsonObject(); //추가한 시간들 정보 담기
-            dayInfo.addProperty("day",pickedDate);
-            if(PickedStartHour==-1){//TODO 1  => 시작시간만 설정
+                JSONObject dayInfo = new JSONObject(); //추가한 시간들 정보 담기
+                dayInfo.put("day",pickedDate);
+
                 String time = MakeSetText(12,0);
-                dayInfo.addProperty("time",time);
-                JsonArray jsonArray = new JsonArray();
-
-                jsonArray.add(dayInfo);
-
-                jsonObject.add("days",jsonArray);
+                dayInfo.put("time",time);
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.put(dayInfo);
+                jsonObject.put("days",jsonArray);
 
                 Log.e("jsonarray",""+jsonArray);
                 Log.e("jsonObject",""+jsonObject);
@@ -1025,39 +1066,141 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else{ //TODO 4
-                JsonArray jsonArray = new JsonArray();
+            }else{ //TODO 4 (유저가 날짜 설정 했을 경우)
+                String startDay = MakeStringForm(PickedStartYear,PickedStartMonth,PickedStartDay);
+                String endDay = MakeStringForm(PickedEndYear,PickedEndMonth,PickedEndDay);
+                List<String> dates = getDates(startDay,endDay);
+
                 String time1 = MakeSetText(PickedStartHour,PickedStartMin);
                 String time2 =MakeSetText(PickedEndHour,PickedEndMin);
 
-                JsonObject object1 = new JsonObject();
-                object1.addProperty("day",pickedDate);
-                object1.addProperty("time",time1);
-                jsonArray.add(object1);
-
-                JsonObject object2 = new JsonObject();
-                object2.addProperty("day",pickedDate);
-                object2.addProperty("time",time2);
-                jsonArray.add(object2);
-
-                jsonObject.add("days",jsonArray);
-
-                if(PickedStartHour>PickedEndHour || (PickedStartHour==PickedEndHour && PickedStartMin>PickedEndMin)){
-                    //TODO 종
-                    showCustomToast("시간을 다시 설정해 주세요");
-                }else{
+                JSONArray jsonArray = new JSONArray();
+                JSONObject sendObject = new JSONObject();
+                sendObject.put("title",title);
+                sendObject.put("location",location);
+                sendObject.put("tag",tag);
+                sendObject.put("color",color);
+                if(!dates.isEmpty()){
+                    for(int i=0;i<dates.size();i++){
+                        if(i==dates.size()-1){
+                            try{
+                                JSONObject jsonObject1 = new JSONObject();
+                                jsonObject1.put("day",dates.get(i));
+                                jsonObject1.put("time",time2);
+                                jsonArray.put(jsonObject1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            try {
+                                JSONObject jsonObject2 = new JSONObject();
+                                jsonObject2.put("day",dates.get(i));
+                                jsonObject2.put("time",time1);
+                                jsonArray.put(jsonObject2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                     try {
-                        PostAddSchedule(jsonObject);
+                        sendObject.put("days",jsonArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                Log.e("sendObject",""+sendObject);
+                try{
+                    Log.e("try",""+sendObject.get("days"));
+                    try {
+                        PostAddSchedule(sendObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    showCustomToast("날짜를 다시 설정해 주세요.");
+                }
+
+
+//                JsonArray jsonArray = new JsonArray();
+//                JsonObject object1 = new JsonObject();
+//                object1.addProperty("day",pickedDate);
+//                object1.addProperty("time",time1);
+//                jsonArray.add(object1);
+//
+//                JsonObject object2 = new JsonObject();
+//                object2.addProperty("day",pickedDate);
+//                object2.addProperty("time",time2);
+//                jsonArray.add(object2);
+//
+//                jsonObject.add("days",jsonArray);
+
+
+//                if(PickedStartHour>PickedEndHour || (PickedStartHour==PickedEndHour && PickedStartMin>PickedEndMin)){
+//                    //TODO 종
+//                    showCustomToast("시간을 다시 설정해 주세요");
+//                }else{
+//                }
             }
         }
     }
-    public void PostAddSchedule(JsonObject jsonObject) throws JSONException {
+    public void PostAddSchedule(JSONObject jsonObject) throws JSONException {
         AddService addService = new AddService(this);
         addService.PostAddSchedule(jsonObject);
     }
+
+    private static List<String> getDates(String dateString1, String dateString2)
+    {
+        ArrayList<String> dates = new ArrayList<String>();
+        DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date1 = null;
+        Date date2 = null;
+
+        try {
+            date1 = df1 .parse(dateString1);
+            date2 = df1 .parse(dateString2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+
+        while(!cal1.after(cal2))
+        {
+            dates.add(DATE_FORMAT.format(cal1.getTime()));
+            cal1.add(Calendar.DATE, 1);
+        }
+        Log.e("showdates",dates.toString());
+        return dates;
+    }
+
+    public String MakeStringForm(int year,int month,int day) throws ParseException {
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        return stringDate;
+    }
+
+    public Date MakeDateForm(int year,int month,int day) throws ParseException {
+//        month+=1;
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        Date date = DATE_FORMAT.parse(stringDate);
+        return date;
+    }
+
 
 }

@@ -54,6 +54,7 @@
 
             <ImageView
                 android:id="@+id/home_toolbar_alarm"
+                android:onClick="NotificationClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -61,119 +62,124 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/home_toolbar_search"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="OnClick" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+        <!--        헤더-->
+        <!--            <LinearLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="0dp"-->
+        <!--                android:animateLayoutChanges="true"-->
+        <!--                android:background="@color/colorPrimary"-->
+        <!--                android:orientation="horizontal">-->
+
+        <!--&lt;!&ndash;                <TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;                    android:id="@+id/title"&ndash;&gt;-->
+        <!--&lt;!&ndash;                    android:layout_width="0dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;                    android:layout_weight="1"&ndash;&gt;-->
+        <!--&lt;!&ndash;                    android:padding="16dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;                    android:textSize="18sp" />&ndash;&gt;-->
+
+        <!--            </LinearLayout>-->
+        <!--요일-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
+            android:layout_height="23dp"
+            android:orientation="horizontal">
+
+            <TextView
+
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="일" />
+
+            <TextView
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="월" />
+
+            <TextView
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="화" />
+
+            <TextView
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="수" />
+
+            <TextView
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="목" />
+
+            <TextView
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="금" />
+
+            <TextView
+                style="@style/CalendarSunToSat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/sun_to_sat_color"
+                android:gravity="center"
+                android:text="토" />
+        </LinearLayout>
+        <!--달력뷰-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendar"
+                app:layout_constraintBottom_toTopOf="@id/home_ll_today_schedule"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:orientation="vertical">
-                <!--        헤더-->
-                <!--            <LinearLayout-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="0dp"-->
-                <!--                android:animateLayoutChanges="true"-->
-                <!--                android:background="@color/colorPrimary"-->
-                <!--                android:orientation="horizontal">-->
-
-                <!--&lt;!&ndash;                <TextView&ndash;&gt;-->
-                <!--&lt;!&ndash;                    android:id="@+id/title"&ndash;&gt;-->
-                <!--&lt;!&ndash;                    android:layout_width="0dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;                    android:layout_weight="1"&ndash;&gt;-->
-                <!--&lt;!&ndash;                    android:padding="16dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;                    android:textSize="18sp" />&ndash;&gt;-->
-
-                <!--            </LinearLayout>-->
-                <!--요일-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="23dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="일" />
-
-                    <TextView
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="월" />
-
-                    <TextView
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="화" />
-
-                    <TextView
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="수" />
-
-                    <TextView
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="목" />
-
-                    <TextView
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="금" />
-
-                    <TextView
-                        style="@style/CalendarSunToSat"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/sun_to_sat_color"
-                        android:gravity="center"
-                        android:text="토" />
-                </LinearLayout>
-                <!--달력뷰-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+                android:layout_marginBottom="81dp"/>
             <LinearLayout
+                android:id="@+id/home_ll_today_schedule"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="81dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -206,7 +212,7 @@
                         android:textSize="12dp" />
                 </FrameLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </LinearLayout>
 </LinearLayout>

@@ -5,12 +5,23 @@ public class PickedDayTasks {
     private String location;
     private int color;
     private String time;
+    private int taskNo;
 
-    public PickedDayTasks(String title, String location, int color, String time) {
+    public PickedDayTasks(String title, String location, int color, String time,int taskNo) {
         this.title = title;
         this.location = location;
         this.color = color;
         this.time = time;
+        this.taskNo=taskNo;
+
+    }
+
+    public void setTaskNo(int taskNo) {
+        this.taskNo = taskNo;
+    }
+
+    public int getTaskNo() {
+        return taskNo;
     }
 
     public String getTitle() {

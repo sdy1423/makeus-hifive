@@ -1,6 +1,5 @@
 package com.example.makeushifive.src.main.interfaces;
 
-import com.example.makeushifive.src.main.MainService;
 import com.example.makeushifive.src.main.models.MainResponse;
 import com.example.makeushifive.src.main.models.ProfileResponse;
 

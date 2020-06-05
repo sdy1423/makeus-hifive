@@ -19,6 +19,7 @@ import com.example.makeushifive.src.main.chatting.models.ChatUserResponse;
 import com.example.makeushifive.src.main.chatting.models.ChattingHistoryResponse;
 import com.example.makeushifive.src.main.chatting.models.ChattingResponse;
 import com.example.makeushifive.src.main.chatting.share.ShareActivity;
+import com.example.makeushifive.src.main.taskchange.TaskChangeActivity;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -59,7 +60,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
     EditText mEdtMessage;
     ArrayList<Message> chatList = new ArrayList<>();
     ChattingAdapter chattingAdapter;
-    ImageView mIvSend;
+    ImageView mIvSend,mIvTaskChange;
     RecyclerView chatRecyclerView;
     String MyName;
 
@@ -74,6 +75,15 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         mbundle = savedInstanceState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
+        mIvTaskChange=findViewById(R.id.chatting_iv_change);
+        mIvTaskChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TaskChangeActivity.class);
+                intent.putExtra("taskNo",taskNo);
+                startActivity(intent);
+            }
+        });
 
         drawerLayout=findViewById(R.id.chatting_drawer);
 
@@ -380,6 +390,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
     @Override
     public void getChatUserSuccess(ArrayList<ChatUserResponse.Result> result) {
+        chatUsers.clear();
         try {
             for(int i =0;i<result.size();i++){
                 int userno = result.get(i).getUserNo();
@@ -456,16 +467,44 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         Log.e("ChattingActivity","onResume"+nickname);
         ChattingService chattingService = new ChattingService(this);
         chattingService.getUser(nickname);
+        chattingService.getChatUser(taskNo);
     }
 
     @Override
     public void getUserSuccess() {
         Log.e("ChattingActivity","onCreateㄱㄱ");
+        ChattingService chattingService = new ChattingService(this);
+        chattingService.getChatUser(taskNo);
         onCreate(mbundle);
     }
 
     @Override
     public void getUserFail() {
+
+    }
+
+    @Override
+    public void onStop() {
+        Log.e("ChattingActivity","onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.e("ChattingActivity","onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e("ChattingActivity","onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("ChattingActivity","onRestart");
 
     }
 

@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,28 +26,41 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.makeushifive.R;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.DAY;
+import static com.example.makeushifive.src.ApplicationClass.MONTH;
+import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class AddTimeDialog extends Dialog {
 
     int startDay;
+    private DatePickerDialog.OnDateSetListener startDateListener;
+    private DatePickerDialog.OnDateSetListener endDateListener;
     private TimePickerDialog.OnTimeSetListener startTimeListener;
     private TimePickerDialog.OnTimeSetListener endTimeListener;
     public Calendar calendar = Calendar.getInstance();
     private Context context;
+    Date pickedDay;
+    int setYear,setMonth,setDay;
 
 
     public AddTimeDialog(@NonNull Context context,
                          TimePickerDialog.OnTimeSetListener startTimeListener,
-                         TimePickerDialog.OnTimeSetListener endTimeListener) {
+                         TimePickerDialog.OnTimeSetListener endTimeListener,Date pickedDay,
+                         DatePickerDialog.OnDateSetListener startDateListener,
+                         DatePickerDialog.OnDateSetListener endDateListener) {
         super(context);
         this.context=context;
         this.startTimeListener = startTimeListener;
         this.endTimeListener=endTimeListener;
+        this.pickedDay=pickedDay;
+        this.startDateListener = startDateListener;
+        this.endDateListener = endDateListener;
     }
 
     private TextView mTvLeftBlur,mTvLeftBlack,mTvRightBlur,mTvRightBlack;
@@ -61,7 +76,7 @@ public class AddTimeDialog extends Dialog {
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
         layoutParams.height = dpToPx(370,context);
-        layoutParams.width = dpToPx(276,context);
+        layoutParams.width = dpToPx(400,context);
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
         Button btnComplete = findViewById(R.id.add_time_dialog_btn_complete);
@@ -83,6 +98,65 @@ public class AddTimeDialog extends Dialog {
         //TODO 처음 오픈하면 LEFT=BLACK, RIGHT=BLUR,
         StartVisible();
 
+
+        DatePicker startDate = findViewById(R.id.date_picker_start_date);
+        DatePicker endDate = findViewById(R.id.date_picker_end_date);
+
+//        Log.e("PICKEDAY",""+pickedDay);
+        setYear=Integer.parseInt(YEAR.format(pickedDay));
+        setMonth=Integer.parseInt(MONTH.format(pickedDay));
+        setDay = Integer.parseInt(DAY.format(pickedDay));
+//        Log.e("초기",""+setYear+" "+setMonth+" "+setDay);
+
+        Date MaxDate;
+        try {
+            MaxDate = MakeDateForm(setYear,setMonth,27);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        final int[] pickedStartYear = new int[1];
+        pickedStartYear[0]=setYear;
+        final int[] pickedStartMonth = new int[1];
+        pickedStartMonth[0]=setMonth;
+        final int[] pickedStartDay = new int[1];
+        pickedStartDay[0]=setDay;
+        final int[] pickedEndYear = new int[1];
+        pickedEndYear[0]=-1;
+        final int[] pickedEndMonth = new int[1];
+        pickedEndMonth[0]=-1;
+        final int[] pickedEndDay = new int[1];
+        pickedEndDay[0]=-1;
+
+        startDate.init(setYear, setMonth-1, setDay, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String date = year + "/" + monthOfYear + "/" + dayOfMonth;
+                Log.e("startdate year",""+date);
+                pickedStartYear[0] =year;
+                pickedStartMonth[0] =monthOfYear;
+                pickedStartDay[0] =dayOfMonth;
+
+            }
+        });
+
+        endDate.init(setYear, setMonth-1, setDay, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String date = year + "/" + monthOfYear + "/" + dayOfMonth;
+                Log.e("enddate year",""+date);
+                pickedEndYear[0] =year;
+                pickedEndMonth[0] =monthOfYear;
+                pickedEndDay[0] =dayOfMonth;
+
+            }
+        });
+
+
+        startDate.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        endDate.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+
         NumberPicker startHour = findViewById(R.id.time_picker_start_hour);
         NumberPicker startMin = findViewById(R.id.time_picker_start_min);
         NumberPicker endHour = findViewById(R.id.time_picker_end_hour);
@@ -92,14 +166,17 @@ public class AddTimeDialog extends Dialog {
         endHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         endMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("선택안했을 경우!시작",""+startHour.getValue()+" "+startMin.getValue());
-                Log.e("선택안했을 경우!종료",""+endHour.getValue()+" "+endMin.getValue());
+                Log.e("시작date",""+startDate.getYear()+" "+startDate.getMonth()+" "+startDate.getDayOfMonth());
+                Log.e("종료date",""+endDate.getMonth()+" "+endDate.getMonth()+" "+endDate.getDayOfMonth());
+                Log.e("시작time",""+startHour.getValue()+" "+startMin.getValue());
+                Log.e("종료time",""+endHour.getValue()+" "+endMin.getValue());
                 startTimeListener.onTimeSet(null,startHour.getValue(),startMin.getValue());
+                startDateListener.onDateSet(null,startDate.getYear(),startDate.getMonth()+1,startDate.getDayOfMonth());
                 endTimeListener.onTimeSet(null,endHour.getValue(),endMin.getValue());
+                endDateListener.onDateSet(null,endDate.getYear(),endDate.getMonth()+1,endDate.getDayOfMonth());
                 dismiss();
             }
         });
@@ -178,5 +255,16 @@ public class AddTimeDialog extends Dialog {
                 .getDisplayMetrics()
                 .density;
         return Math.round((float) dp * density);
+    }
+
+    public Date MakeDateForm(int year,int month,int day) throws ParseException {
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        Date date = DATE_FORMAT.parse(stringDate);
+        return date;
     }
 }
