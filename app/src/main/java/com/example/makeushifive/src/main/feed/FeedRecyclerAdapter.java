@@ -193,6 +193,8 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
                 holder.linearTwo.setVisibility(View.INVISIBLE);
                 holder.linearThree.setVisibility(View.INVISIBLE);
                 holder.linearFour.setVisibility(View.VISIBLE);
+                String num = Integer.toString(numOfPeople);
+                holder.mTvMemberCount.setText(num);
                 for(int i=0;i<numOfPeople;i++){
                     if(i==0){
                         //프사
@@ -235,7 +237,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView mTvTitle,mTvDay;
+        TextView mTvTitle,mTvDay,mTvMemberCount;
         ImageView[] mIvColor = new ImageView[8];
         Context context;
         LinearLayout mLlschedules,mLlnumOfPeople;
@@ -272,7 +274,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             fourSecond=itemView.findViewById(R.id.four_person_second);
             fourThird=itemView.findViewById(R.id.four_person_third);
 
-
+            mTvMemberCount=itemView.findViewById(R.id.cnt_user_four);
             context = itemView.getContext();
             mLlnumOfPeople=itemView.findViewById(R.id.show_profile);
             mLlschedules.setOnClickListener(this);

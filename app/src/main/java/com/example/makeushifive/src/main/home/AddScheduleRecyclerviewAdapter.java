@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.feed.FeedRecyclerAdapter;
 import com.example.makeushifive.src.main.taskchange.TaskChangeActivity;
@@ -57,6 +59,7 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
             }
         }
         holder.mTvTitle.setText(pickedDayTasks.get(position).getTitle());
+
     }
 
     @Override
@@ -69,7 +72,9 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
         int[] colors ={R.id.item_home_picked_schedule_iv_color_one,R.id.item_home_picked_schedule_iv_color_two,R.id.item_home_picked_schedule_iv_color_three,R.id.item_home_picked_schedule_iv_color_four,
                 R.id.item_home_picked_schedule_iv_color_five,R.id.item_home_picked_schedule_iv_color_six,R.id.item_home_picked_schedule_iv_color_seven,R.id.item_home_picked_schedule_iv_color_eight};
         ImageView[] mIvColor =new ImageView[8];
-        ImageView mIvChange;
+        ImageView mIvChange,mIvDelete;
+        SwipeLayout swipeLayout;
+        LinearLayout topWrapper;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,6 +101,67 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
 
                 }
             });
+
+            topWrapper = itemView.findViewById(R.id.top_wrapper);
+            swipeLayout=itemView.findViewById(R.id.swipe_layout);
+            swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+
+
+
+
+
+            swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+
+                }
+            });
+
+            mIvDelete=itemView.findViewById(R.id.item_home_picked_schedule_iv_delete);
+            mIvDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        Log.e("deleteclick","deleteclick");
+//                        int taskNo = pickedDayTasks.get(pos).getTaskNo();
+//                        String time = pickedDayTasks.get(pos).getTime();
+//                        try {
+//                            //TODO 일정삭제
+////                            mListener.onItemClick(v,pos,taskNo,time);
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+                    }
+
+                }
+            });
+
         }
 
 
