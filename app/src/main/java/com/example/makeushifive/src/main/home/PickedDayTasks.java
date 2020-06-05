@@ -6,14 +6,23 @@ public class PickedDayTasks {
     private int color;
     private String time;
     private int taskNo;
+    private boolean emptyFlag;
 
-    public PickedDayTasks(String title, String location, int color, String time,int taskNo) {
+    public PickedDayTasks(String title, String location, int color, String time,int taskNo,boolean emptyFlag) {
         this.title = title;
         this.location = location;
         this.color = color;
         this.time = time;
         this.taskNo=taskNo;
+        this.emptyFlag=emptyFlag;
+    }
 
+    public void setEmptyFlag(boolean emptyFlag) {
+        this.emptyFlag = emptyFlag;
+    }
+
+    public boolean isEmptyFlag() {
+        return emptyFlag;
     }
 
     public void setTaskNo(int taskNo) {

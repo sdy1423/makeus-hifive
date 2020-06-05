@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
     Boolean Flag = false;
     int rowCount=0;
 
@@ -78,18 +80,14 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     private CalendarAdapter mAdapter;
     private StaggeredGridLayoutManager manager;
     ArrayList<DATA> datas = new ArrayList<>();
-
+    String Today;
 
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             CurrentYear=year;
             CurrentMonth=month-1;
-
             ShowScheduleInfo(true);
-//            initCalendarList(year,month-1,true);
-//            setRecycler();
-
         }
     };
 
@@ -100,13 +98,21 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        mSwipeRefreshLayout =rootView.findViewById(R.id.home_swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RefreshApi();
+                mSwipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+
         GregorianCalendar cal = new GregorianCalendar();
         CurrentYear = cal.get(Calendar.YEAR);
         CurrentMonth = cal.get(Calendar.MONTH);
-
         FindViewById(rootView);
-
-
         mContext = getContext();
         mIvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,18 +123,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         });
         mTvTodayNoSchedule.setVisibility(View.VISIBLE);
         TodayRecyclerView.setVisibility(View.INVISIBLE);
-//
-//        calendarView.setOnDayClickListener(new OnDayClickListener() {
-//            @Override
-//            public void onDayClick(EventDay eventDay) {
-//                //TODO dialog내부 recyclerview에 해당 날짜 일정 쏴주기
-//                addScheduleDialog = new AddScheduleDialog(getActivity());
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("date", eventDay.getCalendar().getTime());
-//                addScheduleDialog.setArguments(bundle);
-//                addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "tag");
-//            }
-//        });
         mTvCurrentDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,66 +134,9 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         homeService = new HomeService(this);
         homeService.getSchedule();
         Date CurrentDate = Calendar.getInstance().getTime();
-        String Today =DATE_FORMAT.format(CurrentDate);
+        Today =DATE_FORMAT.format(CurrentDate);
         HomeService homeService1 = new HomeService(this);
         homeService1.getTodaySchedule(Today);
-
-
-//        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//                if (e.getAction() == MotionEvent.ACTION_DOWN) {//화면에 손가락 닿았을때
-//                    try {
-//                        View child = rv.findChildViewUnder(e.getX(), e.getY());
-//                        assert child != null;
-//                        final LinearLayout[] linearLayout = {rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout)};
-//                        linearLayout[0].setBackgroundColor(Color.parseColor("#F4F4F4"));
-//
-//                        // 2초간 멈추게 하고싶다면
-//                        Handler handler = new Handler();
-//                        handler.postDelayed(new Runnable() {
-//                            public void run() {
-//                                try {
-//                                    linearLayout[0] = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
-//                                    linearLayout[0].setBackgroundResource(R.drawable.calendar_tile_border_second);
-//                                } catch (Exception ex) {
-//                                    ex.printStackTrace();
-//                                }
-//                            }
-//                        }, 1000);  // 2000은 2초를 의미합니다.
-//
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//                if (e.getAction() == MotionEvent.ACTION_UP) {
-//                    try {
-//                        View child = rv.findChildViewUnder(e.getX(), e.getY());
-//                        assert child != null;
-//                        LinearLayout linearLayout = rv.getChildViewHolder(child).itemView.findViewById(R.id.item_layout);
-//                        linearLayout.setBackgroundResource(R.drawable.calendar_tile_border_second);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//
-//
-//                return false;
-//            }
-//
-//
-//
-//
-//            @Override
-//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//            }
-//        });
 
         mIvAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +149,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         });
         return rootView;
     }
+
+    private void RefreshApi() {
+        HomeService homeService = new HomeService(this);
+        homeService.getSchedule();
+        homeService.getTodaySchedule(Today);
+    }
+
     public void FindViewById(View rootView){
         mIvSearch=rootView.findViewById(R.id.home_toolbar_search);
         mIvAlarm=rootView.findViewById(R.id.home_toolbar_alarm);
@@ -220,91 +164,79 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         mTvCurrentDate=rootView.findViewById(R.id.home_toolbar_tv_today);
         textView = rootView.findViewById(R.id.title);
         recyclerView = rootView.findViewById(R.id.calendar);
-//        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
     public void getScheduleSuccess(ArrayList<HomeResponse.Result> result) throws ParseException {
-
+        Log.e("일정조회 성공","성공");
+        calendarItems.clear();
         try {
-            for(int i=0;i<result.size();i++){
-                //TODO 달력에 쏴준다.
-                //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
-                //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
+            if(!result.isEmpty()){
+                for(int i=0;i<result.size();i++){
+                    //TODO 달력에 쏴준다.
+                    //TODO 일정정보 배열을 만들어서 저장 -> 필요할때 taskNo로 꺼내 쓸 수 있도록
+                    //TODO 오늘날짜랑 같으면 오늘의 일정으로 뺀다 (필요한것:
 
-                //TODO 지금은 모든 일정 다 담아놔야 달력 바꿀때 꺼내 쓸 수 있음
-                taskNo=result.get(i).getTaskNo();
-                title=result.get(i).getTitle();
-                title=result.get(i).getTitle();
-                color=result.get(i).getColor();
-                count=result.get(i).getCount();
-                day = DATE_FORMAT.parse(result.get(i).getDay());
+                    //TODO 지금은 모든 일정 다 담아놔야 달력 바꿀때 꺼내 쓸 수 있음
+                    taskNo=result.get(i).getTaskNo();
+                    title=result.get(i).getTitle();
+                    title=result.get(i).getTitle();
+                    color=result.get(i).getColor();
+                    count=result.get(i).getCount();
+                    day = DATE_FORMAT.parse(result.get(i).getDay());
 
-                CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
-                calendarItems.add(calendarItem);
+                    CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
+                    calendarItems.add(calendarItem);
+                }
             }
             ShowScheduleInfo(false);
-
         } catch (Exception e) {
+            ShowScheduleInfo(false);
             e.printStackTrace();
         }
 
     }
 
     private void ShowScheduleInfo(boolean flag) {
-//        String ThisMonth = MONTH.format(calendarView.getCurrentPageDate().getTime());
-//        Log.e("thismonth",""+calendarView.getCurrentPageDate().getTime());
-//        int year_int,month_int,day_int;
-//        String year_st,month_st,day_st;
-//        List<EventDay> events = new ArrayList<>();
-
+        Log.e("ShowScheduleInfo","ShowScheduleInfo "+flag);
         if(!flag){
-            for(int i=0;i<calendarItems.size();i++){
-                //같은 달인지 파싱한다.
-                int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
-                int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
-                if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+1){ //현재 달력과 년 월이 같다면
-                    int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
-                    int ItemColor = calendarItems.get(i).getColor();
-                    String ItemTitle = calendarItems.get(i).getTitle();
-                    TileItem item = new TileItem(ItemYear,ItemMonth,ItemDay,ItemColor,ItemTitle);
-                    tileItems.add(item);
-                }else{
-                    continue;
+            if(!calendarItems.isEmpty()){
+                for(int i=0;i<calendarItems.size();i++){
+                    //같은 달인지 파싱한다.
+                    int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
+                    int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
+                    if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+1){ //현재 달력과 년 월이 같다면
+                        int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
+                        int ItemColor = calendarItems.get(i).getColor();
+                        String ItemTitle = calendarItems.get(i).getTitle();
+                        TileItem item = new TileItem(ItemYear,ItemMonth,ItemDay,ItemColor,ItemTitle);
+                        tileItems.add(item);
+                    }else{
+                        continue;
+                    }
                 }
             }
         }else{
             tileItems.clear();
-            for(int i=0;i<calendarItems.size();i++){
-                //같은 달인지 파싱한다.
-                int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
-                int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
-                if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+1){ //현재 달력과 년 월이 같다면
-                    int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
-                    int ItemColor = calendarItems.get(i).getColor();
-                    String ItemTitle = calendarItems.get(i).getTitle();
-                    TileItem item = new TileItem(ItemYear,ItemMonth,ItemDay,ItemColor,ItemTitle);
-                    tileItems.add(item);
-                }else{
-                    continue;
+            if(!calendarItems.isEmpty()){
+                for(int i=0;i<calendarItems.size();i++){
+                    //같은 달인지 파싱한다.
+                    int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
+                    int ItemMonth = Integer.parseInt(MONTH.format(calendarItems.get(i).getDay()));
+                    if(ItemYear==CurrentYear && ItemMonth == CurrentMonth+1){ //현재 달력과 년 월이 같다면
+                        int ItemDay = Integer.parseInt(DAY.format(calendarItems.get(i).getDay()));
+                        int ItemColor = calendarItems.get(i).getColor();
+                        String ItemTitle = calendarItems.get(i).getTitle();
+                        TileItem item = new TileItem(ItemYear,ItemMonth,ItemDay,ItemColor,ItemTitle);
+                        tileItems.add(item);
+                    }else{
+                        continue;
+                    }
                 }
             }
         }
+        Log.e("ShowScheduleInfo","Bottom "+flag);
 
-        //타일 안에 들어간 정보를 다 담고 달력 만든다.
-//        for(int i=0;i<tileItems.size();i++){
-//            int yea = tileItems.get(i).getYear();
-//            int mon = tileItems.get(i).getMonth();
-//            int day = tileItems.get(i).getDay();
-//            String strin = tileItems.get(i).getTitle();
-//            int colo = tileItems.get(i).getColor();
-////            Log.e("타일 year",""+yea);
-////            Log.e("타일 mon",""+mon);
-////            Log.e("타일 day",""+day);
-////            Log.e("타일 title",""+strin);
-////            Log.e("타일 color",""+colo);
-//
-//        }
         initSet(flag);
         setRecycler();
     }
@@ -312,6 +244,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     @Override
     public void getScheduleFail() {
         ShowScheduleInfo(false);
+        Log.e("getScheduleFail","getScheduleFail");
+
     }
 
     @Override
@@ -324,19 +258,24 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             String location,time,title;
 
             ArrayList<PickedDayTasks> tasks = new ArrayList<>();
-            for(int i=0;i<result.size();i++){
-                color = result.get(i).getColor();
-                location = result.get(i).getLocation();
-                time=result.get(i).getTime();
-                title = result.get(i).getTitle();
-                taskNo=result.get(i).getTaskNo();
-                PickedDayTasks pickedDayTasks = new PickedDayTasks(title,location,color,time,taskNo);
-                tasks.add(pickedDayTasks);
+            if(!result.isEmpty()){
+                for(int i=0;i<result.size();i++){
+                    color = result.get(i).getColor();
+                    location = result.get(i).getLocation();
+                    time=result.get(i).getTime();
+                    title = result.get(i).getTitle();
+                    taskNo=result.get(i).getTaskNo();
+                    PickedDayTasks pickedDayTasks = new PickedDayTasks(title,location,color,time,taskNo,false);
+                    tasks.add(pickedDayTasks);
+                }
             }
+
 
             if(result.isEmpty()){
                 TodayRecyclerView.setVisibility(View.INVISIBLE);
                 mTvTodayNoSchedule.setVisibility(View.VISIBLE);
+
+
             }else{
                 //TODO 오늘의 일정에 뿌리기기
                 mTvTodayNoSchedule.setVisibility(View.INVISIBLE);
@@ -361,14 +300,15 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 
     @Override
     public void getTodayScheduleFail() {
+        Log.e("getTodayScheduleFail","getTodayScheduleFail");
 
     }
 
 
+
     private void setRecycler() {
-        if (mCalendarList == null) {
-//            Log.w(TAG, "No Query, not initializing RecyclerView");
-        }
+
+        Log.e("setRecycler","setRecycler");
 
         manager = new StaggeredGridLayoutManager(7, StaggeredGridLayoutManager.VERTICAL);
         mAdapter = new CalendarAdapter(tileItems,datas,mCalendarList,getContext());
@@ -400,6 +340,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
     }
 
     private void initSet(boolean flag) {
+        Log.e("initSet","initSet"+flag);
+
         initCalendarList(flag);
     }
 
@@ -407,16 +349,19 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         if(!flag){
             GregorianCalendar cal = new GregorianCalendar();
             setCalendarList(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH));
+            Log.e("initCalendarList","initCalendarList"+flag);
         }else{
             Log.e("initCalendarList",""+CurrentYear+" "+CurrentMonth);
             setCalendarList(CurrentYear,CurrentMonth);
+            Log.e("initCalendarList","initCalendarList"+flag);
         }
     }
     private void setCalendarList(int year,int month) {
+        Log.e("setCalendarList","setCalendarList"+year+month);
+
         CurrentYear=year;
         CurrentMonth=month;
 
-        Log.e("setCalendarlist",""+year+" "+month);
 
         //TODO Month는 미리 +1해서 줄것.
 
@@ -424,6 +369,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         ArrayList<Object> calendarList = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
             try {
+                Log.e("setCalendarlist ","int for loop"+year+" "+month);
                 GregorianCalendar calendar = new GregorianCalendar(year, month, 1, 0, 0, 0);
                 if (i == 0) {
                     mCenterPosition = calendarList.size();
@@ -461,8 +407,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         mCalendarList = calendarList;
     }
 
-    private void initView(View rootView) {
-    }
 
     public String MakeStringForm(int year,int month,int day) throws ParseException {
 //        month+=1;
@@ -486,4 +430,9 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         return date;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("homefragement","onresume");
+    }
 }

@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeushifive.R;
 import com.example.makeushifive.src.main.home.add.AddActivity;
+import com.example.makeushifive.src.main.home.add.AddService;
 import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
 import com.example.makeushifive.src.main.taskchange.TaskChangeActivity;
+
+import org.json.JSONException;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -36,7 +41,7 @@ import static com.example.makeushifive.src.ApplicationClass.DOT_FORMAT;
 import static com.example.makeushifive.src.ApplicationClass.MONTH;
 import static com.example.makeushifive.src.ApplicationClass.YEAR;
 
-public class AddScheduleDialog extends DialogFragment implements AddScheduleView{
+public class AddScheduleDialog extends DialogFragment implements AddScheduleView {
 
     private Activity activity;
     private Context mContext;
@@ -45,7 +50,7 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
     private Fragment fragment;
     ArrayList<PickedDayTasks> tasks = new ArrayList<>();
     RecyclerView recyclerView;
-
+    String getScheduleFormat;
 
     public AddScheduleDialog(Activity activity) {
         this.activity = activity;
@@ -57,7 +62,7 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
         super.onResume();
         int width = getResources().getDimensionPixelSize(R.dimen.day_pick_dialog_width);
         int height = getResources().getDimensionPixelSize(R.dimen.day_pick_dialog_height);
-        Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow()).setLayout(width,height);
+        Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow()).setLayout(width, height);
     }
 
     @Nullable
@@ -69,9 +74,8 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
 
         View rootview = inflater.inflate(R.layout.home_custom_dialog_add_schedule, container, false);
 
-        Bundle bundle =savedInstanceState !=null ? savedInstanceState :getArguments();
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments();
         assert bundle != null;
-//        Date ShowDate = (Date)bundle.getSerializable("date");
         String getDate = bundle.getString("date");
         Date getDateDate = null;
         try {
@@ -82,8 +86,9 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
         }
 
 
+        assert getDateDate != null;
         String dialogFormDate = DOT_FORMAT.format(getDateDate); //dialog에 표시할 날짜 형식
-        String getScheduleFormat = DATE_FORMAT.format(getDateDate);
+        getScheduleFormat = DATE_FORMAT.format(getDateDate);
         AddScheduleService addScheduleService = new AddScheduleService(this);
         addScheduleService.getPickedDaySchedule(getScheduleFormat);
 
@@ -96,16 +101,16 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
         //TODO 오늘의 일정 보여주는 Recyclerview만들기 (오늘의 일정 get API 엮어서 보여주자)
 
         fragment = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("tag");
-        mTvToday=rootview.findViewById(R.id.home_custom_dialog_day);
+        mTvToday = rootview.findViewById(R.id.home_custom_dialog_day);
         mTvToday.setText(dialogFormDate);
 
-        mIvAddSchedule=rootview.findViewById(R.id.home_custom_dialog_iv_plus_button);
+        mIvAddSchedule = rootview.findViewById(R.id.home_custom_dialog_iv_plus_button);
         mIvAddSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(activity, AddActivity.class);
-                intent.putExtra("date",getScheduleFormat);
+                intent.putExtra("date", getScheduleFormat);
                 startActivity(intent);
 
                 DialogFragment dialogFragment = (DialogFragment) fragment;
@@ -114,7 +119,7 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
             }
         });
 
-        recyclerView=rootview.findViewById(R.id.home_dialog_add_schedule_recyclerview);
+        recyclerView = rootview.findViewById(R.id.home_dialog_add_schedule_recyclerview);
         //TODO 리사이클러뷰 만들기
 
 
@@ -125,41 +130,71 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
     @Override
     public void getPickedScheduleSuccess(ArrayList<HomeTodayResponse.Result> result) {
         //TODO 리사이클러뷰 만들기
+        Log.e("선택한날 일정 받아옴", "성공");
 
-        String title,location,time;
-        int color,taskNo;
-
+        String title, location, time;
+        int color, taskNo;
+        tasks.clear();
         try {
-            if(!result.isEmpty()){
-                for(int i=0;i<result.size();i++){
-                    title=result.get(i).getTitle();
-                    location=result.get(i).getLocation();
-                    time=result.get(i).getTime();
-                    color=result.get(i).getColor();
-                    taskNo=result.get(i).getTaskNo();
-                    PickedDayTasks task = new PickedDayTasks(title,location,color,time,taskNo);
+            if (!result.isEmpty()) {
+                for (int i = 0; i < result.size(); i++) {
+                    title = result.get(i).getTitle();
+                    location = result.get(i).getLocation();
+                    time = result.get(i).getTime();
+                    color = result.get(i).getColor();
+                    taskNo = result.get(i).getTaskNo();
+                    PickedDayTasks task = new PickedDayTasks(title, location, color, time, taskNo, false);
                     tasks.add(task);
                 }
-                recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-                AddScheduleRecyclerviewAdapter addScheduleRecyclerviewAdapter = new AddScheduleRecyclerviewAdapter(tasks);
-                recyclerView.setAdapter(addScheduleRecyclerviewAdapter);
-                addScheduleRecyclerviewAdapter.setOnItemClickListener(new AddScheduleRecyclerviewAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int pos, int taskNo,String time) throws ParseException {
-                        Intent intent = new Intent(activity, TaskChangeActivity.class);
-                        intent.putExtra("taskNo",taskNo);
-                        intent.putExtra("date",time);
-                        startActivity(intent);
-                    }
-                });
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        AddScheduleRecyclerviewAdapter addScheduleRecyclerviewAdapter = new AddScheduleRecyclerviewAdapter(tasks);
+        recyclerView.setAdapter(addScheduleRecyclerviewAdapter);
+
+        addScheduleRecyclerviewAdapter.setOnItemClickListener(new AddScheduleRecyclerviewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos, int taskNo, String time) throws ParseException {
+                Intent intent = new Intent(activity, TaskChangeActivity.class);
+                intent.putExtra("taskNo", taskNo);
+                intent.putExtra("date", time);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onDeleteClick(View v, int pos, int taskNo) {
+                try {
+                    deleteTask(taskNo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
+    public void deleteTask(int taskNo) throws JSONException {
+        AddScheduleService addScheduleService = new AddScheduleService(this);
+        addScheduleService.deleteTask(taskNo);
     }
 
     @Override
     public void getPickedScheduleFail() {
 
+    }
+
+    @Override
+    public void deleteTaskSuccess() {
+        Log.e("일정 삭제 성공", "성공");
+        AddScheduleService addScheduleService = new AddScheduleService(this);
+        addScheduleService.getPickedDaySchedule(getScheduleFormat);
+    }
+
+    @Override
+    public void deleteTaskFail() {
+        Toast.makeText(getContext(), "일정 삭제를 실패했습니다.", Toast.LENGTH_SHORT).show();
     }
 }

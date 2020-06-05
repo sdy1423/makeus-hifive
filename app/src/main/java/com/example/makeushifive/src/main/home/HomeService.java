@@ -30,9 +30,12 @@ public class HomeService {
             @Override
             public void onResponse(Call<HomeResponse> call, Response<HomeResponse> response) {
                 if (response.body() != null) {
-//                    Log.e("show",""+response.body().getResult());
                     try {
-                        homeFragmentView.getScheduleSuccess(response.body().getResult());
+                        if(response.body().getCode()==100){
+                            homeFragmentView.getScheduleSuccess(response.body().getResult());
+                        }else{
+                            homeFragmentView.getScheduleFail();
+                        }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

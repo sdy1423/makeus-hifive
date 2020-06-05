@@ -11,5 +11,12 @@
 
     <dimen name="year_month_pick_dialog_width">296dp</dimen>
     <dimen name="year_month_pick_dialog_height">320dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="ob_banner_height">300dp</dimen>
+    <dimen name="ob_desc_padding">30dp</dimen>
+    <dimen name="ob_header_text_size">22sp</dimen>
+    <dimen name="ob_desc_text_size">18dp</dimen>
+    <dimen name="pager_height">16dp</dimen>
+    <dimen name="button_text">18dp</dimen>
 
 </resources>

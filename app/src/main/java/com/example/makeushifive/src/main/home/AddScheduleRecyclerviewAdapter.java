@@ -2,6 +2,8 @@ package com.example.makeushifive.src.main.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
 
     public interface OnItemClickListener{
         void onItemClick(View v, int pos,int taskNo,String time) throws ParseException;
+        void onDeleteClick(View v,int pos,int taskNo);
     }
     private OnItemClickListener mListener = null;
 
@@ -51,15 +54,24 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
     @Override
     public void onBindViewHolder(@NonNull AddScheduleRecyclerviewAdapter.ViewHolder holder, int position)  {
         int color = pickedDayTasks.get(position).getColor();
-        for(int i=0;i<8;i++){
-            if(color-1==i){
-                holder.mIvColor[i].setVisibility(View.VISIBLE);
-            }else{
+        if (pickedDayTasks.size() == 1 && pickedDayTasks.get(0).isEmptyFlag()) {
+            for (int i = 0; i < 8; i++) {
                 holder.mIvColor[i].setVisibility(View.INVISIBLE);
             }
+            holder.mTvTitle.setText(pickedDayTasks.get(0).getTitle());
+            holder.mIvColor9.setVisibility(View.VISIBLE);
+        } else {
+            holder.mIvColor9.setVisibility(View.INVISIBLE);
+            for (int i = 0; i < 8; i++) {
+                if (color - 1 == i) {
+                    holder.mIvColor[i].setVisibility(View.VISIBLE);
+                } else {
+                    holder.mIvColor[i].setVisibility(View.INVISIBLE);
+                }
+            }
+            holder.mIvColor9.setVisibility(View.INVISIBLE);
+            holder.mTvTitle.setText(pickedDayTasks.get(position).getTitle());
         }
-        holder.mTvTitle.setText(pickedDayTasks.get(position).getTitle());
-
     }
 
     @Override
@@ -72,15 +84,19 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
         int[] colors ={R.id.item_home_picked_schedule_iv_color_one,R.id.item_home_picked_schedule_iv_color_two,R.id.item_home_picked_schedule_iv_color_three,R.id.item_home_picked_schedule_iv_color_four,
                 R.id.item_home_picked_schedule_iv_color_five,R.id.item_home_picked_schedule_iv_color_six,R.id.item_home_picked_schedule_iv_color_seven,R.id.item_home_picked_schedule_iv_color_eight};
         ImageView[] mIvColor =new ImageView[8];
+        ImageView mIvColor9;
         ImageView mIvChange,mIvDelete;
         SwipeLayout swipeLayout;
         LinearLayout topWrapper;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+
             for(int i=0;i<8;i++){
                 mIvColor[i]=itemView.findViewById(colors[i]);
             }
+            mIvColor9=itemView.findViewById(R.id.item_home_picked_schedule_iv_color_nine);
             mTvTitle=itemView.findViewById(R.id.item_home_picked_schedule_tv_title);
             mIvChange=itemView.findViewById(R.id.item_home_picked_schedule_iv_change);
             mIvChange.setOnClickListener(new View.OnClickListener() {
@@ -88,14 +104,16 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if(pos!=RecyclerView.NO_POSITION){
-                        int taskNo = pickedDayTasks.get(pos).getTaskNo();
-                        String time = pickedDayTasks.get(pos).getTime();
-                        try {
-//                            Log.e("타일",""+year+" "+month+" "+day);
-                            //TODO 리스터 달고 밖에서 일정정보 수정으로 이동(인텐트로 taskNo도 같이 전송)
-                            mListener.onItemClick(v,pos,taskNo,time);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        if(!pickedDayTasks.isEmpty()){
+                            int taskNo = pickedDayTasks.get(pos).getTaskNo();
+                            String time = pickedDayTasks.get(pos).getTime();
+                            try {
+    //                            Log.e("타일",""+year+" "+month+" "+day);
+                                //TODO 리스터 달고 밖에서 일정정보 수정으로 이동(인텐트로 taskNo도 같이 전송)
+                                mListener.onItemClick(v,pos,taskNo,time);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
@@ -149,14 +167,10 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
                     int pos = getAdapterPosition();
                     if(pos!=RecyclerView.NO_POSITION){
                         Log.e("deleteclick","deleteclick");
-//                        int taskNo = pickedDayTasks.get(pos).getTaskNo();
-//                        String time = pickedDayTasks.get(pos).getTime();
-//                        try {
-//                            //TODO 일정삭제
-////                            mListener.onItemClick(v,pos,taskNo,time);
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
+                        if(!pickedDayTasks.isEmpty()){
+                            int taskNo = pickedDayTasks.get(pos).getTaskNo();
+                            mListener.onDeleteClick(v,pos,taskNo);
+                        }
                     }
 
                 }

@@ -162,42 +162,44 @@ public class CalendarAdapter extends RecyclerView.Adapter {
             }
             // Model의 데이터를 View에 표현하기
             holder.bind(model);
-            int year =datas.get(position).getYear();
+            int year = datas.get(position).getYear();
             int month = datas.get(position).getMonth();
             int day = datas.get(position).getDay();
-            if(!tileItems.isEmpty()){
-                ArrayList<TileItem> items = new ArrayList<>();
-                for(int i=0;i<tileItems.size();i++){
-                    int TileYear = tileItems.get(i).getYear();
-                    int TileMonth = tileItems.get(i).getMonth();
-                    int TileDay = tileItems.get(i).getDay();
-//                    Log.e("calendar date",""+year+" "+month+" "+day);
-//                    Log.e("calendar tile date",""+TileYear+" "+TileMonth+" "+TileDay);
 
-                    if(year==TileYear && (month+1)==TileMonth && day==TileDay){
-                        TileItem tileItem = new TileItem(TileYear,TileMonth,TileDay,tileItems.get(i).getColor(),tileItems.get(i).getTitle());
-                        items.add(tileItem);
-                        holder.TileRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                        TileRecyclerAdapter adapter = new TileRecyclerAdapter(items,context);
-                        holder.TileRecycler.setAdapter(adapter);
-                        adapter.setOnItemClickListener(new TileRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
-//                                Log.e("캘린더",""+year+" "+month+" "+day);
-                                mListener.onItemClick(v,pos,year,month,day);
-                            }
-                        });
-
+            ArrayList<TileItem> items = new ArrayList<>();
+            items.clear();
+            try {
+                if (!tileItems.isEmpty()) {
+                    for (int i = 0; i < tileItems.size(); i++) {
+                        int TileYear = tileItems.get(i).getYear();
+                        int TileMonth = tileItems.get(i).getMonth();
+                        int TileDay = tileItems.get(i).getDay();
+                        if (year == TileYear && (month + 1) == TileMonth && day == TileDay) {
+                            TileItem tileItem = new TileItem(TileYear, TileMonth, TileDay, tileItems.get(i).getColor(), tileItems.get(i).getTitle());
+                            items.add(tileItem);
+                        }
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
+            holder.TileRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            TileRecyclerAdapter adapter = new TileRecyclerAdapter(items, context);
+            holder.TileRecycler.setAdapter(adapter);
+            adapter.setOnItemClickListener(new TileRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int pos, int year, int month, int day) throws ParseException {
+//                                Log.e("캘린더",""+year+" "+month+" "+day);
+                    mListener.onItemClick(v, pos, year, month, day);
+                }
+            });
             GregorianCalendar cal = new GregorianCalendar();
             if(year==cal.get(Calendar.YEAR) && month==cal.get(Calendar.MONTH) && day==cal.get(Calendar.DATE)){
                 holder.itemView.setBackgroundColor(Color.parseColor("#F4F4F4"));
             }
         }
     }
+
 
     // 개수구하기
     @Override

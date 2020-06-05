@@ -22,6 +22,7 @@ import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.login.interfaces.LoginActivityView;
 import com.example.makeushifive.src.login.models.LoginResponse;
 import com.example.makeushifive.src.main.MainActivity;
+import com.example.makeushifive.src.main.onboarding.OnBoardingActivity;
 import com.example.makeushifive.src.signup.SignupActivity;
 
 import org.json.JSONException;
@@ -131,10 +132,22 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         Log.e("userNo",""+mUserNo);
         Log.e("nickname",""+result.getNickname());
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
 
+
+        boolean newUser = sSharedPreferences.getBoolean("new",false);
+        if(newUser){
+            SharedPreferences.Editor editor1 = sSharedPreferences.edit();
+            editor1.putBoolean("new",false);
+            editor1.apply();
+
+            Log.e("open onboarding!!!","onStart");
+            Intent intent = new Intent(this, OnBoardingActivity.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+        }
     }
 
     //로그인 실패

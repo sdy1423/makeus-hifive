@@ -17,4 +17,6 @@
     <color name="black">#000000</color>
     <color name="sun_to_sat_color">#4AEFEFEF</color>
     <color name="chatting_background">#66ACDBF4</color>
+    <color name="ob_header">#4A4A4A</color>
+    <color name="ob_desc">#4A4A4A</color>
 </resources>

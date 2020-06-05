@@ -21,6 +21,7 @@ import com.example.makeushifive.src.BaseActivity;
 import com.example.makeushifive.src.main.interfaces.MainActivityView;
 import com.example.makeushifive.src.main.notification.models.NotificationResponse;
 import com.example.makeushifive.src.main.notification.NotificationInfo;
+import com.example.makeushifive.src.main.onboarding.OnBoardingActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -179,6 +180,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     @Override
     protected void onPause() {
         super.onPause();
+
         Log.e("onPause","onStart");
 
     }
@@ -207,6 +209,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     protected void onStart() {
         super.onStart();
         Log.e("onStart","onStart");
+
     }
 
     @Override

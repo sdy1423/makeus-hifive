@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".src.main.taskchange.TaskChangeActivity"></activity>
+        <activity android:name=".src.main.onboarding.OnBoardingActivity"></activity>
+        <activity android:name=".src.main.taskchange.TaskChangeActivity" />
         <activity android:name=".src.main.chatting.share.ShareActivity" />
         <activity android:name=".src.main.setting.change.ChangeActivity" />
         <activity android:name=".src.main.chatting.ChattingActivity" />

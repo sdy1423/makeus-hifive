@@ -29,4 +29,16 @@
     <string name="material_calendar_friday">금</string>
     <string name="material_calendar_saturday">토</string>
     <string name="material_calendar_sunday">일</string>
+    <string name="ob_header1">일정을 관리해보세요!</string>
+    <string name="ob_desc1">일정을 추가하고 나만의 달력을 만들어보세요. \n시간부터 장소까지 간편하게 추가할 수 있답니다.</string>
+    <string name="ob_get_started">Next</string>
+
+    <string name="ob_header2">일정을 공유해보세요!</string>
+    <string name="ob_header3">NO HIDDEN CHARGES OR FEES</string>
+
+
+
+    <string name="ob_desc2">친구들과 일정을 공유하고 채팅해보세요. \n공유 일정은 친구의 캘린더에 자동 등록된답니다.</string>
+    <string name="ob_desc3">We have a very small charge for non-Wonep calls to mobiles or landlines</string>
+
 </resources>

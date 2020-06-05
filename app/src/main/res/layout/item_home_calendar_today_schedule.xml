@@ -104,6 +104,11 @@
                     android:id="@+id/item_home_picked_schedule_iv_color_eight"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
+                <ImageView
+                    android:background="@drawable/feed_recycler_border_item_white"
+                    android:id="@+id/item_home_picked_schedule_iv_color_nine"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </FrameLayout>
             <LinearLayout
                 android:weightSum="2"

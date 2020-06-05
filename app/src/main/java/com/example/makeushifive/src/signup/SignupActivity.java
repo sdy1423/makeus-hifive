@@ -3,6 +3,7 @@ package com.example.makeushifive.src.signup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -27,6 +28,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.example.makeushifive.R.id.sign_up_edt_email;
+import static com.example.makeushifive.src.ApplicationClass.X_ACCESS_TOKEN;
+import static com.example.makeushifive.src.ApplicationClass.sSharedPreferences;
 
 public class SignupActivity extends BaseActivity implements SignupActivityView {
 
@@ -260,6 +263,11 @@ public class SignupActivity extends BaseActivity implements SignupActivityView {
             //성공
             showCustomToast("회원가입에 성공했습니다.");
             onBackPressed();
+            //TODO 온보딩을 위한 SHAREDPREFERENCE ㄱㄱ
+            SharedPreferences.Editor editor = sSharedPreferences.edit();
+            editor.putBoolean("new",true);
+            editor.apply();
+
         }else if(code==200){
             //이미 등록된 이메일
             ShowImPossibleEmail("다른 이메일을 사용해주세요.");
