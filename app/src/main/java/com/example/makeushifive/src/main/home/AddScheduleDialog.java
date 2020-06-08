@@ -2,6 +2,7 @@ package com.example.makeushifive.src.main.home;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,11 +24,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeushifive.R;
+import com.example.makeushifive.src.main.chatting.ChattingActivity;
 import com.example.makeushifive.src.main.home.add.AddActivity;
 import com.example.makeushifive.src.main.home.add.AddService;
 import com.example.makeushifive.src.main.home.models.HomeTodayResponse;
 import com.example.makeushifive.src.main.taskchange.TaskChangeActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.text.ParseException;
@@ -56,6 +59,19 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
         this.activity = activity;
     }
 
+    private DialogInterface.OnDismissListener onDismissListener;
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
+
+    @Override
+    public void onDismiss(@NotNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -157,10 +173,12 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
         addScheduleRecyclerviewAdapter.setOnItemClickListener(new AddScheduleRecyclerviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int pos, int taskNo, String time) throws ParseException {
-                Intent intent = new Intent(activity, TaskChangeActivity.class);
-                intent.putExtra("taskNo", taskNo);
-                intent.putExtra("date", time);
-                startActivity(intent);
+//                Intent intent = new Intent(activity, TaskChangeActivity.class);
+//                intent.putExtra("taskNo", taskNo);
+//                intent.putExtra("date", time);
+//                startActivity(intent);
+                Toast.makeText(getContext(), "서비스 준비중 입니다.", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -168,6 +186,20 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
                 try {
                     deleteTask(taskNo);
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onTitleClick(View v, int pos, int taskNo, int color) {
+                try {
+                    Intent intent = new Intent(getContext(), ChattingActivity.class);
+                    intent.putExtra("taskNo",taskNo);
+                    intent.putExtra("color",color);
+                    Log.e("addschedule taskNo",""+taskNo);
+                    Log.e("addschedule color",""+color);
+                    startActivity(intent);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

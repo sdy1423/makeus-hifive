@@ -41,4 +41,7 @@
         <item name="android:windowExitAnimation">@anim/anim_down</item>
     </style>
 
+    <style name="NumberPickerStyle">
+        <item name="colorControlNormal">@color/one</item>
+    </style>
 </resources>

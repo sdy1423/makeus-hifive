@@ -36,6 +36,7 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
     public interface OnItemClickListener{
         void onItemClick(View v, int pos,int taskNo,String time) throws ParseException;
         void onDeleteClick(View v,int pos,int taskNo);
+        void onTitleClick(View v,int pos,int taskNo,int color);
     }
     private OnItemClickListener mListener = null;
 
@@ -167,12 +168,33 @@ public class AddScheduleRecyclerviewAdapter extends RecyclerView.Adapter<AddSche
                     int pos = getAdapterPosition();
                     if(pos!=RecyclerView.NO_POSITION){
                         Log.e("deleteclick","deleteclick");
-                        if(!pickedDayTasks.isEmpty()){
-                            int taskNo = pickedDayTasks.get(pos).getTaskNo();
-                            mListener.onDeleteClick(v,pos,taskNo);
+                        try{
+                            if(!pickedDayTasks.isEmpty()){
+                                int taskNo = pickedDayTasks.get(pos).getTaskNo();
+                                mListener.onDeleteClick(v,pos,taskNo);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
+                }
+            });
+            mTvTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        try{
+                            if(!pickedDayTasks.isEmpty()){
+                                int taskNo = pickedDayTasks.get(pos).getTaskNo();
+                                int color = pickedDayTasks.get(pos).getColor();
+                                mListener.onTitleClick(v,pos,taskNo,color);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 

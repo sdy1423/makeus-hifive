@@ -11,6 +11,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -22,12 +23,14 @@ public interface TaskChangeRetrofitInterface {
 //
 //    @GET("/task")
 //    Call<HomeTodayResponse> getTodaySchedule(@Query("day") String date);
+//
+//    @GET("/task/info")
+//    Call<TaskChangeResponse> getTaskInfo(
+//            @Body RequestBody params
+//    );
 
-    @GET("/task/info")
-    Call<TaskChangeResponse> getTaskInfo(
-            @Body RequestBody params
-    );
-
+    @HTTP(method = "GET", path = "/task/info", hasBody = true)
+    Call<TaskChangeResponse> getTaskInfo(@Body RequestBody requestBody);
 
 
     @PATCH("/task")

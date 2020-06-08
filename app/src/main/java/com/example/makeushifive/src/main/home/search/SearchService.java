@@ -1,5 +1,7 @@
 package com.example.makeushifive.src.main.home.search;
 
+import android.util.Log;
+
 import com.example.makeushifive.src.main.home.search.interfaces.SearchActivityView;
 import com.example.makeushifive.src.main.home.search.interfaces.SearchRetrofitInterface;
 import com.example.makeushifive.src.main.home.search.models.SearchResponse;
@@ -19,6 +21,7 @@ public class SearchService {
     }
 
     void getSearchTitle(String title) {
+
         SearchRetrofitInterface searchRetrofitInterface = getRetrofit().
                 create(SearchRetrofitInterface.class);
         searchRetrofitInterface.getSearchTitle(title).enqueue(new Callback<SearchResponse>(){

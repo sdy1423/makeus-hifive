@@ -66,35 +66,39 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
     @Override
     public void getScheduleSuccess(ArrayList<FeedResponse.Result> result) {
         //TODO
-        if(!result.isEmpty()){
-            tasks.clear();
-            int taskNo = 0,color=0,week=0,count=0;
-            String title = null, location = null, day = null, time = null;
-            for (int i = 0; i < result.size(); i++) {
-                taskNo=result.get(i).getTaskNo();
-                title=result.get(i).getTitle();
-                color=result.get(i).getColor();
-                day=result.get(i).getDay();
-                week=result.get(i).getWeek();
-                count=result.get(i).getCount();
-                ArrayList<UserInfo> userInfos = new ArrayList<>();
-                if(!result.get(i).getUserInfo().isEmpty()){
-                    for(int j=0;j<result.get(i).getUserInfo().size();j++){
-                        int userNo = result.get(i).getUserInfo().get(j).getUserNo();
-                        String profileurl = result.get(i).getUserInfo().get(j).getProfileUrl();
-                        UserInfo userInfo = new UserInfo(userNo,profileurl);
-                        userInfos.add(userInfo);
+        tasks.clear();
+        try {
+            if (!result.isEmpty()) {
+                int taskNo = 0, color = 0, week = 0, count = 0;
+                String title = null, location = null, day = null, time = null;
+
+                for (int i = 0; i < result.size(); i++) {
+                    taskNo = result.get(i).getTaskNo();
+                    title = result.get(i).getTitle();
+                    color = result.get(i).getColor();
+                    day = result.get(i).getDay();
+                    week = result.get(i).getWeek();
+                    count = result.get(i).getCount();
+                    ArrayList<UserInfo> userInfos = new ArrayList<>();
+                    if (!result.get(i).getUserInfo().isEmpty()) {
+                        for (int j = 0; j < result.get(i).getUserInfo().size(); j++) {
+                            int userNo = result.get(i).getUserInfo().get(j).getUserNo();
+                            String profileurl = result.get(i).getUserInfo().get(j).getProfileUrl();
+                            UserInfo userInfo = new UserInfo(userNo, profileurl);
+                            userInfos.add(userInfo);
+                        }
                     }
+                    TASK task = new TASK(taskNo, title, color, day, week, count, userInfos);
+                    tasks.add(task);
                 }
-                TASK task = new TASK(taskNo, title, color, day, week, count,userInfos);
-                tasks.add(task);
+
             }
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            feedRecyclerAdapter = new FeedRecyclerAdapter(tasks,getContext());
-            mRecyclerView.setAdapter(feedRecyclerAdapter);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        feedRecyclerAdapter = new FeedRecyclerAdapter(tasks,getContext());
+        mRecyclerView.setAdapter(feedRecyclerAdapter);
     }
 
     @Override

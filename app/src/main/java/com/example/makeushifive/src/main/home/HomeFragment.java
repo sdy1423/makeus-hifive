@@ -3,6 +3,7 @@ package com.example.makeushifive.src.main.home;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -201,6 +202,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
         Log.e("ShowScheduleInfo","ShowScheduleInfo "+flag);
         if(!flag){
             if(!calendarItems.isEmpty()){
+                tileItems.clear();
                 for(int i=0;i<calendarItems.size();i++){
                     //같은 달인지 파싱한다.
                     int ItemYear = Integer.parseInt(YEAR.format(calendarItems.get(i).getDay()));
@@ -328,6 +330,12 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
 //                Log.e("SHOWSHOW",""+date);
 //                bundle.putSerializable("date", date.getTime());
                 addScheduleDialog.setArguments(bundle);
+                addScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        RefreshApi();
+                    }
+                });
                 addScheduleDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "tag");
             }
         });

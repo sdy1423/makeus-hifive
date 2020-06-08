@@ -30,6 +30,7 @@ public class NotificationDialogAdapter extends DialogFragment implements Notific
 
     Context context;
     RecyclerView mRecycler;
+    ArrayList<NotificationInfo> notificationInfos = new ArrayList<>();
 
     public NotificationDialogAdapter(Context context) {
         this.context = context;
@@ -88,26 +89,31 @@ public class NotificationDialogAdapter extends DialogFragment implements Notific
     @Override
     public void getNotificationSuccess(ArrayList<NotificationResponse.Result> results) {
         Log.e("진입","알림만들것");
-        if(!results.isEmpty()){
-            ArrayList<NotificationInfo> notificationInfos= new ArrayList<>();
-            Log.e("result존재","알림만들것");
-            for(int i=0;i<results.size();i++){
-                Log.e("result for문","알림만들것");
-                int taskNo= results.get(i).getTaskNo();
-                String title= results.get(i).getTitle();
-                int color =results.get(i).getColor();
-                String day = results.get(i).getDay();
-                int week = results.get(i).getWeek();
-                String time = results.get(i).getTime();
-                String nickname = results.get(i).getNickname();
-                NotificationInfo info = new NotificationInfo(taskNo,title,color,day,week,time,nickname);
-                notificationInfos.add(info);
+        notificationInfos.clear();
+        try {
+            if(!results.isEmpty()) {
+                Log.e("result존재", "알림만들것");
+                for (int i = 0; i < results.size(); i++) {
+                    Log.e("result for문", "알림만들것");
+                    int taskNo = results.get(i).getTaskNo();
+                    String title = results.get(i).getTitle();
+                    int color = results.get(i).getColor();
+                    String day = results.get(i).getDay();
+                    int week = results.get(i).getWeek();
+                    String time = results.get(i).getTime();
+                    String nickname = results.get(i).getNickname();
+                    NotificationInfo info = new NotificationInfo(taskNo, title, color, day, week, time, nickname);
+                    notificationInfos.add(info);
+                }
             }
-            Log.e("알림","notificationInfos"+notificationInfos);
-            mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-            NotificationRecyclerAdapter adapter = new NotificationRecyclerAdapter(notificationInfos,context);
-            mRecycler.setAdapter(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        Log.e("알림", "notificationInfos" + notificationInfos);
+        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        NotificationRecyclerAdapter adapter = new NotificationRecyclerAdapter(notificationInfos, context);
+        mRecycler.setAdapter(adapter);
+
 
     }
 

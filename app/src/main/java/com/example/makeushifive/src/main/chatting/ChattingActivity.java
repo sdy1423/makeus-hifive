@@ -75,6 +75,14 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
         mbundle = savedInstanceState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
+
+        Intent intent = getIntent();
+        taskNo = Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
+        color = intent.getExtras().getInt("color");
+        Log.e("받는taskNo",""+taskNo);
+        Log.e("받는color",""+color);
+
+
         mIvTaskChange=findViewById(R.id.chatting_iv_change);
         mIvTaskChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,15 +110,6 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
             }
         });
         //TODO 클릭하면 일정공유
-
-
-
-        Intent intent = getIntent();
-        taskNo = Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
-        color = intent.getExtras().getInt("color");
-
-        Log.e("받는taskNo",""+taskNo);
-        Log.e("받는color",""+color);
 
         chattingService = new ChattingService(this);
         chattingService.getDetailSchedule(taskNo);
@@ -362,12 +361,28 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
             Date dateformat;
             dateformat = DATE_FORMAT.parse(day); //string to date
 
-            String showTime = null;
-            try {
-                showTime = time.substring(0, 5);
+            String ShowTime="";
+            try{
+                ShowTime+=time.substring(0,5);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            try {
+                if(time.length()==17){
+                    try{
+                        ShowTime="";
+                        ShowTime+=time.substring(0,5);
+                        ShowTime+=time.substring(8,14);
+                        Log.e("ShowTime",""+time.length());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
 
 
             assert dateformat != null;
@@ -375,7 +390,7 @@ public class ChattingActivity extends BaseActivity implements ChattingActivityVi
 
             mTvLocation.setText(location);
             mTvDay.setText(today);
-            mTvTime.setText(showTime);
+            mTvTime.setText(ShowTime);
             mTvTitle.setText(title);
 
 

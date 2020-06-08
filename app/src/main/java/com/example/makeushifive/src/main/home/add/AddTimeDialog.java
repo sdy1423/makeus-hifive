@@ -5,10 +5,13 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -22,10 +25,14 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.makeushifive.R;
+import com.github.jjobes.slidedatetimepicker.CustomDatePicker;
+import com.github.jjobes.slidedatetimepicker.CustomTimePicker;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -67,6 +74,7 @@ public class AddTimeDialog extends Dialog {
     private LinearLayout mLlStartPick,mLlEndPick;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +83,8 @@ public class AddTimeDialog extends Dialog {
         WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         layoutParams.dimAmount=0.8f;
-        layoutParams.height = dpToPx(370,context);
-        layoutParams.width = dpToPx(400,context);
+        layoutParams.height = dpToPx(290,context);
+        layoutParams.width = dpToPx(300,context);
         Objects.requireNonNull(getWindow()).setAttributes(layoutParams);
 
         Button btnComplete = findViewById(R.id.add_time_dialog_btn_complete);
@@ -98,22 +106,22 @@ public class AddTimeDialog extends Dialog {
         //TODO 처음 오픈하면 LEFT=BLACK, RIGHT=BLUR,
         StartVisible();
 
-
         DatePicker startDate = findViewById(R.id.date_picker_start_date);
         DatePicker endDate = findViewById(R.id.date_picker_end_date);
+        TimePicker startTime = findViewById(R.id.time_picker_start_time);
+        TimePicker endTime = findViewById(R.id.time_picker_end_time);
 
-//        Log.e("PICKEDAY",""+pickedDay);
+        Objects.requireNonNull(startDate).setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+//        startDate.setOutlineSpotShadowColor(Color.parseColor("#F87BAB"));
+
+
+        endDate.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        startTime.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        endTime.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
         setYear=Integer.parseInt(YEAR.format(pickedDay));
         setMonth=Integer.parseInt(MONTH.format(pickedDay));
         setDay = Integer.parseInt(DAY.format(pickedDay));
-//        Log.e("초기",""+setYear+" "+setMonth+" "+setDay);
-
-        Date MaxDate;
-        try {
-            MaxDate = MakeDateForm(setYear,setMonth,27);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         final int[] pickedStartYear = new int[1];
         pickedStartYear[0]=setYear;
@@ -156,27 +164,25 @@ public class AddTimeDialog extends Dialog {
         startDate.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         endDate.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
+//        startDate.setIndicatorColor(Color.parseColor("#FF0000"));
+//        startDate.setOutlineSpotShadowColor(Color.parseColor("#F87BAB"));
 
-        NumberPicker startHour = findViewById(R.id.time_picker_start_hour);
-        NumberPicker startMin = findViewById(R.id.time_picker_start_min);
-        NumberPicker endHour = findViewById(R.id.time_picker_end_hour);
-        NumberPicker endMin = findViewById(R.id.time_picker_end_min);
-        startHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        startMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        endHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        endMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
 
         btnComplete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 Log.e("시작date",""+startDate.getYear()+" "+startDate.getMonth()+" "+startDate.getDayOfMonth());
                 Log.e("종료date",""+endDate.getMonth()+" "+endDate.getMonth()+" "+endDate.getDayOfMonth());
-                Log.e("시작time",""+startHour.getValue()+" "+startMin.getValue());
-                Log.e("종료time",""+endHour.getValue()+" "+endMin.getValue());
-                startTimeListener.onTimeSet(null,startHour.getValue(),startMin.getValue());
+                Log.e("시작time",""+startTime.getHour()+" "+startTime.getMinute());
+                Log.e("종료time",""+endTime.getHour()+" "+endTime.getMinute());
+
                 startDateListener.onDateSet(null,startDate.getYear(),startDate.getMonth()+1,startDate.getDayOfMonth());
-                endTimeListener.onTimeSet(null,endHour.getValue(),endMin.getValue());
                 endDateListener.onDateSet(null,endDate.getYear(),endDate.getMonth()+1,endDate.getDayOfMonth());
+                endTimeListener.onTimeSet(null,endTime.getHour(),endTime.getMinute());
+                startTimeListener.onTimeSet(null,startTime.getHour(),startTime.getMinute());
+
                 dismiss();
             }
         });
@@ -202,29 +208,30 @@ public class AddTimeDialog extends Dialog {
             }
         });
 
-        startHour.setMinValue(0);
-        startHour.setMaxValue(23);
+//        startHour.setMinValue(0);
+//        startHour.setMaxValue(23);
+//
+//        endHour.setMinValue(0);
+//        endHour.setMaxValue(23);
+//
+//        startMin.setMinValue(0);
+//        startMin.setMaxValue(59);
+//
+//        endMin.setMinValue(0);
+//        endMin.setMaxValue(59);
 
-        endHour.setMinValue(0);
-        endHour.setMaxValue(23);
+        mTvLeftBlur.setText("일정시작");
+        mTvLeftBlack.setText("일정시작");
 
-        startMin.setMinValue(0);
-        startMin.setMaxValue(59);
+        mTvRightBlur.setText("일정종료");
+        mTvRightBlack.setText("일정종료");
 
-        endMin.setMinValue(0);
-        endMin.setMaxValue(59);
 
-        mTvLeftBlur.setText("시작시간");
-        mTvLeftBlack.setText("시작시간");
-
-        mTvRightBlur.setText("종료시간");
-        mTvRightBlack.setText("종료시간");
-
-        startHour.setValue(12);
-        startMin.setValue(0);
-
-        endHour.setValue(12);
-        endMin.setValue(0);
+//        startHour.setValue(12);
+//        startMin.setValue(0);
+//
+//        endHour.setValue(12);
+//        endMin.setValue(0);
 
 
     }

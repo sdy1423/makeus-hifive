@@ -1,6 +1,7 @@
 package com.example.makeushifive.src.main.taskchange;
 
 import android.animation.ValueAnimator;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,9 +29,13 @@ import com.example.makeushifive.src.main.taskchange.models.TaskChangeResponse;
 
 import org.json.JSONException;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.example.makeushifive.src.ApplicationClass.DATE_FORMAT;
@@ -83,9 +89,8 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
     boolean DayFlag[]={false,false,false,false,false,false,false},LocationFlag=false,SelectDayWeekMonthFlag=false,EveryDayFlag=false,EveryWeekFlag=false,TimeFlag=false,AlarmFlag=false
             ,TagFlag=false;
 
-
-    int PickedStartMonth=-1,PickedStartDay=-1,PickedStartHour=-1,PickedStartMin=-1,
-            PickedEndMonth=-1,PickedEndDay=-1,PickedEndHour=-1,PickedEndMin=-1,PickedStartYear=-1;
+    int PickedStartYear=-1,PickedStartMonth=-1,PickedStartDay=-1,PickedStartHour=-1,PickedStartMin=-1,
+            PickedEndYear=-1,PickedEndMonth=-1,PickedEndDay=-1,PickedEndHour=-1,PickedEndMin=-1;
 
     FrameLayout mFlComplete;
     String title="";
@@ -117,10 +122,11 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
         FindViewById();
         SetVisibility();
 
-        //TODO 받아온 값으로 기존 일정정보 조회 ㄱㄱ
-        Intent intent = getIntent();
-        pickedDate = Objects.requireNonNull(intent.getExtras()).getString("date");
-        taskNoFromIntent= Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
+//        Intent intent = getIntent();
+//        pickedDate = Objects.requireNonNull(intent.getExtras()).getString("date");
+//        taskNoFromIntent= Objects.requireNonNull(intent.getExtras()).getInt("taskNo");
+
+        //TODO 기존 일정 정보 뿌려주기 위함
         TaskChangeService taskChangeService = new TaskChangeService(this);
         try {
             taskChangeService.getTaskInfo(taskNoFromIntent);
@@ -129,20 +135,20 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
         }
 
 
-        pickedDay = null;
-        try {
-            assert pickedDate != null;
-            pickedDay = DATE_FORMAT.parse(pickedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        assert pickedDay != null;
-        PickedStartMonth = Integer.parseInt(MONTH.format(pickedDay));
-        PickedStartDay = Integer.parseInt(DAY.format(pickedDay));
-        PickedStartYear = Integer.parseInt(YEAR.format(pickedDay));
-
-        mTvStartDate.setText(KOREAN_FORMAT.format(pickedDay));
-        mTvEndDate.setText(KOREAN_FORMAT.format(pickedDay));
+//        pickedDay = null;
+//        try {
+//            assert pickedDate != null;
+//            pickedDay = DATE_FORMAT.parse(pickedDate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        assert pickedDay != null;
+//        PickedStartMonth = Integer.parseInt(MONTH.format(pickedDay));
+//        PickedStartDay = Integer.parseInt(DAY.format(pickedDay));
+//        PickedStartYear = Integer.parseInt(YEAR.format(pickedDay));
+//
+//        mTvStartDate.setText(KOREAN_FORMAT.format(pickedDay));
+//        mTvEndDate.setText(KOREAN_FORMAT.format(pickedDay));
 
 
         mEdtTitle.addTextChangedListener(new TextWatcher() {
@@ -393,18 +399,18 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
     }
 
 
-//    public void TaskChangeTimeClick(View view){
-//        //AddTimeDialog띄우기
-//        if(!TimeFlag){
-//            TimeFlag=true;
-//            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startTimeListener,endTimeListener,pickedDay,);
-//            Objects.requireNonNull(addTimeDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            addTimeDialog.show();
-//        }else{
-//            TimeFlag=false;
-//            ClosePickedTime();
-//        }
-//    }
+    public void TaskChangeTimeClick(View view){
+        //AddTimeDialog띄우기
+        if(!TimeFlag){
+            TimeFlag=true;
+            AddTimeDialog addTimeDialog = new AddTimeDialog(this,startTimeListener,endTimeListener,pickedDay,startDateListener,endDateListener);
+            Objects.requireNonNull(addTimeDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            addTimeDialog.show();
+        }else{
+            TimeFlag=false;
+            ClosePickedTime();
+        }
+    }
     TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -423,6 +429,42 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
             OpenPickedTime();
         }
     };
+    DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            PickedStartYear=year;
+            PickedStartMonth = month;
+            PickedStartDay=dayOfMonth;
+            Date StartDate = null;
+            try {
+                StartDate = MakeDateForm(PickedStartYear,PickedStartMonth,PickedStartDay);
+                Log.e("startDate",""+StartDate);
+                String date = KOREAN_FORMAT.format(StartDate);
+                mTvStartDate.setText(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+    DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            PickedEndYear=year;
+            PickedEndMonth = month;
+            PickedEndDay = dayOfMonth;
+
+            Date EndDate = null;
+            try {
+                EndDate = MakeDateForm(PickedEndYear,PickedEndMonth,PickedEndDay);
+                Log.e("EndDate",""+EndDate);
+                String date = KOREAN_FORMAT.format(EndDate);
+                mTvEndDate.setText(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
 
     private String MakeSetText(int hourOfDay, int minute) {
         String text ="";
@@ -883,19 +925,59 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
         int getColor = result.getColor();
         ArrayList<repeatweek> repeatweeks = null;
         ArrayList<days> day = null;
-        for(int i=0;i<result.getRepeatweek().size();i++){
-            repeatweek repeatweek = new repeatweek(result.getRepeatweek().get(i).getRepeatweek());
-            repeatweeks.add(repeatweek);
+        try {
+            if(!result.getRepeatweek().isEmpty()){
+                for(int i=0;i<result.getRepeatweek().size();i++){
+                    repeatweek repeatweek = new repeatweek(result.getRepeatweek().get(i).getRepeatweek());
+                    repeatweeks.add(repeatweek);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        for(int i=0;i<result.getDays().size();i++){
-            int getdayno = result.getDays().get(i).getDayNo();
-            String getday = result.getDays().get(i).getDay();
-            String time= result.getDays().get(i).getTime();
-            days days = new days(getdayno,getday,time);
-            day.add(days);
+        try {
+            if(!result.getDays().isEmpty()){
+                for(int i=0;i<result.getDays().size();i++){
+                    int getdayno = result.getDays().get(i).getDayNo();
+                    String getday = result.getDays().get(i).getDay();
+                    String time= result.getDays().get(i).getTime();
+                    days days = new days(getdayno,getday,time);
+                    day.add(days);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         showtasks = new SHOWTASK(getTaskNo,getTitle,getLocation,getTag,getColor,repeatweeks,day);
         //TODO 뿌려줘라.
+        ShowTaskChangeInitialize(showtasks);
+    }
+
+    private void ShowTaskChangeInitialize(SHOWTASK showtasks) {
+    //TODO 일정변경에 진입했을 때 값을 넣어주는 역할
+        //TODO 타이틀
+        mEdtTitle.setText(showtasks.getTitle(),TextView.BufferType.EDITABLE);
+        //TODO 시간
+        try {
+            if(!showtasks.getDays().isEmpty()){
+                int max = showtasks.getDays().size()-1;
+                String startDatee = showtasks.getDays().get(0).getDay();
+                String endDatee = showtasks.getDays().get(max).getDay();
+                Date StartDate = null,EndDate=null;
+                StartDate = DATE_FORMAT.parse(startDatee);
+                EndDate = DATE_FORMAT.parse(endDatee);
+                assert StartDate != null;
+                String ShowStartDate = KOREAN_FORMAT.format(StartDate);
+                assert EndDate != null;
+                String ShowEndDate = KOREAN_FORMAT.format(EndDate);
+                mTvStartDate.setText(ShowStartDate);
+                mTvEndDate.setText(ShowEndDate);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mEdtLocation.setText(showtasks.getLocation(),TextView.BufferType.EDITABLE);
+        //TODO 마저 하라...
 
     }
 
@@ -913,4 +995,51 @@ public class TaskChangeActivity extends BaseActivity implements TaskChangeActivi
     public void postTaskRepeatFail() {
 
     }
+    public Date MakeDateForm(int year,int month,int day) throws ParseException {
+//        month+=1;
+        String stringDate="";
+        stringDate+=String.valueOf(year);
+        stringDate+="-";
+        stringDate+=String.valueOf(month);
+        stringDate+="-";
+        stringDate+=String.valueOf(day);
+        Date date = DATE_FORMAT.parse(stringDate);
+        return date;
+    }
+
+    private static List<String> getDates(String dateString1, String dateString2)
+    {
+        ArrayList<String> dates = new ArrayList<String>();
+        DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date1 = null;
+        Date date2 = null;
+
+        try {
+            date1 = df1 .parse(dateString1);
+            date2 = df1 .parse(dateString2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+
+        while(!cal1.after(cal2))
+        {
+            dates.add(DATE_FORMAT.format(cal1.getTime()));
+            cal1.add(Calendar.DATE, 1);
+
+
+
+
+        }
+        Log.e("showdates",dates.toString());
+        return dates;
+    }
+
 }

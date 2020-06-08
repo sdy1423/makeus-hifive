@@ -14,6 +14,12 @@ public class SearchResponse {
             return taskNo;
         }
 
+        @SerializedName("mastertaskNo")
+        public int mastertaskNo;
+        public int getMastertaskNo() {
+            return mastertaskNo;
+        }
+
         @SerializedName("title")
         public String title;
         public String getTitle() {

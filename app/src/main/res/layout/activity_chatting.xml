@@ -78,7 +78,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:background="@drawable/chatting_schedule_detail_border"
-                android:elevation="10dp"
+                android:elevation="5dp"
                 android:id="@+id/chatting_ll_schedule_detail"
                 android:layout_width="match_parent"
                 android:layout_height="137dp"

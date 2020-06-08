@@ -901,7 +901,7 @@ public class AddActivity extends BaseActivity implements AddActivityView {
             showCustomToast("일정이 등록되었습니다.");
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-            AddActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+            AddActivity.this.finish();
             Log.e("반복할 일정이 없다.","반복할 일정이 없다.");
         }else{
             Log.e("반복할 일정이 있다.","반복할 일정이 있다.");
@@ -1037,10 +1037,20 @@ public class AddActivity extends BaseActivity implements AddActivityView {
         if(titleFlag){ //최소한 타이틀이 입력되어 있어야 등록 가능
             location = mEdtLocation.getText().toString(); //장소
             tag = mEdtTag.getText().toString(); //태그
-
+            try {
+                if(tag.length()>1){
+                    if(tag.charAt(0)!='#'){
+                        String buf = tag;
+                        tag="#";
+                        tag+=buf;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.e("태그자동수정",tag);
             if(PickedStartHour==-1){//TODO 1  => 시작시간만 설정 (유저가 날짜 설정 안한것)
             JSONObject jsonObject = new JSONObject();
-
             jsonObject.put("title",title); //입력했어야 진입 가능
             jsonObject.put("location",location); //입력 안했으면 ""
             jsonObject.put("tag",tag); //입력 안했으면 ""
@@ -1070,77 +1080,65 @@ public class AddActivity extends BaseActivity implements AddActivityView {
                 String startDay = MakeStringForm(PickedStartYear,PickedStartMonth,PickedStartDay);
                 String endDay = MakeStringForm(PickedEndYear,PickedEndMonth,PickedEndDay);
                 List<String> dates = getDates(startDay,endDay);
+                if( (PickedStartDay!=PickedEndDay) && (EveryDayFlag || EveryWeekFlag)){
+                    showCustomToast("연속일정은 일정반복을 추가 할 수 없습니다.");
+                }else{
 
-                String time1 = MakeSetText(PickedStartHour,PickedStartMin);
-                String time2 =MakeSetText(PickedEndHour,PickedEndMin);
+                    String time1 = MakeSetText(PickedStartHour,PickedStartMin);
+                    String time2 =MakeSetText(PickedEndHour,PickedEndMin);
 
-                JSONArray jsonArray = new JSONArray();
-                JSONObject sendObject = new JSONObject();
-                sendObject.put("title",title);
-                sendObject.put("location",location);
-                sendObject.put("tag",tag);
-                sendObject.put("color",color);
-                if(!dates.isEmpty()){
-                    for(int i=0;i<dates.size();i++){
-                        if(i==dates.size()-1){
-                            try{
-                                JSONObject jsonObject1 = new JSONObject();
-                                jsonObject1.put("day",dates.get(i));
-                                jsonObject1.put("time",time2);
-                                jsonArray.put(jsonObject1);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }else{
-                            try {
-                                JSONObject jsonObject2 = new JSONObject();
-                                jsonObject2.put("day",dates.get(i));
-                                jsonObject2.put("time",time1);
-                                jsonArray.put(jsonObject2);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                    JSONArray jsonArray = new JSONArray();
+                    JSONObject sendObject = new JSONObject();
+                    sendObject.put("title",title);
+                    sendObject.put("location",location);
+                    sendObject.put("tag",tag);
+                    sendObject.put("color",color);
+                    if(!dates.isEmpty()){
+                        for(int i=0;i<dates.size();i++){
+                            if(i==dates.size()-1){
+                                try{
+                                    JSONObject jsonObject1 = new JSONObject();
+                                    jsonObject1.put("day",dates.get(i));
+                                    jsonObject1.put("time",time2);
+                                    jsonArray.put(jsonObject1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }else{
+                                try {
+                                    JSONObject jsonObject2 = new JSONObject();
+                                    jsonObject2.put("day",dates.get(i));
+                                    jsonObject2.put("time",time1);
+                                    jsonArray.put(jsonObject2);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
+                        try {
+                            sendObject.put("days",jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    try {
-                        sendObject.put("days",jsonArray);
+                    Log.e("sendObject",""+sendObject);
+                    try{
+                        Log.e("try",""+sendObject.get("days"));
+                        try {
+                            PostAddSchedule(sendObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        showCustomToast("날짜를 다시 설정해 주세요.");
                     }
-                }
-                Log.e("sendObject",""+sendObject);
-                try{
-                    Log.e("try",""+sendObject.get("days"));
-                    try {
-                        PostAddSchedule(sendObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    showCustomToast("날짜를 다시 설정해 주세요.");
+
+
                 }
 
 
-//                JsonArray jsonArray = new JsonArray();
-//                JsonObject object1 = new JsonObject();
-//                object1.addProperty("day",pickedDate);
-//                object1.addProperty("time",time1);
-//                jsonArray.add(object1);
-//
-//                JsonObject object2 = new JsonObject();
-//                object2.addProperty("day",pickedDate);
-//                object2.addProperty("time",time2);
-//                jsonArray.add(object2);
-//
-//                jsonObject.add("days",jsonArray);
 
-
-//                if(PickedStartHour>PickedEndHour || (PickedStartHour==PickedEndHour && PickedStartMin>PickedEndMin)){
-//                    //TODO 종
-//                    showCustomToast("시간을 다시 설정해 주세요");
-//                }else{
-//                }
             }
         }
     }
