@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.makeushifive">
+    package="com.song.makeushifive">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".src.ApplicationClass"
+        android:name="com.song.makeushifive.src.ApplicationClass"
         android:allowBackup="true"
         android:icon="@drawable/ic_hifive_icon"
         android:label="@string/app_name"
@@ -13,23 +13,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".src.main.onboarding.OnBoardingActivity"></activity>
-        <activity android:name=".src.main.taskchange.TaskChangeActivity" />
-        <activity android:name=".src.main.chatting.share.ShareActivity" />
-        <activity android:name=".src.main.setting.change.ChangeActivity" />
-        <activity android:name=".src.main.chatting.ChattingActivity" />
-        <activity android:name=".src.main.home.search.SearchActivity" />
-        <activity android:name=".src.main.home.add.AddActivity" />
-        <activity android:name=".src.splash.SplashActivity">
+        <activity android:name="com.song.makeushifive.src.main.onboarding.OnBoardingActivity"></activity>
+        <activity android:name="com.song.makeushifive.src.main.taskchange.TaskChangeActivity" />
+        <activity android:name="com.song.makeushifive.src.main.chatting.share.ShareActivity" />
+        <activity android:name="com.song.makeushifive.src.main.setting.change.ChangeActivity" />
+        <activity android:name="com.song.makeushifive.src.main.chatting.ChattingActivity" />
+        <activity android:name="com.song.makeushifive.src.main.home.search.SearchActivity" />
+        <activity android:name="com.song.makeushifive.src.main.home.add.AddActivity" />
+        <activity android:name="com.song.makeushifive.src.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".src.signup.SignupActivity" />
-        <activity android:name=".src.login.LoginActivity" />
-        <activity android:name=".src.main.MainActivity" />
+        <activity android:name="com.song.makeushifive.src.signup.SignupActivity" />
+        <activity android:name="com.song.makeushifive.src.login.LoginActivity" />
+        <activity android:name="com.song.makeushifive.src.main.MainActivity" />
     </application>
 
 </manifest>

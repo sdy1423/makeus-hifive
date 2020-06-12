@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="10"
     android:orientation="vertical">
 
     <TextView
-        android:layout_marginTop="66dp"
         android:id="@+id/tv_header"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
-        android:textAlignment="center"
         android:paddingLeft="@dimen/ob_desc_padding"
         android:paddingRight="@dimen/ob_desc_padding"
         android:text="@string/ob_header1"
+        android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/ob_header"
         android:textSize="@dimen/ob_header_text_size" />
 
     <ImageView
+        android:maxHeight="295dp"
         android:id="@+id/iv_onboard"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
         android:gravity="center"
-        android:scaleType="fitXY"
         android:src="@drawable/on_boarding_1" />
 
     <RelativeLayout
-        android:layout_below="@+id/iv_onboard"
+        android:id="@+id/below"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tv_desc"
@@ -48,5 +52,6 @@
             android:textSize="@dimen/ob_desc_text_size" />
     </RelativeLayout>
 
-
 </LinearLayout>
+
+

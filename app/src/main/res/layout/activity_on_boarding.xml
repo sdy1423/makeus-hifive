@@ -8,7 +8,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager_introduction"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/on_boarding_bottom"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -18,46 +18,35 @@
     <LinearLayout
         android:id="@+id/on_boarding_bottom"
         android:layout_width="match_parent"
-        android:layout_height="143dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pager_introduction"
-        android:orientation="vertical">
+        app:layout_constraintTop_toBottomOf="@id/pager_introduction">
 
         <LinearLayout
             android:id="@+id/viewPagerCountDots"
             android:layout_width="match_parent"
             android:layout_height="@dimen/pager_height"
-            android:layout_above="@+id/ll_footer"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="12dp"
-            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center|center_vertical"
             android:orientation="horizontal" />
 
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:id="@+id/ll_footer"
+        <Button
+            android:id="@+id/btn_get_started"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
-
-            <Button
-                android:stateListAnimator="@null"
-                android:id="@+id/btn_get_started"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="28dp"
-                android:layout_marginRight="28dp"
-                android:background="@drawable/login_join_btn_border"
-                android:text="@string/ob_get_started"
-                android:textAllCaps="false"
-                android:textColor="#ffffff"
-                android:textSize="@dimen/button_text" />
-        </LinearLayout>
-
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/login_join_btn_border"
+            android:stateListAnimator="@null"
+            android:text="@string/ob_get_started"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/button_text" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
