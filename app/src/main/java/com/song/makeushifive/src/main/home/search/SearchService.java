@@ -1,5 +1,7 @@
 package com.song.makeushifive.src.main.home.search;
 
+import android.util.Log;
+
 import com.song.makeushifive.src.main.home.search.interfaces.SearchActivityView;
 import com.song.makeushifive.src.main.home.search.interfaces.SearchRetrofitInterface;
 import com.song.makeushifive.src.main.home.search.models.SearchResponse;
@@ -25,10 +27,15 @@ public class SearchService {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 if(response.body()!=null){
-                    if(response.body().code==100){
-                        searchActivityView.getSearchSuccess(response.body().getResult());
-                    }else{
-                        searchActivityView.getSearchFail();
+                    try{
+                        if(response.body().code==100){
+                            Log.e("검색성공",""+response.body().getResult());
+                            searchActivityView.getSearchSuccess(response.body().getResult());
+                        }else{
+                            searchActivityView.getSearchFail();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }

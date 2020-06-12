@@ -170,7 +170,22 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                         int TileDay = tileItems.get(i).getDay();
                         if (year == TileYear && (month + 1) == TileMonth && day == TileDay) {
                             TileItem tileItem = new TileItem(TileYear, TileMonth, TileDay, tileItems.get(i).getColor(), tileItems.get(i).getTitle());
-                            items.add(tileItem);
+                            boolean flag = false;
+                            try{
+                                if(!items.isEmpty()){
+                                    for(int j=0;j<items.size();j++){
+                                        if(tileItem.getTitle().equals(items.get(j).getTitle())){
+                                            flag=true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if(!flag){
+                                items.add(tileItem);
+                            }
                         }
                     }
                 }

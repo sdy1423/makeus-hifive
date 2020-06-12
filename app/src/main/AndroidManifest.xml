@@ -17,7 +17,8 @@
         <activity android:name="com.song.makeushifive.src.main.taskchange.TaskChangeActivity" />
         <activity android:name="com.song.makeushifive.src.main.chatting.share.ShareActivity" />
         <activity android:name="com.song.makeushifive.src.main.setting.change.ChangeActivity" />
-        <activity android:name="com.song.makeushifive.src.main.chatting.ChattingActivity" />
+        <activity android:name="com.song.makeushifive.src.main.chatting.ChattingActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name="com.song.makeushifive.src.main.home.search.SearchActivity" />
         <activity android:name="com.song.makeushifive.src.main.home.add.AddActivity" />
         <activity android:name="com.song.makeushifive.src.splash.SplashActivity">

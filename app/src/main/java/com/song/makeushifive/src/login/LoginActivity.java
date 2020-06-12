@@ -128,25 +128,20 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         Log.e("jwt",""+mJwtToken);
         Log.e("userNo",""+mUserNo);
         Log.e("nickname",""+result.getNickname());
+        boolean newUser = sSharedPreferences.getBoolean("new",false);
+        if(newUser){
+            SharedPreferences.Editor editor1 = sSharedPreferences.edit();
+            editor1.putBoolean("new",false);
+            editor1.apply();
 
-
+            Log.e("open onboarding!!!","onStart");
             Intent intent = new Intent(this, OnBoardingActivity.class);
             startActivity(intent);
-
-//        boolean newUser = sSharedPreferences.getBoolean("new",false);
-//        if(newUser){
-//            SharedPreferences.Editor editor1 = sSharedPreferences.edit();
-//            editor1.putBoolean("new",false);
-//            editor1.apply();
-//
-//            Log.e("open onboarding!!!","onStart");
-//            Intent intent = new Intent(this, OnBoardingActivity.class);
-//            startActivity(intent);
-//        }else{
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(intent);
-//            LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
-//        }
+        }else{
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            LoginActivity.this.finish(); //로딩페이지를 액티비티 스택에서 제거거
+        }
     }
 
     //로그인 실패

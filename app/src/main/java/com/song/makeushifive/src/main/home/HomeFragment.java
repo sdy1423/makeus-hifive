@@ -144,7 +144,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
             public void onClick(View v) {
                 NotificationDialogAdapter adapter = new NotificationDialogAdapter(getContext());
                 assert getFragmentManager() != null;
-                adapter.setStyle(DialogFragment.STYLE_NO_FRAME, 0);
+//                adapter.setStyle(DialogFragment.STYLE_NO_FRAME, 0);
                 adapter.show(getFragmentManager(),"notification");
             }
         });
@@ -185,9 +185,24 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                     color=result.get(i).getColor();
                     count=result.get(i).getCount();
                     day = DATE_FORMAT.parse(result.get(i).getDay());
-
                     CalendarItem calendarItem = new CalendarItem(taskNo,title,color,day,count);
-                    calendarItems.add(calendarItem);
+
+                    boolean flag = false;
+                    try {
+                        if(!calendarItems.isEmpty()){
+                            for(int j=0;j<calendarItems.size();j++){
+                                if(calendarItem.getTaskNo()==calendarItems.get(j).getTaskNo()){
+                                    flag=true;
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(!flag){
+                        calendarItems.add(calendarItem);
+                    }
                 }
             }
             ShowScheduleInfo(false);
@@ -268,7 +283,22 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView {
                     title = result.get(i).getTitle();
                     taskNo=result.get(i).getTaskNo();
                     PickedDayTasks pickedDayTasks = new PickedDayTasks(title,location,color,time,taskNo,false);
-                    tasks.add(pickedDayTasks);
+                    boolean flag=false;
+                    try {
+                        if(!tasks.isEmpty()){
+                            for(int j=0;j<tasks.size();j++){
+                                if(pickedDayTasks.getTaskNo()==tasks.get(j).getTaskNo()){
+                                    flag=true;
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(!flag){
+                        tasks.add(pickedDayTasks);
+                    }
                 }
             }
 

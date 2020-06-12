@@ -158,7 +158,22 @@ public class AddScheduleDialog extends DialogFragment implements AddScheduleView
                     color = result.get(i).getColor();
                     taskNo = result.get(i).getTaskNo();
                     PickedDayTasks task = new PickedDayTasks(title, location, color, time, taskNo, false);
-                    tasks.add(task);
+                    boolean flag=false;
+                    try {
+                        if(!tasks.isEmpty()){
+                            for(int j=0;j<tasks.size();j++){
+                                if(tasks.get(j).getTaskNo()==task.getTaskNo()){
+                                    flag=true;
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(!flag){
+                        tasks.add(task);
+                    }
                 }
             }
         } catch (Exception ex) {

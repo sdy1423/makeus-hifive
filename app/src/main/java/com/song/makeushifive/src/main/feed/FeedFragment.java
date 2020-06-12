@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
     ArrayList<TASK> tasks = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private FeedRecyclerAdapter feedRecyclerAdapter;
-
+    SwipeRefreshLayout refreshLayout;
     ImageView mIvSearch,mIvNoti;
 
     @Nullable
@@ -37,6 +38,7 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
         FeedService feedService = new FeedService(this);
         feedService.getSchedule();
 
+        refreshLayout=rootView.findViewById(R.id.feed_swipe);
         mRecyclerView=rootView.findViewById(R.id.feed_rv_recycler);
 
         mIvNoti = rootView.findViewById(R.id.feed_iv_alarm);
@@ -49,7 +51,13 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
             }
         });
 
-
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RefreshApi();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
 
         mIvSearch = rootView.findViewById(R.id.feed_iv_search);
@@ -61,6 +69,11 @@ public class FeedFragment extends BaseFragment implements FeedFragmentView {
             }
         });
         return rootView;
+    }
+
+    private void RefreshApi() {
+        FeedService feedService = new FeedService(this);
+        feedService.getSchedule();
     }
 
     @Override
